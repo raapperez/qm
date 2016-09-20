@@ -6,12 +6,13 @@
     "start": "node ./node_modules/cross-env/bin/cross-env.js NODE_ENV=production node ./bin/www",
     "compile": "node ./node_modules/cross-env/bin/cross-env.js NODE_ENV=production node ./node_modules/concurrently/src/main.js \"node ./node_modules/webpack/bin/webpack.js\" \"node ./node_modules/gulp/bin/gulp.js\"",
     "start-dev": "node ./node_modules/concurrently/src/main.js --kill-others \"node ./node_modules/nodemon/bin/nodemon.js --delay 1 ./bin/www.js\" \"node ./node_modules/webpack/bin/webpack.js --colors --watch\" \"node ./node_modules/gulp/bin/gulp.js watch\"",
-    "reset-db-dev": "node ./bin/reset-db", 
+    "reset-db-dev": "node ./bin/reset-db",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Rodrigo Perez",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.4.6",
     "body-parser": "~1.15.1",
     "classnames": "^2.2.5",
     "compression": "^1.6.2",

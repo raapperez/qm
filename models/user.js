@@ -4,6 +4,10 @@ const Sequelize = require('sequelize');
 const db = require('../services/db');
 
 const User = db.define('user', {
+    id: {
+      type: Sequelize.UUID,
+      primaryKey: true
+    },
     email: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -30,7 +34,8 @@ const User = db.define('user', {
     },
     isActive: {
         type: Sequelize.BOOLEAN,
-        defaultValue: true
+        defaultValue: true,
+        allowNull: false
     }
 });
 
