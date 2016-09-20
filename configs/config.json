@@ -2,16 +2,39 @@
     "development": {
         "winston": {
             "level": "silly"
-        }
-    },
-    "homolog": {
-        "winston": {
-            "level": "silly"
+        },
+        "db": {
+            "user": "postgres",
+            "password": "muddy",
+            "database": "qmdev",
+            "options": {
+                "host": "localhost",
+                "dialect": "postgres",
+                "pool": {
+                    "max": 5,
+                    "min": 0,
+                    "idle": 10000
+                }
+            }
         }
     },
     "production": {
         "winston": {
             "level": "info"
+        },
+        "db": {
+            "user": "postgres",
+            "password": "muddy",
+            "database": "qmdev",
+            "options": {
+                "host": "localhost",
+                "dialect": "postgres",
+                "pool": {
+                    "max": 5,
+                    "min": 0,
+                    "idle": 10000
+                }
+            }
         }
     }
 }

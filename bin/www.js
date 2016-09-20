@@ -8,7 +8,7 @@ const logger = require('winston');
 function configureLog() {
   logger.level = config.winston.level || 'error';
   logger.add(logger.transports.File, {
-    filename: __dirname + '/../logs/base-react-server.log',
+    filename: __dirname + '/../logs/qm-server.log',
     json: false,
     maxFiles: 10,
     maxsize: 5242880,
