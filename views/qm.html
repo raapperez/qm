@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>
+    Example
+  </title>
+
+  <link rel="stylesheet" media="all" href="/css/qm-main.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+  
+</head>
+
+<body>
+  <div id="entry-point"><%= data.entryPoint %></div>  
+  <script>window.__PRELOADED_STATE__ = <%= data.initialState? JSON.stringify(data.initialState) : 'undefined' %>;</script>
+  <script src="/js/qm.js"></script>
+</body>
+
+</html>
