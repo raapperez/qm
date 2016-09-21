@@ -3,6 +3,7 @@
         "winston": {
             "level": "silly"
         },
+        "authSecret": "AAAAB3NzaC1yc2EAAAABJQAAAIEAvyGrKXlxGuE0yCPTMK74C3ZdE/YgGpL1SWjkAvcVWFV1k8zKTLQvHa6T/YrjIQPYCMvfj/TISPsD8sa6OqjXsfvp2+CHhBDPuOCbarHyARsjkXx6LCYc3QRtpnNw9sgenIAXn9odYXCcrY4/ZjTCtT9XJfwm/F2yWVH/T4qq20U=",
         "db": {
             "user": "postgres",
             "password": "muddy",
@@ -22,6 +23,7 @@
         "winston": {
             "level": "info"
         },
+        "authSecret": "AAAAB3NzaC1yc2EAAAABJQAAAIBTbENolrUQvQ4OcTg8lEDLyLxbMZYGm7bPM8cvhUq0LyrtOPuCIH/wf/tq+DtsFbrKP1RwvqtQ1bWkHyWgif5PkJUlZerr0vV9+AqCw/GkPUJvHFCtFIy84GWZDmn+GFyTwUiU9Jy6ajA/fEM+aDr5jUeMW4d7ELtXmQQcEc1WkQ=",
         "db": {
             "user": "postgres",
             "password": "muddy",

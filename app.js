@@ -10,6 +10,7 @@ const logger = require('winston');
 const exampleRoutes = require('./routes/example');
 const lodashExpress = require('lodash-express');
 const compression = require('compression');
+const config = require('./configs/config.json')[env];
 
 const app = express();
 
@@ -35,6 +36,24 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+const passport = require('passport');
+const {Strategy, ExtractJwt} = require('passport-jwt');
+passport.use(new Strategy({
+    jwtFromRequest: ExtractJwt.fromAuthHeader(),
+    secretOrKey: config.authSecret
+}, (payload, done) => {
+    done(null, payload);
+}));
+
+app.use(passport.initialize());
+
+const v1AuthRoute = require('./routes/api/v1/auth');
+app.use('/api/v1/auth', v1AuthRoute);
+
+const v1UsersRoute = require('./routes/api/v1/users');
+app.use('/api/v1/users', v1UsersRoute);
+
 
 app.use('/', exampleRoutes);
 
