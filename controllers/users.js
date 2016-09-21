@@ -36,3 +36,27 @@ module.exports.get = (req, res, next) => {
         next(err);
     });
 };
+
+module.exports.destroy = (req, res, next) => {
+    const {id} = req.params;
+
+    userModel.update({
+        isActive: false
+    }, {
+        where: {id}
+    }).then(result => {
+        
+        const success = result[0] === 1;
+
+        if(!success) {
+            const error = new Error('Not found');
+            error.status = 404;
+            next(error);
+            return;
+        }
+
+        res.status(200).end();
+    }).catch(err => {
+        next(err);
+    });
+};
