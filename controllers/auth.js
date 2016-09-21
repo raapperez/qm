@@ -27,9 +27,9 @@ module.exports.login = (req, res, next) => {
             return;
         }
 
-        const passwordIsValid = authService.checkPassword(password, user.passwordSalt, user.passwordHash);
+        const isPasswordValid = authService.checkPassword(password, user.passwordSalt, user.passwordHash);
 
-        if(!passwordIsValid) {
+        if(!isPasswordValid) {
             const error = new Error('Invalid credentials');
             error.status = 400;    
             next(error);

@@ -19,3 +19,20 @@ module.exports.create = (req, res, next) => {
         next(err);
     });
 };
+
+
+module.exports.get = (req, res, next) => {
+    const {id} = req.params;
+
+    userModel.findById(id).then(user => {
+        if(!user) {
+            const error = new Error('Not found');
+            error.status =  404;
+            next(error);
+            return;
+        }
+        res.status(200).json(user);
+    }).catch(err => {
+        next(err);
+    });
+};
