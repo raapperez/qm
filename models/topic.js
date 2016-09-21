@@ -7,8 +7,8 @@ const Answer = require('./answer');
 
 const Topic = db.define('topic', {
     id: {
-      type: Sequelize.UUID,
-      primaryKey: true
+        type: Sequelize.UUID,
+        primaryKey: true
     },
     subject: {
         type: Sequelize.STRING,
@@ -25,7 +25,18 @@ const Topic = db.define('topic', {
     }
 });
 
-Topic.belongsTo(User, {as: 'createdByUser'});
-Topic.hasMany(Answer, {as: 'Answers'});
+Topic.belongsTo(User, {
+    as: 'createdByUser',
+    foreignKey: {
+        allowNull: false
+    }
+});
+
+Topic.hasMany(Answer, {
+    as: 'Answers',
+    foreignKey: {
+        allowNull: false
+    }
+});
 
 module.exports = Topic;
