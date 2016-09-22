@@ -30,11 +30,19 @@ module.exports = (sequelize, Sequelize) => {
                 associate: function (models) {
 
                     Topic.belongsTo(models.User, {
-                        foreignKey: 'createdByUserId'
+                        as: 'createdByUser',
+                        foreignKey: {
+                            name: 'createdByUserId',
+                            allowNull: false
+                        }
                     });
 
                     Topic.hasMany(models.Answer, {
-                        foreignKey: 'topicId'
+                        as: 'answers',
+                        foreignKey: {
+                            name: 'topicId',
+                            allowNull: false
+                        }
                     });
                 }
             },

@@ -35,15 +35,20 @@ module.exports.list = (req, res, next) => {
     const {pagination} = req;
 
     Topic.findAll({
-        where: pagination.where,
+        where: Object.assign({}, pagination.where, {isDeleted: false}),
         order: pagination.order,
         offset: pagination.pageSize * (pagination.page - 1),
         limit: pagination.pageSize,
-        include: [{
-            model: User            
-        }, {
-            model: Answer
-        }]
+        include: [
+            {
+                model: User,
+                as: 'createdByUser'
+            },
+            {
+                model: Answer,
+                as: 'answers',
+                where: {isDeleted: false}
+            }]
     }).then(topics => {
         res.status(200).json({
             pagination,
@@ -85,7 +90,7 @@ module.exports.update = (req, res, next) => {
             return;
         }
 
-        return topic.update({ topicData }).then(topic => {
+        return topic.update(topicData).then(topic => {
             res.status(200).json(topic);
         });
     }).catch(err => {

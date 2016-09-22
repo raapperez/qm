@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 
 module.exports = (sequelize, Sequelize) => {
     const Answer = sequelize.define('Answer', {
@@ -19,22 +20,23 @@ module.exports = (sequelize, Sequelize) => {
     },
         {
             classMethods: {
+                isValidToCreate: function (data) {
+                    return data && _.has(data, 'message') && _.isString(data.message) && _.has(data, 'topicId') && _.isString(data.topicId);
+                },
                 associate: function (models) {
-                    Answer.belongsTo(models.User, {                        
-                        foreignKey: 'createdByUserId'
+                    Answer.belongsTo(models.User, {         
+                        as: 'createdByUser',               
+                        foreignKey: {
+                            name: 'createdByUserId',
+                            allowNull: false
+                        }
                     });
 
                     Answer.belongsTo(models.Topic, {                        
-                        foreignKey: 'topicId'
-                    });
-
-                    Answer.belongsTo(models.Answer, {
-                        foreignKey: 'answerId'
-                    });
-
-                    Answer.hasMany(models.Answer, {
-                        as: 'Answers',
-                        foreignKey: 'answerId'
+                        foreignKey: {
+                            name: 'topicId',
+                            allowNull: false
+                        }
                     });
                 }
             },

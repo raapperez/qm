@@ -52,8 +52,19 @@ module.exports = (sequelize, Sequelize) => {
         {
             classMethods: {
                 associate: function (models) {
-                    User.hasMany(models.Topic, {foreignKey: 'createdByUserId'});
-                    User.hasMany(models.Answer, {foreignKey: 'createdByUserId'});
+                    User.hasMany(models.Topic, {
+                        foreignKey: {
+                            name: 'createdByUserId',
+                            allowNull: false
+                        }
+                    });
+
+                    User.hasMany(models.Answer, {
+                        foreignKey: {
+                            name: 'createdByUserId',
+                            allowNull: false
+                        }
+                    });
                 }
             },
             instanceMethods: {
