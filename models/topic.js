@@ -1,53 +1,48 @@
 'use strict';
 
-const Sequelize = require('sequelize');
-const db = require('../services/db');
-const User = require('./user');
-const Answer = require('./answer');
 const _ = require('lodash');
 
-const Topic = db.define('topic', {
-    id: {
-        type: Sequelize.UUID,
-        primaryKey: true
-    },
-    subject: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    message: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    isDeleted: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-        allowNull: false
-    }
-},
-    {
-        classMethods: {
-            isValidToCreate: function(data) {
-                return data && _.has(data, 'subject') && _.isString(data.subject) && _.has(data, 'message') && _.isString(data.message);
-            }
+module.exports = (sequelize, Sequelize) => {
+    const Topic = sequelize.define('Topic', {
+        id: {
+            type: Sequelize.UUID,
+            primaryKey: true
         },
-        instanceMethods: {
-
+        subject: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        message: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        isDeleted: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+            allowNull: false
         }
-    });
+    },
+        {
+            classMethods: {
+                isValidToCreate: function (data) {
+                    return data && _.has(data, 'subject') && _.isString(data.subject) && _.has(data, 'message') && _.isString(data.message);
+                },
+                associate: function (models) {
 
-Topic.belongsTo(User, {
-    as: 'createdByUser',
-    foreignKey: {
-        allowNull: false
-    }
-});
+                    Topic.belongsTo(models.User, {
+                        foreignKey: 'createdByUserId'
+                    });
 
-Topic.hasMany(Answer, {
-    as: 'Answers',
-    foreignKey: {
-        allowNull: false
-    }
-});
+                    Topic.hasMany(models.Answer, {
+                        foreignKey: 'topicId'
+                    });
+                }
+            },
+            instanceMethods: {
 
-module.exports = Topic;
+            }
+        }
+    );
+
+    return Topic;
+};

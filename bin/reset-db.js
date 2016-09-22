@@ -23,9 +23,9 @@ function configureLog() {
 configureLog();
 
 
-const User = require('../models/user');
-const Topic = require('../models/topic');
-const Answer = require('../models/answer');
+const models = require('../models');
+
+const {User, Topic, Answer} = models;
 
 bb.each([User, Topic, Answer], item => {
     return item.sync({ force: true });

@@ -1,7 +1,8 @@
 'use sttict';
 
-const topicModel = require('../models/topic');
-const userModel = require('../models/user');
+const models = require('../models');
+const {Topic, User, Answer} = models;
+
 const uuid = require('uuid');
 const _ = require('lodash');
 
@@ -9,14 +10,14 @@ const _ = require('lodash');
 module.exports.create = (req, res, next) => {
     const topicData = req.body;
 
-    if (!topicModel.isValidToCreate(topicData)) {
+    if (!Topic.isValidToCreate(topicData)) {
         const error = new Error('Invalid topic\'s subject or message');
         error.status = 404;
         next(error);
         return;
     }
 
-    const topic = topicModel.build(Object.assign(topicData, {
+    const topic = Topic.build(Object.assign(topicData, {
         id: uuid.v4(),
         isDeleted: false,
         createdByUserId: req.user.id
@@ -33,13 +34,15 @@ module.exports.create = (req, res, next) => {
 module.exports.list = (req, res, next) => {
     const {pagination} = req;
 
-    topicModel.findAll({
+    Topic.findAll({
         where: pagination.where,
         order: pagination.order,
         offset: pagination.pageSize * (pagination.page - 1),
         limit: pagination.pageSize,
         include: [{
-            model: userModel
+            model: User            
+        }, {
+            model: Answer
         }]
     }).then(topics => {
         res.status(200).json({
@@ -55,7 +58,7 @@ module.exports.list = (req, res, next) => {
 module.exports.get = (req, res, next) => {
     const {id} = req.params;
 
-    topicModel.findById(id).then(topic => {
+    Topic.findById(id).then(topic => {
         if (!topic) {
             const error = new Error('Not found');
             error.status = 404;
@@ -93,7 +96,7 @@ module.exports.update = (req, res, next) => {
 module.exports.destroy = (req, res, next) => {
     const {id} = req.params;
 
-    topicModel.update({
+    Topic.update({
         isDeleted: true
     }, {
             where: { id }

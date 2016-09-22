@@ -1,37 +1,46 @@
 'use strict';
 
-const Sequelize = require('sequelize');
-const db = require('../services/db');
-const User = require('./user');
 
-const Answer = db.define('answer', {
-    id: {
-        type: Sequelize.UUID,
-        primaryKey: true
+module.exports = (sequelize, Sequelize) => {
+    const Answer = sequelize.define('Answer', {
+        id: {
+            type: Sequelize.UUID,
+            primaryKey: true
+        },
+        message: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        isDeleted: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+            allowNull: false
+        }
     },
-    message: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    isDeleted: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-        allowNull: false
-    }
-});
+        {
+            classMethods: {
+                associate: function (models) {
+                    Answer.belongsTo(models.User, {                        
+                        foreignKey: 'createdByUserId'
+                    });
 
-Answer.belongsTo(User, {
-    as: 'createdByUser',
-    foreignKey: {
-        allowNull: false
-    }
-});
+                    Answer.belongsTo(models.Topic, {                        
+                        foreignKey: 'topicId'
+                    });
 
-Answer.hasMany(Answer, {
-    as: 'Answers',
-    foreignKey: {
-        allowNull: true
-    }
-});
+                    Answer.belongsTo(models.Answer, {
+                        foreignKey: 'answerId'
+                    });
 
-module.exports = Answer;
+                    Answer.hasMany(models.Answer, {
+                        as: 'Answers',
+                        foreignKey: 'answerId'
+                    });
+                }
+            },
+            instanceMethods: {}
+        }
+    );
+
+    return Answer;
+};

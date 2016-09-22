@@ -1,7 +1,9 @@
 'use strict';
 
+const models = require('../models');
+const {User} = models;
+
 const passport = require('passport');
-const userModel = require('../models/user');
 const SHA256 = require('crypto-js/sha256');
 
 module.exports = (req, res, next) => {
@@ -13,7 +15,7 @@ module.exports = (req, res, next) => {
             return;
         }
 
-        userModel.findById(req.user.id).then(user => {
+        User.findById(req.user.id).then(user => {
             const token = req.headers.authorization.replace('JWT ', '');
             const tokenHash = SHA256(token).toString();
                         

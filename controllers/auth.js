@@ -1,6 +1,7 @@
 'use sttict';
 
-const userModel = require('../models/user');
+const models = require('../models');
+const {User} = models;
 const authService = require('../services/auth');
 
 module.exports.login = (req, res, next) => {
@@ -14,7 +15,7 @@ module.exports.login = (req, res, next) => {
         return;
     }
 
-    userModel.findOne({
+    User.findOne({
         where: {
             email,
             isActive: true

@@ -1,12 +1,14 @@
 'use sttict';
 
-const userModel = require('../models/user');
+const models = require('../models');
+const {User} = models;
+
 const uuid = require('uuid');
 
 module.exports.create = (req, res, next) => {
     const userData = req.body;
 
-    const user = userModel.build(Object.assign(userData, {
+    const user = User.build(Object.assign(userData, {
         id: uuid.v4(),
         isActive: true
     }));
@@ -23,8 +25,8 @@ module.exports.create = (req, res, next) => {
 
 module.exports.get = (req, res, next) => {
     const {id} = req.params;
-
-    userModel.findById(id).then(user => {
+console.log('get');
+    User.findById(id).then(user => {
         if(!user) {
             const error = new Error('Not found');
             error.status =  404;
@@ -40,7 +42,7 @@ module.exports.get = (req, res, next) => {
 module.exports.destroy = (req, res, next) => {
     const {id} = req.params;
 
-    userModel.update({
+    User.update({
         isActive: false
     }, {
         where: {id}

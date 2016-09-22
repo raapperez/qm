@@ -5,7 +5,7 @@ const router = express.Router();
 const usersController = require('../../../controllers/users');
 const auth = require('../../../middlewares/auth');
 
-router.post('', auth, usersController.create);
+router.post('', usersController.create);
 router.get('/:id', auth, usersController.get);
 router.delete('/:id', auth, usersController.destroy);
 
