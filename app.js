@@ -48,12 +48,8 @@ passport.use(new Strategy({
 
 app.use(passport.initialize());
 
-const v1AuthRoute = require('./routes/api/v1/auth');
-app.use('/api/v1/auth', v1AuthRoute);
-
-const v1UsersRoute = require('./routes/api/v1/users');
-app.use('/api/v1/users', v1UsersRoute);
-
+const v1Routes = require('./routes/api/v1-routes');
+app.use('/api/v1', v1Routes);
 
 app.use('/', exampleRoutes);
 
