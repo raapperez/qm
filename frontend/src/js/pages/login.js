@@ -5,6 +5,7 @@ import LoginForm from '../components/login-form';
 import Api from '../services/api';
 import Http from '../services/http';
 import user from '../services/user';
+import { SubmissionError } from 'redux-form';
 
 class LoginPage extends Component {
 
@@ -21,7 +22,7 @@ class LoginPage extends Component {
 
         const api = new Api(new Http(fetch));
 
-        api.login(email, password).then(data => {
+        return api.login(email, password).then(data => {
 
             const {token} = data;
             
@@ -32,9 +33,8 @@ class LoginPage extends Component {
             router.push('/topics');
             
         }).catch(err => {
-            console.log(err);
+            throw new SubmissionError({_error: err.message});
         });
-        
     }
 
     render() {

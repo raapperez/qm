@@ -35,6 +35,8 @@ var LoginForm = function (_Component) {
             var _props = this.props;
             var handleSubmit = _props.handleSubmit;
             var submitting = _props.submitting;
+            var onSubmit = _props.onSubmit;
+            var error = _props.error;
 
 
             return _react2.default.createElement(
@@ -54,7 +56,7 @@ var LoginForm = function (_Component) {
                     { className: 'panel-body' },
                     _react2.default.createElement(
                         'form',
-                        { onSubmit: handleSubmit },
+                        { onSubmit: handleSubmit(onSubmit) },
                         _react2.default.createElement(
                             'div',
                             { className: 'form-group' },
@@ -75,6 +77,18 @@ var LoginForm = function (_Component) {
                             ),
                             _react2.default.createElement(_reduxForm.Field, { name: 'password', id: 'password', className: 'form-control', component: 'input', type: 'password', required: true })
                         ),
+                        error ? _react2.default.createElement(
+                            'div',
+                            { className: 'alert alert-danger', role: 'alert' },
+                            _react2.default.createElement('span', { className: 'glyphicon glyphicon-exclamation-sign', 'aria-hidden': 'true' }),
+                            _react2.default.createElement(
+                                'span',
+                                { className: 'sr-only' },
+                                'Error: '
+                            ),
+                            ' ',
+                            error
+                        ) : null,
                         _react2.default.createElement(
                             'button',
                             { type: 'submit', className: 'btn btn-default', disabled: submitting },
@@ -90,8 +104,10 @@ var LoginForm = function (_Component) {
 }(_react.Component);
 
 LoginForm.propTypes = {
+    onSubmit: _react.PropTypes.func.isRequired,
     handleSubmit: _react.PropTypes.func.isRequired,
-    submitting: _react.PropTypes.bool.isRequired
+    submitting: _react.PropTypes.bool.isRequired,
+    error: _react.PropTypes.string
 };
 
 exports.default = (0, _reduxForm.reduxForm)({

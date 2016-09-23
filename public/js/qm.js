@@ -37825,6 +37825,8 @@
 
 	var _user2 = _interopRequireDefault(_user);
 
+	var _reduxForm = __webpack_require__(259);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37855,7 +37857,7 @@
 
 	            var api = new _api2.default(new _http2.default(fetch));
 
-	            api.login(email, password).then(function (data) {
+	            return api.login(email, password).then(function (data) {
 	                var token = data.token;
 
 
@@ -37865,7 +37867,7 @@
 
 	                router.push('/topics');
 	            }).catch(function (err) {
-	                console.log(err);
+	                throw new _reduxForm.SubmissionError({ _error: err.message });
 	            });
 	        }
 	    }, {
@@ -37934,6 +37936,8 @@
 	            var _props = this.props;
 	            var handleSubmit = _props.handleSubmit;
 	            var submitting = _props.submitting;
+	            var onSubmit = _props.onSubmit;
+	            var error = _props.error;
 
 
 	            return _react2.default.createElement(
@@ -37953,7 +37957,7 @@
 	                    { className: 'panel-body' },
 	                    _react2.default.createElement(
 	                        'form',
-	                        { onSubmit: handleSubmit },
+	                        { onSubmit: handleSubmit(onSubmit) },
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'form-group' },
@@ -37974,6 +37978,18 @@
 	                            ),
 	                            _react2.default.createElement(_reduxForm.Field, { name: 'password', id: 'password', className: 'form-control', component: 'input', type: 'password', required: true })
 	                        ),
+	                        error ? _react2.default.createElement(
+	                            'div',
+	                            { className: 'alert alert-danger', role: 'alert' },
+	                            _react2.default.createElement('span', { className: 'glyphicon glyphicon-exclamation-sign', 'aria-hidden': 'true' }),
+	                            _react2.default.createElement(
+	                                'span',
+	                                { className: 'sr-only' },
+	                                'Error: '
+	                            ),
+	                            ' ',
+	                            error
+	                        ) : null,
 	                        _react2.default.createElement(
 	                            'button',
 	                            { type: 'submit', className: 'btn btn-default', disabled: submitting },
@@ -37989,8 +38005,10 @@
 	}(_react.Component);
 
 	LoginForm.propTypes = {
+	    onSubmit: _react.PropTypes.func.isRequired,
 	    handleSubmit: _react.PropTypes.func.isRequired,
-	    submitting: _react.PropTypes.bool.isRequired
+	    submitting: _react.PropTypes.bool.isRequired,
+	    error: _react.PropTypes.string
 	};
 
 	exports.default = (0, _reduxForm.reduxForm)({
@@ -38154,7 +38172,9 @@
 	    if (response.status >= 200 && response.status < 300) {
 	        return Promise.resolve(response);
 	    } else {
-	        return Promise.rejected(json(response));
+	        return json(response).then(function (json) {
+	            return Promise.reject(json);
+	        });
 	    }
 	}
 

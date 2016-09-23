@@ -20,7 +20,9 @@ function status(response) {
     if (response.status >= 200 && response.status < 300) {
         return Promise.resolve(response);
     } else {
-        return Promise.rejected(json(response));
+        return json(response).then(function (json) {
+            return Promise.reject(json);
+        });
     }
 }
 

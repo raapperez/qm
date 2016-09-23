@@ -26,6 +26,8 @@ var _user = require('../services/user');
 
 var _user2 = _interopRequireDefault(_user);
 
+var _reduxForm = require('redux-form');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -56,7 +58,7 @@ var LoginPage = function (_Component) {
 
             var api = new _api2.default(new _http2.default(fetch));
 
-            api.login(email, password).then(function (data) {
+            return api.login(email, password).then(function (data) {
                 var token = data.token;
 
 
@@ -66,7 +68,7 @@ var LoginPage = function (_Component) {
 
                 router.push('/topics');
             }).catch(function (err) {
-                console.log(err);
+                throw new _reduxForm.SubmissionError({ _error: err.message });
             });
         }
     }, {
