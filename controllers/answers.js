@@ -8,7 +8,7 @@ const _ = require('lodash');
 
 
 module.exports.create = (req, res, next) => {
-    const answerData = req.body;
+    const answerData = Object.extend({}, req.body, { topicId: req.params.topicId });
 
     if (!Answer.isValidToCreate(answerData)) {
         const error = new Error('Invalid answer\'s message or wrong value for pair (answerId, topicId)');
@@ -25,6 +25,30 @@ module.exports.create = (req, res, next) => {
 
     answer.save().then(newAnswer => {
         res.status(201).json(newAnswer);
+    }).catch(err => {
+        next(err);
+    });
+};
+
+module.exports.list = (req, res, next) => {
+    const {pagination} = req;
+    const {topicId} = req.params;
+
+    Answer.findAll({
+        where: Object.assign({}, pagination.where, {isDeleted: false, topicId}),
+        order: pagination.order,
+        offset: pagination.pageSize * (pagination.page - 1),
+        limit: pagination.pageSize,
+        include: [
+            {
+                model: User,
+                as: 'createdByUser'
+            }]
+    }).then(answers => {
+        res.status(200).json({
+            pagination,
+            data: answers
+        });
     }).catch(err => {
         next(err);
     });

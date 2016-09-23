@@ -15,7 +15,7 @@ router.get('*', function (req, res, next) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (renderProps) {
 
-      const initialState = {value: 10};
+      const initialState = undefined;
 
       res.status(200).render('qm', {        
         data: {

@@ -7,7 +7,6 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const logger = require('winston');
-const exampleRoutes = require('./routes/example');
 const lodashExpress = require('lodash-express');
 const compression = require('compression');
 const config = require('./configs/config.json')[env];
@@ -40,10 +39,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 const passport = require('passport');
 const {Strategy, ExtractJwt} = require('passport-jwt');
 passport.use(new Strategy({
-    jwtFromRequest: ExtractJwt.fromAuthHeader(),
-    secretOrKey: config.authSecret
+  jwtFromRequest: ExtractJwt.fromAuthHeader(),
+  secretOrKey: config.authSecret
 }, (payload, done) => {
-    done(null, payload);
+  done(null, payload);
 }));
 
 app.use(passport.initialize());
@@ -51,7 +50,8 @@ app.use(passport.initialize());
 const v1Routes = require('./routes/api/v1-routes');
 app.use('/api/v1', v1Routes);
 
-app.use('/', exampleRoutes);
+const qmRoutes = require('./routes/qm');
+app.use('/', qmRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -68,10 +68,20 @@ if (app.get('env') === 'development') {
   app.use(function (err, req, res, next) {
     logger.error(err);
     res.status(err.status || 500);
-    res.render('error', {
+
+    const response = {
+      status: err.status,
       message: err.message,
-      error: err
-    });
+      error: err,
+      stack: err.stack
+    };
+
+    if (req.headers.accept === 'application/json') {
+      res.json(response);
+      return;
+    }
+
+    res.render('error', response);
   });
 }
 
@@ -80,10 +90,19 @@ if (app.get('env') === 'development') {
 app.use(function (err, req, res, next) {
   logger.error(err);
   res.status(err.status || 500);
-  res.render('error', {
+
+  const response = {
+    status: err.status,
     message: err.message,
     error: {}
-  });
+  };
+
+  if (req.headers.accept === 'application/json') {
+    res.json(response);
+    return;
+  }
+
+  res.render('error', response);
 });
 
 

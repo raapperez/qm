@@ -11,29 +11,48 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = require('react-router');
 
-var _example = require('./pages/example');
-
-var _example2 = _interopRequireDefault(_example);
-
-var _page = require('./pages/page2');
-
-var _page2 = _interopRequireDefault(_page);
-
 var _reactRedux = require('react-redux');
 
 var _qmStore = require('./stores/qm-store');
+
+var _app = require('./components/app');
+
+var _app2 = _interopRequireDefault(_app);
+
+var _inside = require('./components/inside');
+
+var _inside2 = _interopRequireDefault(_inside);
+
+var _login = require('./pages/login');
+
+var _login2 = _interopRequireDefault(_login);
+
+var _signup = require('./pages/signup');
+
+var _signup2 = _interopRequireDefault(_signup);
+
+var _topics = require('./pages/topics');
+
+var _topics2 = _interopRequireDefault(_topics);
+
+var _topic = require('./pages/topic');
+
+var _topic2 = _interopRequireDefault(_topic);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var routes = exports.routes = _react2.default.createElement(
     _reactRouter.Route,
-    { path: '', component: function component(_ref) {
-            var children = _ref.children;
-            return children;
-        } },
-    _react2.default.createElement(_reactRouter.Route, { path: '/index', component: _example2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: '/page2', component: _page2.default }),
-    _react2.default.createElement(_reactRouter.Redirect, { from: '*', to: '/index' })
+    { path: '', component: _app2.default },
+    _react2.default.createElement(
+        _reactRouter.Route,
+        { path: '', component: _inside2.default },
+        _react2.default.createElement(_reactRouter.Route, { path: '/topics', component: _topics2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: '/topic/:id', component: _topic2.default })
+    ),
+    _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _login2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _signup2.default }),
+    _react2.default.createElement(_reactRouter.Redirect, { from: '/', to: '/login' })
 );
 
 var serverSide = exports.serverSide = function serverSide(renderProps, initialState) {

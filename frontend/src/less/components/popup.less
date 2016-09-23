@@ -1,0 +1,90 @@
+.popup-component {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 50;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-flex-direction: row;
+    -moz-box-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    &.hide {
+        display: none;
+    }
+    
+    .panel {
+        padding: 30px;
+        background-color: #ffffff;
+        max-width: 960px;
+        width: 90%;
+        margin: auto;
+        max-height: 60%;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        box-shadow: 0 45px 50px 0 rgba(0, 0, 0, 0.4);
+        position: relative;
+        
+        &.small {
+            max-width: 480px;
+        }
+        
+        .title {
+            display: block;
+            font-size: 1.125em;
+      //      color: @textColor;
+        }
+        
+        .close-btn {
+            //color: @orangeColor;
+            display: block;
+            position: absolute;
+            font-size: 2em;
+            right: 30px;
+            top: 30px;
+        }
+        
+        .content {
+            padding: 30px 0;
+        }
+        
+        .footer {
+            text-align: right;
+            
+            a:not(:last-child) {
+               margin-right: 10px;
+            }
+            
+            .btn {
+               // min-width: @buttonWidth;
+                display: inline-block;
+                text-align: center;
+                padding: 8px 0;
+                font-size: 0.875em;
+                color: #ffffff;
+            }
+            
+            .positive-btn {
+                // .main-form .button();
+                // .btn();
+            }
+            
+            .negative-btn {
+                // .main-form .sub-button();
+                // .btn();
+            }
+            
+        }
+    }
+    
+}
