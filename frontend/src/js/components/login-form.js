@@ -1,47 +1,16 @@
 'use strict';
 
 import React, {Component, PropTypes} from 'react';
+import {Field, reduxForm} from 'redux-form';
 
 class LoginForm extends Component {
 
-    constructor(props) {        
+    constructor(props) {
         super(props);
-
-        this.state = {
-            email: '',
-            password: ''
-        };
-
-        this.submit = this.submit.bind(this);
-        this.onEmailChange = this.onEmailChange.bind(this);
-        this.onPasswordChange = this.onPasswordChange.bind(this);
-    }
-    
-    componentDidMount() {
-
-    }
-
-    submit(e) {
-        e.preventDefault();
-
-        const {onSubmit} = this.props;
-        onSubmit(this.state);
-    }
-
-    onEmailChange(e) {
-        this.setState({
-            email: e.target.value
-        });
-    }
-
-    onPasswordChange(e) {
-        this.setState({
-            password: e.target.value
-        });
     }
 
     render() {
-        const {email, password} = this.state;
+        const {handleSubmit, submitting} = this.props;
 
         return (
             <div className="login-form panel panel-default">
@@ -49,31 +18,29 @@ class LoginForm extends Component {
                     <h3>Login</h3>
                 </div>
                 <div className="panel-body">
-                    <form onSubmit={this.submit}>
+                    <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="email">Email address</label>
-                            <input type="email" className="form-control" id="email" value={email} onChange={this.onEmailChange} placeholder="user@email.com" required />
+                            <Field name="email" id="email" className="form-control" placeholder="user@email.com" component="input" type="email" required />
                         </div>
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
-                            <input type="password" className="form-control" value={password} onChange={this.onPasswordChange} id="password" required/>
+                            <Field name="password" id="password" className="form-control" component="input" type="password" required />                            
                         </div>
 
-                        <button type="submit" className="btn btn-default">Enter</button>
-                    </form>            
+                        <button type="submit" className="btn btn-default" disabled={submitting}>Enter</button>
+                    </form>
                 </div>
             </div>
         );
     }
 }
 
-
 LoginForm.propTypes = {
-    onSubmit: PropTypes.func.isRequired
+    handleSubmit: PropTypes.func.isRequired,
+    submitting: PropTypes.bool.isRequired
 };
 
-LoginForm.contextTypes = {
-    router: React.PropTypes.object.isRequired
-};
-
-export default LoginForm;
+export default reduxForm({
+    form: 'login'
+})(LoginForm);

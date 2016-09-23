@@ -10,6 +10,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reduxForm = require('redux-form');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24,51 +26,15 @@ var LoginForm = function (_Component) {
     function LoginForm(props) {
         _classCallCheck(this, LoginForm);
 
-        var _this = _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call(this, props));
-
-        _this.state = {
-            email: '',
-            password: ''
-        };
-
-        _this.submit = _this.submit.bind(_this);
-        _this.onEmailChange = _this.onEmailChange.bind(_this);
-        _this.onPasswordChange = _this.onPasswordChange.bind(_this);
-        return _this;
+        return _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call(this, props));
     }
 
     _createClass(LoginForm, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {}
-    }, {
-        key: 'submit',
-        value: function submit(e) {
-            e.preventDefault();
-
-            var onSubmit = this.props.onSubmit;
-
-            onSubmit(this.state);
-        }
-    }, {
-        key: 'onEmailChange',
-        value: function onEmailChange(e) {
-            this.setState({
-                email: e.target.value
-            });
-        }
-    }, {
-        key: 'onPasswordChange',
-        value: function onPasswordChange(e) {
-            this.setState({
-                password: e.target.value
-            });
-        }
-    }, {
         key: 'render',
         value: function render() {
-            var _state = this.state;
-            var email = _state.email;
-            var password = _state.password;
+            var _props = this.props;
+            var handleSubmit = _props.handleSubmit;
+            var submitting = _props.submitting;
 
 
             return _react2.default.createElement(
@@ -88,7 +54,7 @@ var LoginForm = function (_Component) {
                     { className: 'panel-body' },
                     _react2.default.createElement(
                         'form',
-                        { onSubmit: this.submit },
+                        { onSubmit: handleSubmit },
                         _react2.default.createElement(
                             'div',
                             { className: 'form-group' },
@@ -97,7 +63,7 @@ var LoginForm = function (_Component) {
                                 { htmlFor: 'email' },
                                 'Email address'
                             ),
-                            _react2.default.createElement('input', { type: 'email', className: 'form-control', id: 'email', value: email, onChange: this.onEmailChange, placeholder: 'user@email.com', required: true })
+                            _react2.default.createElement(_reduxForm.Field, { name: 'email', id: 'email', className: 'form-control', placeholder: 'user@email.com', component: 'input', type: 'email', required: true })
                         ),
                         _react2.default.createElement(
                             'div',
@@ -107,11 +73,11 @@ var LoginForm = function (_Component) {
                                 { htmlFor: 'password' },
                                 'Password'
                             ),
-                            _react2.default.createElement('input', { type: 'password', className: 'form-control', value: password, onChange: this.onPasswordChange, id: 'password', required: true })
+                            _react2.default.createElement(_reduxForm.Field, { name: 'password', id: 'password', className: 'form-control', component: 'input', type: 'password', required: true })
                         ),
                         _react2.default.createElement(
                             'button',
-                            { type: 'submit', className: 'btn btn-default' },
+                            { type: 'submit', className: 'btn btn-default', disabled: submitting },
                             'Enter'
                         )
                     )
@@ -124,11 +90,10 @@ var LoginForm = function (_Component) {
 }(_react.Component);
 
 LoginForm.propTypes = {
-    onSubmit: _react.PropTypes.func.isRequired
+    handleSubmit: _react.PropTypes.func.isRequired,
+    submitting: _react.PropTypes.bool.isRequired
 };
 
-LoginForm.contextTypes = {
-    router: _react2.default.PropTypes.object.isRequired
-};
-
-exports.default = LoginForm;
+exports.default = (0, _reduxForm.reduxForm)({
+    form: 'login'
+})(LoginForm);
