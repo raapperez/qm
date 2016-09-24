@@ -26,7 +26,7 @@ class TopicsTable extends Component {
                                 Author
                             </th>
                             <th>
-                                Responses
+                                Replies
                             </th>
                             <th>
                                 Created
@@ -37,7 +37,7 @@ class TopicsTable extends Component {
 
                         {
                             topics.map(topic => (
-                                <tr key={topic.id} onClick={
+                                <tr key={topic.id} className="clickable" onClick={
                                     e => {
                                         e.preventDefault();
                                         openTopic(topic);

@@ -53,19 +53,10 @@ var TopicForm = function (_Component) {
 
             return _react2.default.createElement(
                 'div',
-                { className: 'topic-form-component panel panel-default' },
+                { className: 'topic-form-component' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'panel-heading' },
-                    _react2.default.createElement(
-                        'h3',
-                        null,
-                        'New topic'
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'panel-body' },
+                    { className: 'well' },
                     _react2.default.createElement(
                         'form',
                         { onSubmit: handleSubmit(onSubmit) },
@@ -77,7 +68,7 @@ var TopicForm = function (_Component) {
                                 { htmlFor: 'subject' },
                                 'Subject'
                             ),
-                            _react2.default.createElement(_reduxForm.Field, { name: 'subject', id: 'subject', className: 'form-control', component: 'input', type: 'text', required: true })
+                            _react2.default.createElement(_reduxForm.Field, { name: 'subject', id: 'subject', className: 'form-control', component: 'input', type: 'text', maxLength: '255', required: true })
                         ),
                         _react2.default.createElement(
                             'div',
@@ -87,7 +78,7 @@ var TopicForm = function (_Component) {
                                 { htmlFor: 'message' },
                                 'Question'
                             ),
-                            _react2.default.createElement(_reduxForm.Field, { name: 'message', id: 'message', className: 'form-control', component: 'textarea', required: true })
+                            _react2.default.createElement(_reduxForm.Field, { name: 'message', id: 'message', className: 'form-control', component: 'textarea', maxLength: '255', required: true })
                         ),
                         error ? _react2.default.createElement(
                             'div',

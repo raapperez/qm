@@ -7,6 +7,7 @@ import Http from '../services/http';
 import * as actions from '../actions/qm-actions';
 import AnswerForm from '../components/answer-form';
 import { SubmissionError } from 'redux-form';
+import moment from 'moment';
 
 class TopicPage extends Component {
 
@@ -19,7 +20,7 @@ class TopicPage extends Component {
     componentDidMount() {
         const {params, topic, getTopic} = this.props;
 
-        if(!topic || topic.id !== params.id) {
+        if (!topic || topic.id !== params.id) {
             getTopic(params.id);
         }
     }
@@ -28,20 +29,20 @@ class TopicPage extends Component {
         const {postAnswer, topic, getTopic} = this.props;
 
         postAnswer(topic.id, answerData).catch(err => {
-            throw new SubmissionError({_error: err.message});
+            throw new SubmissionError({ _error: err.message });
         }).then(() => {
             const {answerForm} = this.refs;
             answerForm.reset();
             getTopic(topic.id);
         });
-    
+
 
     }
 
     render() {
         const {topic, params} = this.props;
 
-        if(!topic || topic.id !== params.id) {
+        if (!topic || topic.id !== params.id) {
             return (
                 <div>
                     Loading...
@@ -51,14 +52,33 @@ class TopicPage extends Component {
 
         return (
             <div>
-                <h2>{topic.subject}</h2>
-                <p>{topic.message}</p>
+
+                <h1 className="page-header">{topic.subject}</h1>
+
+                <div className="panel panel-default">
+                    <div className="panel-body">
+                        {topic.message}
+                    </div>
+                </div>
 
                 <AnswerForm ref="answerForm" onSubmit={this.doAnswer}/>
 
                 {
                     topic.answers && topic.answers.map(answer => (
-                        <div key={answer.id}>{answer.message}</div>
+                        <div key={answer.id} className="panel panel-default">
+                            <div className="panel-heading">
+                                <h3 className="panel-title">{`${answer.author.firstName} ${answer.author.lastName} - ${moment(answer.updatedAt).fromNow()}`}</h3>
+                                {
+                                    answer.createdAt !== answer.updatedAt ?
+                                        <span className="label label-info">edited</span>
+                                        : null
+                                }
+
+                            </div>
+                            <div className="panel-body">
+                                {answer.message}
+                            </div>
+                        </div>
                     ))
                 }
             </div>
@@ -82,13 +102,13 @@ export default connect(
                 dispatch(actions.setTopic(topic));
                 return topic;
             }).catch(err => {
-                dispatch(actions.setTopic({error: err}));
+                dispatch(actions.setTopic({ error: err }));
             });
 
         },
         postAnswer: (topicId, answer) => {
             const api = new Api(new Http(fetch));
-            return api.post(`/topics/${topicId}/answers`, answer);            
+            return api.post(`/topics/${topicId}/answers`, answer);
         }
     })
 )(TopicPage);

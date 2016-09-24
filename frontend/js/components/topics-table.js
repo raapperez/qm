@@ -64,7 +64,7 @@ var TopicsTable = function (_Component) {
                             _react2.default.createElement(
                                 'th',
                                 null,
-                                'Responses'
+                                'Replies'
                             ),
                             _react2.default.createElement(
                                 'th',
@@ -79,7 +79,7 @@ var TopicsTable = function (_Component) {
                         topics.map(function (topic) {
                             return _react2.default.createElement(
                                 'tr',
-                                { key: topic.id, onClick: function onClick(e) {
+                                { key: topic.id, className: 'clickable', onClick: function onClick(e) {
                                         e.preventDefault();
                                         openTopic(topic);
                                     } },

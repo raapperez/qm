@@ -30,6 +30,10 @@ var _answerForm2 = _interopRequireDefault(_answerForm);
 
 var _reduxForm = require('redux-form');
 
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -105,21 +109,43 @@ var TopicPage = function (_Component) {
                 'div',
                 null,
                 _react2.default.createElement(
-                    'h2',
-                    null,
+                    'h1',
+                    { className: 'page-header' },
                     topic.subject
                 ),
                 _react2.default.createElement(
-                    'p',
-                    null,
-                    topic.message
+                    'div',
+                    { className: 'panel panel-default' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'panel-body' },
+                        topic.message
+                    )
                 ),
                 _react2.default.createElement(_answerForm2.default, { ref: 'answerForm', onSubmit: this.doAnswer }),
                 topic.answers && topic.answers.map(function (answer) {
                     return _react2.default.createElement(
                         'div',
-                        { key: answer.id },
-                        answer.message
+                        { key: answer.id, className: 'panel panel-default' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'panel-heading' },
+                            _react2.default.createElement(
+                                'h3',
+                                { className: 'panel-title' },
+                                answer.author.firstName + ' ' + answer.author.lastName + ' - ' + (0, _moment2.default)(answer.updatedAt).fromNow()
+                            ),
+                            answer.createdAt !== answer.updatedAt ? _react2.default.createElement(
+                                'span',
+                                { className: 'label label-info' },
+                                'edited'
+                            ) : null
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'panel-body' },
+                            answer.message
+                        )
                     );
                 })
             );

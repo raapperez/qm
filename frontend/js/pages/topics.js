@@ -110,6 +110,13 @@ var TopicsPage = function (_Component) {
                 _react2.default.createElement(
                     'div',
                     { className: 'col-md-12' },
+                    _react2.default.createElement(
+                        'h1',
+                        { className: 'page-header' },
+                        'Topics (',
+                        topics.pagination.total,
+                        ')'
+                    ),
                     _react2.default.createElement(_topicsTable2.default, { topics: topics.data, openTopic: this.openTopic }),
                     _react2.default.createElement(
                         'div',

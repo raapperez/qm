@@ -21,7 +21,7 @@ class TopicCreatePage extends Component {
         const {createTopic} = this.props;
         const {router} = this.context;
 
-        createTopic(topicData).then(topic => {
+        return createTopic(topicData).then(topic => {
             router.push(`/topic/${topic.id}`);
         }).catch(err => {
             throw new SubmissionError({_error: err.message});
@@ -37,7 +37,7 @@ class TopicCreatePage extends Component {
         return (
             <div className="row">
                 <div className="col-md-12">
-                    <br />
+                    <h1 className="page-header">New topic</h1>
                     <TopicForm onSubmit={this.onSubmit} onCancel={this.goBack} />
                 </div>
             </div>

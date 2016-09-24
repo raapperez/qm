@@ -13,16 +13,12 @@ class AnswerForm extends Component {
         const {handleSubmit, submitting, onSubmit, error} = this.props;
 
         return (
-            <div className="topic-form-component panel panel-default">
-                <div className="panel-heading">
-                    <h3>New topic</h3>
-                </div>
-                <div className="panel-body">
+            <div className="topic-form-component well">
                     <form onSubmit={handleSubmit(onSubmit) }>
 
                         <div className="form-group">
-                            <label htmlFor="message">Answer</label>
-                            <Field name="message" id="message" className="form-control" component="textarea" required />
+                            <label htmlFor="message">Add a reply</label>
+                            <Field name="message" id="message" className="form-control" component="textarea" maxLength="255" required />
                         </div>
 
                         {error ?
@@ -36,7 +32,6 @@ class AnswerForm extends Component {
                         <button type="submit" className="btn btn-primary" disabled={submitting}>Post</button>
 
                     </form>
-                </div>
             </div>
         );
     }

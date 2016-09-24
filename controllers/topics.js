@@ -54,7 +54,13 @@ module.exports.list = (req, res, next) => {
                     model: Answer,
                     as: 'answers',
                     where: { isDeleted: false },
-                    required: false
+                    required: false,
+                    include: [
+                        {
+                            model: User,
+                            as: 'author'
+                        }
+                    ]
                 }]
         })
     ]).then(_.spread((count, topics) => {
@@ -84,7 +90,13 @@ module.exports.get = (req, res, next) => {
         include: [
             {
                 model: Answer,
-                as: 'answers'
+                as: 'answers',
+                include: [
+                    {
+                        model: User,
+                        as: 'author'
+                    }
+                ]
             }
         ],
         order: [

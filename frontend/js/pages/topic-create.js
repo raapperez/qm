@@ -60,7 +60,7 @@ var TopicCreatePage = function (_Component) {
             var router = this.context.router;
 
 
-            createTopic(topicData).then(function (topic) {
+            return createTopic(topicData).then(function (topic) {
                 router.push('/topic/' + topic.id);
             }).catch(function (err) {
                 throw new _reduxForm.SubmissionError({ _error: err.message });
@@ -82,7 +82,11 @@ var TopicCreatePage = function (_Component) {
                 _react2.default.createElement(
                     'div',
                     { className: 'col-md-12' },
-                    _react2.default.createElement('br', null),
+                    _react2.default.createElement(
+                        'h1',
+                        { className: 'page-header' },
+                        'New topic'
+                    ),
                     _react2.default.createElement(_topicForm2.default, { onSubmit: this.onSubmit, onCancel: this.goBack })
                 )
             );

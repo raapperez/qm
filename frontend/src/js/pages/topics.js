@@ -55,8 +55,9 @@ class TopicsPage extends Component {
 
         return (
             <div className="row">
-
                 <div className="col-md-12">
+
+                    <h1 className="page-header">Topics ({topics.pagination.total})</h1>
 
                     <TopicsTable topics={topics.data} openTopic={this.openTopic} />
 

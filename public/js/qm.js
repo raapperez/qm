@@ -46589,6 +46589,13 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'col-md-12' },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        { className: 'page-header' },
+	                        'Topics (',
+	                        topics.pagination.total,
+	                        ')'
+	                    ),
 	                    _react2.default.createElement(_topicsTable2.default, { topics: topics.data, openTopic: this.openTopic }),
 	                    _react2.default.createElement(
 	                        'div',
@@ -46703,7 +46710,7 @@
 	                            _react2.default.createElement(
 	                                'th',
 	                                null,
-	                                'Responses'
+	                                'Replies'
 	                            ),
 	                            _react2.default.createElement(
 	                                'th',
@@ -46718,7 +46725,7 @@
 	                        topics.map(function (topic) {
 	                            return _react2.default.createElement(
 	                                'tr',
-	                                { key: topic.id, onClick: function onClick(e) {
+	                                { key: topic.id, className: 'clickable', onClick: function onClick(e) {
 	                                        e.preventDefault();
 	                                        openTopic(topic);
 	                                    } },
@@ -61296,6 +61303,10 @@
 
 	var _reduxForm = __webpack_require__(566);
 
+	var _moment = __webpack_require__(753);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -61371,21 +61382,43 @@
 	                'div',
 	                null,
 	                _react2.default.createElement(
-	                    'h2',
-	                    null,
+	                    'h1',
+	                    { className: 'page-header' },
 	                    topic.subject
 	                ),
 	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    topic.message
+	                    'div',
+	                    { className: 'panel panel-default' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'panel-body' },
+	                        topic.message
+	                    )
 	                ),
 	                _react2.default.createElement(_answerForm2.default, { ref: 'answerForm', onSubmit: this.doAnswer }),
 	                topic.answers && topic.answers.map(function (answer) {
 	                    return _react2.default.createElement(
 	                        'div',
-	                        { key: answer.id },
-	                        answer.message
+	                        { key: answer.id, className: 'panel panel-default' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'panel-heading' },
+	                            _react2.default.createElement(
+	                                'h3',
+	                                { className: 'panel-title' },
+	                                answer.author.firstName + ' ' + answer.author.lastName + ' - ' + (0, _moment2.default)(answer.updatedAt).fromNow()
+	                            ),
+	                            answer.createdAt !== answer.updatedAt ? _react2.default.createElement(
+	                                'span',
+	                                { className: 'label label-info' },
+	                                'edited'
+	                            ) : null
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'panel-body' },
+	                            answer.message
+	                        )
 	                    );
 	                })
 	            );
@@ -61469,49 +61502,36 @@
 
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'topic-form-component panel panel-default' },
+	                { className: 'topic-form-component well' },
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'panel-heading' },
+	                    'form',
+	                    { onSubmit: handleSubmit(onSubmit) },
 	                    _react2.default.createElement(
-	                        'h3',
-	                        null,
-	                        'New topic'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'panel-body' },
-	                    _react2.default.createElement(
-	                        'form',
-	                        { onSubmit: handleSubmit(onSubmit) },
+	                        'div',
+	                        { className: 'form-group' },
 	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'form-group' },
-	                            _react2.default.createElement(
-	                                'label',
-	                                { htmlFor: 'message' },
-	                                'Answer'
-	                            ),
-	                            _react2.default.createElement(_reduxForm.Field, { name: 'message', id: 'message', className: 'form-control', component: 'textarea', required: true })
+	                            'label',
+	                            { htmlFor: 'message' },
+	                            'Add a reply'
 	                        ),
-	                        error ? _react2.default.createElement(
-	                            'div',
-	                            { className: 'alert alert-danger', role: 'alert' },
-	                            _react2.default.createElement('span', { className: 'glyphicon glyphicon-exclamation-sign', 'aria-hidden': 'true' }),
-	                            _react2.default.createElement(
-	                                'span',
-	                                { className: 'sr-only' },
-	                                'Error: '
-	                            ),
-	                            ' ',
-	                            error
-	                        ) : null,
+	                        _react2.default.createElement(_reduxForm.Field, { name: 'message', id: 'message', className: 'form-control', component: 'textarea', maxLength: '255', required: true })
+	                    ),
+	                    error ? _react2.default.createElement(
+	                        'div',
+	                        { className: 'alert alert-danger', role: 'alert' },
+	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-exclamation-sign', 'aria-hidden': 'true' }),
 	                        _react2.default.createElement(
-	                            'button',
-	                            { type: 'submit', className: 'btn btn-primary', disabled: submitting },
-	                            'Post'
-	                        )
+	                            'span',
+	                            { className: 'sr-only' },
+	                            'Error: '
+	                        ),
+	                        ' ',
+	                        error
+	                    ) : null,
+	                    _react2.default.createElement(
+	                        'button',
+	                        { type: 'submit', className: 'btn btn-primary', disabled: submitting },
+	                        'Post'
 	                    )
 	                )
 	            );
@@ -61598,7 +61618,7 @@
 	            var router = this.context.router;
 
 
-	            createTopic(topicData).then(function (topic) {
+	            return createTopic(topicData).then(function (topic) {
 	                router.push('/topic/' + topic.id);
 	            }).catch(function (err) {
 	                throw new _reduxForm.SubmissionError({ _error: err.message });
@@ -61620,7 +61640,11 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'col-md-12' },
-	                    _react2.default.createElement('br', null),
+	                    _react2.default.createElement(
+	                        'h1',
+	                        { className: 'page-header' },
+	                        'New topic'
+	                    ),
 	                    _react2.default.createElement(_topicForm2.default, { onSubmit: this.onSubmit, onCancel: this.goBack })
 	                )
 	            );
@@ -61711,19 +61735,10 @@
 
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'topic-form-component panel panel-default' },
+	                { className: 'topic-form-component' },
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'panel-heading' },
-	                    _react2.default.createElement(
-	                        'h3',
-	                        null,
-	                        'New topic'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'panel-body' },
+	                    { className: 'well' },
 	                    _react2.default.createElement(
 	                        'form',
 	                        { onSubmit: handleSubmit(onSubmit) },
@@ -61735,7 +61750,7 @@
 	                                { htmlFor: 'subject' },
 	                                'Subject'
 	                            ),
-	                            _react2.default.createElement(_reduxForm.Field, { name: 'subject', id: 'subject', className: 'form-control', component: 'input', type: 'text', required: true })
+	                            _react2.default.createElement(_reduxForm.Field, { name: 'subject', id: 'subject', className: 'form-control', component: 'input', type: 'text', maxLength: '255', required: true })
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',
@@ -61745,7 +61760,7 @@
 	                                { htmlFor: 'message' },
 	                                'Question'
 	                            ),
-	                            _react2.default.createElement(_reduxForm.Field, { name: 'message', id: 'message', className: 'form-control', component: 'textarea', required: true })
+	                            _react2.default.createElement(_reduxForm.Field, { name: 'message', id: 'message', className: 'form-control', component: 'textarea', maxLength: '255', required: true })
 	                        ),
 	                        error ? _react2.default.createElement(
 	                            'div',

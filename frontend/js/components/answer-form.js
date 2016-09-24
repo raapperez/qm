@@ -41,49 +41,36 @@ var AnswerForm = function (_Component) {
 
             return _react2.default.createElement(
                 'div',
-                { className: 'topic-form-component panel panel-default' },
+                { className: 'topic-form-component well' },
                 _react2.default.createElement(
-                    'div',
-                    { className: 'panel-heading' },
+                    'form',
+                    { onSubmit: handleSubmit(onSubmit) },
                     _react2.default.createElement(
-                        'h3',
-                        null,
-                        'New topic'
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'panel-body' },
-                    _react2.default.createElement(
-                        'form',
-                        { onSubmit: handleSubmit(onSubmit) },
+                        'div',
+                        { className: 'form-group' },
                         _react2.default.createElement(
-                            'div',
-                            { className: 'form-group' },
-                            _react2.default.createElement(
-                                'label',
-                                { htmlFor: 'message' },
-                                'Answer'
-                            ),
-                            _react2.default.createElement(_reduxForm.Field, { name: 'message', id: 'message', className: 'form-control', component: 'textarea', required: true })
+                            'label',
+                            { htmlFor: 'message' },
+                            'Add a reply'
                         ),
-                        error ? _react2.default.createElement(
-                            'div',
-                            { className: 'alert alert-danger', role: 'alert' },
-                            _react2.default.createElement('span', { className: 'glyphicon glyphicon-exclamation-sign', 'aria-hidden': 'true' }),
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'sr-only' },
-                                'Error: '
-                            ),
-                            ' ',
-                            error
-                        ) : null,
+                        _react2.default.createElement(_reduxForm.Field, { name: 'message', id: 'message', className: 'form-control', component: 'textarea', maxLength: '255', required: true })
+                    ),
+                    error ? _react2.default.createElement(
+                        'div',
+                        { className: 'alert alert-danger', role: 'alert' },
+                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-exclamation-sign', 'aria-hidden': 'true' }),
                         _react2.default.createElement(
-                            'button',
-                            { type: 'submit', className: 'btn btn-primary', disabled: submitting },
-                            'Post'
-                        )
+                            'span',
+                            { className: 'sr-only' },
+                            'Error: '
+                        ),
+                        ' ',
+                        error
+                    ) : null,
+                    _react2.default.createElement(
+                        'button',
+                        { type: 'submit', className: 'btn btn-primary', disabled: submitting },
+                        'Post'
                     )
                 )
             );

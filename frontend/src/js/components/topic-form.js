@@ -22,20 +22,17 @@ class TopicForm extends Component {
         const {handleSubmit, submitting, onSubmit, error} = this.props;
 
         return (
-            <div className="topic-form-component panel panel-default">
-                <div className="panel-heading">
-                    <h3>New topic</h3>
-                </div>
-                <div className="panel-body">
+            <div className="topic-form-component">
+                <div className="well">
                     <form onSubmit={handleSubmit(onSubmit) }>
                         <div className="form-group">
                             <label htmlFor="subject">Subject</label>
-                            <Field name="subject" id="subject" className="form-control" component="input" type="text" required />
+                            <Field name="subject" id="subject" className="form-control" component="input" type="text" maxLength="255" required />
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="message">Question</label>
-                            <Field name="message" id="message" className="form-control" component="textarea" required />
+                            <Field name="message" id="message" className="form-control" component="textarea" maxLength="255" required />
                         </div>
 
                         {error ?
