@@ -22,7 +22,6 @@ class TopicCreatePage extends Component {
         const {router} = this.context;
 
         createTopic(topicData).then(topic => {
-            console.log(topic);
             router.push(`/topic/${topic.id}`);
         }).catch(err => {
             throw new SubmissionError({_error: err.message});

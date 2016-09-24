@@ -12,6 +12,7 @@ class Api {
     getDefaultOptions() {
         let headers = {};
         headers['Content-Type'] = 'application/json;charset=UTF-8';
+        headers.accept = 'application/json';
 
         const token = user.getToken();
         if (token) {

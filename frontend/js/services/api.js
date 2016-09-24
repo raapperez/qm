@@ -28,6 +28,7 @@ var Api = function () {
         value: function getDefaultOptions() {
             var headers = {};
             headers['Content-Type'] = 'application/json;charset=UTF-8';
+            headers.accept = 'application/json';
 
             var token = _user2.default.getToken();
             if (token) {

@@ -10,6 +10,6 @@ const answersRoutes = require('./v1/answers');
 router.use('/auth', authRoutes);
 router.use('/users', usersRoutes);
 router.use('/topics', topicsRoutes);
-router.use('/topics/:topicId/answers', answersRoutes);
+router.use('/topics', answersRoutes);
 
 module.exports = router;

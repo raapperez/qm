@@ -10,6 +10,28 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRedux = require('react-redux');
+
+var _api = require('../services/api');
+
+var _api2 = _interopRequireDefault(_api);
+
+var _http = require('../services/http');
+
+var _http2 = _interopRequireDefault(_http);
+
+var _qmActions = require('../actions/qm-actions');
+
+var actions = _interopRequireWildcard(_qmActions);
+
+var _answerForm = require('../components/answer-form');
+
+var _answerForm2 = _interopRequireDefault(_answerForm);
+
+var _reduxForm = require('redux-form');
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21,20 +43,115 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var TopicPage = function (_Component) {
     _inherits(TopicPage, _Component);
 
-    function TopicPage() {
+    function TopicPage(props) {
         _classCallCheck(this, TopicPage);
 
-        return _possibleConstructorReturn(this, (TopicPage.__proto__ || Object.getPrototypeOf(TopicPage)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (TopicPage.__proto__ || Object.getPrototypeOf(TopicPage)).call(this, props));
+
+        _this.doAnswer = _this.doAnswer.bind(_this);
+        return _this;
     }
 
     _createClass(TopicPage, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _props = this.props;
+            var params = _props.params;
+            var topic = _props.topic;
+            var getTopic = _props.getTopic;
+
+
+            if (!topic || topic.id !== params.id) {
+                getTopic(params.id);
+            }
+        }
+    }, {
+        key: 'doAnswer',
+        value: function doAnswer(answerData) {
+            var _this2 = this;
+
+            var _props2 = this.props;
+            var postAnswer = _props2.postAnswer;
+            var topic = _props2.topic;
+            var getTopic = _props2.getTopic;
+
+
+            postAnswer(topic.id, answerData).catch(function (err) {
+                throw new _reduxForm.SubmissionError({ _error: err.message });
+            }).then(function () {
+                var answerForm = _this2.refs.answerForm;
+
+                answerForm.reset();
+                getTopic(topic.id);
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
-            return _react2.default.createElement('div', null);
+            var _props3 = this.props;
+            var topic = _props3.topic;
+            var params = _props3.params;
+
+
+            if (!topic || topic.id !== params.id) {
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    'Loading...'
+                );
+            }
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'h2',
+                    null,
+                    topic.subject
+                ),
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    topic.message
+                ),
+                _react2.default.createElement(_answerForm2.default, { ref: 'answerForm', onSubmit: this.doAnswer }),
+                topic.answers.map(function (answer) {
+                    return _react2.default.createElement(
+                        'div',
+                        { key: answer.id },
+                        answer.message
+                    );
+                })
+            );
         }
     }]);
 
     return TopicPage;
 }(_react.Component);
 
-exports.default = TopicPage;
+TopicPage.propTypes = {
+    topic: _react.PropTypes.object,
+    params: _react.PropTypes.object.isRequired,
+    getTopic: _react.PropTypes.func.isRequired,
+    postAnswer: _react.PropTypes.func.isRequired
+};
+
+exports.default = (0, _reactRedux.connect)(function (state) {
+    return { topic: state.topic };
+}, function (dispatch) {
+    return {
+        getTopic: function getTopic(id) {
+            var api = new _api2.default(new _http2.default(fetch));
+            return api.get('/topics', id).then(function (topic) {
+                dispatch(actions.setTopic(topic));
+                return topic;
+            }).catch(function (err) {
+                dispatch(actions.setTopic({ error: err }));
+            });
+        },
+        postAnswer: function postAnswer(topicId, answer) {
+            var api = new _api2.default(new _http2.default(fetch));
+            return api.post('/topics/' + topicId + '/answers', answer);
+        }
+    };
+})(TopicPage);

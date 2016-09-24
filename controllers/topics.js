@@ -63,7 +63,24 @@ module.exports.list = (req, res, next) => {
 module.exports.get = (req, res, next) => {
     const {id} = req.params;
 
-    Topic.findById(id).then(topic => {
+    if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+        const error = new Error('Invalid topic\'s id');
+        error.status = 400;
+        next(error);
+        return;
+    }
+
+    Topic.findById(id, {        
+        include: [
+            {
+                model: Answer,
+                as: 'answers'
+            }
+        ],
+        order: [
+            [{model: Answer, as: 'answers'}, 'createdAt', 'DESC']
+        ]
+    }).then(topic => {
         if (!topic) {
             const error = new Error('Not found');
             error.status = 404;

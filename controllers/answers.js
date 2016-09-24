@@ -8,7 +8,7 @@ const _ = require('lodash');
 
 
 module.exports.create = (req, res, next) => {
-    const answerData = Object.extend({}, req.body, { topicId: req.params.topicId });
+    const answerData = Object.assign({}, req.body, { topicId: req.params.topicId });
 
     if (!Answer.isValidToCreate(answerData)) {
         const error = new Error('Invalid answer\'s message or wrong value for pair (answerId, topicId)');

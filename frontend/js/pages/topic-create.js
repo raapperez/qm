@@ -61,7 +61,6 @@ var TopicCreatePage = function (_Component) {
 
 
             createTopic(topicData).then(function (topic) {
-                console.log(topic);
                 router.push('/topic/' + topic.id);
             }).catch(function (err) {
                 throw new _reduxForm.SubmissionError({ _error: err.message });

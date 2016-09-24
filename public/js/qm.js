@@ -28360,7 +28360,7 @@
 
 	var _topic2 = _interopRequireDefault(_topic);
 
-	var _topicCreate = __webpack_require__(753);
+	var _topicCreate = __webpack_require__(754);
 
 	var _topicCreate2 = _interopRequireDefault(_topicCreate);
 
@@ -45753,6 +45753,7 @@
 	        value: function getDefaultOptions() {
 	            var headers = {};
 	            headers['Content-Type'] = 'application/json;charset=UTF-8';
+	            headers.accept = 'application/json';
 
 	            var token = _user2.default.getToken();
 	            if (token) {
@@ -46503,6 +46504,28 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(543);
+
+	var _api = __webpack_require__(744);
+
+	var _api2 = _interopRequireDefault(_api);
+
+	var _http = __webpack_require__(746);
+
+	var _http2 = _interopRequireDefault(_http);
+
+	var _qmActions = __webpack_require__(565);
+
+	var actions = _interopRequireWildcard(_qmActions);
+
+	var _answerForm = __webpack_require__(753);
+
+	var _answerForm2 = _interopRequireDefault(_answerForm);
+
+	var _reduxForm = __webpack_require__(566);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -46514,26 +46537,231 @@
 	var TopicPage = function (_Component) {
 	    _inherits(TopicPage, _Component);
 
-	    function TopicPage() {
+	    function TopicPage(props) {
 	        _classCallCheck(this, TopicPage);
 
-	        return _possibleConstructorReturn(this, (TopicPage.__proto__ || Object.getPrototypeOf(TopicPage)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (TopicPage.__proto__ || Object.getPrototypeOf(TopicPage)).call(this, props));
+
+	        _this.doAnswer = _this.doAnswer.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(TopicPage, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _props = this.props;
+	            var params = _props.params;
+	            var topic = _props.topic;
+	            var getTopic = _props.getTopic;
+
+
+	            if (!topic || topic.id !== params.id) {
+	                getTopic(params.id);
+	            }
+	        }
+	    }, {
+	        key: 'doAnswer',
+	        value: function doAnswer(answerData) {
+	            var _this2 = this;
+
+	            var _props2 = this.props;
+	            var postAnswer = _props2.postAnswer;
+	            var topic = _props2.topic;
+	            var getTopic = _props2.getTopic;
+
+
+	            postAnswer(topic.id, answerData).catch(function (err) {
+	                throw new _reduxForm.SubmissionError({ _error: err.message });
+	            }).then(function () {
+	                var answerForm = _this2.refs.answerForm;
+
+	                answerForm.reset();
+	                getTopic(topic.id);
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            return _react2.default.createElement('div', null);
+	            var _props3 = this.props;
+	            var topic = _props3.topic;
+	            var params = _props3.params;
+
+
+	            if (!topic || topic.id !== params.id) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    'Loading...'
+	                );
+	            }
+
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(
+	                    'h2',
+	                    null,
+	                    topic.subject
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    topic.message
+	                ),
+	                _react2.default.createElement(_answerForm2.default, { ref: 'answerForm', onSubmit: this.doAnswer }),
+	                topic.answers.map(function (answer) {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        { key: answer.id },
+	                        answer.message
+	                    );
+	                })
+	            );
 	        }
 	    }]);
 
 	    return TopicPage;
 	}(_react.Component);
 
-	exports.default = TopicPage;
+	TopicPage.propTypes = {
+	    topic: _react.PropTypes.object,
+	    params: _react.PropTypes.object.isRequired,
+	    getTopic: _react.PropTypes.func.isRequired,
+	    postAnswer: _react.PropTypes.func.isRequired
+	};
+
+	exports.default = (0, _reactRedux.connect)(function (state) {
+	    return { topic: state.topic };
+	}, function (dispatch) {
+	    return {
+	        getTopic: function getTopic(id) {
+	            var api = new _api2.default(new _http2.default(fetch));
+	            return api.get('/topics', id).then(function (topic) {
+	                dispatch(actions.setTopic(topic));
+	                return topic;
+	            }).catch(function (err) {
+	                dispatch(actions.setTopic({ error: err }));
+	            });
+	        },
+	        postAnswer: function postAnswer(topicId, answer) {
+	            var api = new _api2.default(new _http2.default(fetch));
+	            return api.post('/topics/' + topicId + '/answers', answer);
+	        }
+	    };
+	})(TopicPage);
 
 /***/ },
 /* 753 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(474);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reduxForm = __webpack_require__(566);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AnswerForm = function (_Component) {
+	    _inherits(AnswerForm, _Component);
+
+	    function AnswerForm(props) {
+	        _classCallCheck(this, AnswerForm);
+
+	        return _possibleConstructorReturn(this, (AnswerForm.__proto__ || Object.getPrototypeOf(AnswerForm)).call(this, props));
+	    }
+
+	    _createClass(AnswerForm, [{
+	        key: 'render',
+	        value: function render() {
+	            var _props = this.props;
+	            var handleSubmit = _props.handleSubmit;
+	            var submitting = _props.submitting;
+	            var onSubmit = _props.onSubmit;
+	            var error = _props.error;
+
+
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'topic-form-component panel panel-default' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'panel-heading' },
+	                    _react2.default.createElement(
+	                        'h3',
+	                        null,
+	                        'New topic'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'panel-body' },
+	                    _react2.default.createElement(
+	                        'form',
+	                        { onSubmit: handleSubmit(onSubmit) },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'form-group' },
+	                            _react2.default.createElement(
+	                                'label',
+	                                { htmlFor: 'message' },
+	                                'Answer'
+	                            ),
+	                            _react2.default.createElement(_reduxForm.Field, { name: 'message', id: 'message', className: 'form-control', component: 'textarea', required: true })
+	                        ),
+	                        error ? _react2.default.createElement(
+	                            'div',
+	                            { className: 'alert alert-danger', role: 'alert' },
+	                            _react2.default.createElement('span', { className: 'glyphicon glyphicon-exclamation-sign', 'aria-hidden': 'true' }),
+	                            _react2.default.createElement(
+	                                'span',
+	                                { className: 'sr-only' },
+	                                'Error: '
+	                            ),
+	                            ' ',
+	                            error
+	                        ) : null,
+	                        _react2.default.createElement(
+	                            'button',
+	                            { type: 'submit', className: 'btn btn-primary', disabled: submitting },
+	                            'Post'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return AnswerForm;
+	}(_react.Component);
+
+	AnswerForm.propTypes = {
+	    onSubmit: _react.PropTypes.func.isRequired,
+	    handleSubmit: _react.PropTypes.func.isRequired,
+	    submitting: _react.PropTypes.bool.isRequired,
+	    error: _react.PropTypes.string
+	};
+
+	exports.default = (0, _reduxForm.reduxForm)({
+	    form: 'topic'
+	})(AnswerForm);
+
+/***/ },
+/* 754 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -46562,7 +46790,7 @@
 
 	var actions = _interopRequireWildcard(_qmActions);
 
-	var _topicForm = __webpack_require__(754);
+	var _topicForm = __webpack_require__(755);
 
 	var _topicForm2 = _interopRequireDefault(_topicForm);
 
@@ -46599,7 +46827,6 @@
 
 
 	            createTopic(topicData).then(function (topic) {
-	                console.log(topic);
 	                router.push('/topic/' + topic.id);
 	            }).catch(function (err) {
 	                throw new _reduxForm.SubmissionError({ _error: err.message });
@@ -46654,7 +46881,7 @@
 	})(TopicCreatePage);
 
 /***/ },
-/* 754 */
+/* 755 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
