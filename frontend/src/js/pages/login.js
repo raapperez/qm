@@ -4,7 +4,7 @@ import React, {PropTypes, Component} from 'react';
 import LoginForm from '../components/login-form';
 import Api from '../services/api';
 import Http from '../services/http';
-import user from '../services/user';
+import userService from '../services/user';
 import { SubmissionError } from 'redux-form';
 
 class LoginPage extends Component {
@@ -28,7 +28,7 @@ class LoginPage extends Component {
             const {token} = data;
             
             if(token) {
-                user.setToken(token);
+                userService.setToken(token);
             }
             
             router.push('/topics');

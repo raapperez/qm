@@ -39,12 +39,17 @@ var Api = function () {
     }, {
         key: 'get',
         value: function get(path, id) {
-            return this.http.get(path + '/' + id, undefined, this.getDefaultOptions());
+            return this.http.get('' + _config.apiHost + path + '/' + id, undefined, this.getDefaultOptions());
         }
     }, {
         key: 'login',
         value: function login(email, password) {
             return this.http.post(_config.apiHost + '/auth/login', { email: email, password: password }, { headers: { 'content-type': 'application/json;charset=UTF-8', accept: 'application/json' } });
+        }
+    }, {
+        key: 'signup',
+        value: function signup(data) {
+            return this.http.post(_config.apiHost + '/users', data, { headers: { 'content-type': 'application/json;charset=UTF-8', accept: 'application/json' } });
         }
     }]);
 

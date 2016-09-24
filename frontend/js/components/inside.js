@@ -10,6 +10,30 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _menu = require('./menu');
+
+var _menu2 = _interopRequireDefault(_menu);
+
+var _page = require('./page');
+
+var _page2 = _interopRequireDefault(_page);
+
+var _reactRedux = require('react-redux');
+
+var _api = require('../services/api');
+
+var _api2 = _interopRequireDefault(_api);
+
+var _http = require('../services/http');
+
+var _http2 = _interopRequireDefault(_http);
+
+var _qmActions = require('../actions/qm-actions');
+
+var actions = _interopRequireWildcard(_qmActions);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21,19 +45,34 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Inside = function (_Component) {
     _inherits(Inside, _Component);
 
-    function Inside() {
+    function Inside(props) {
         _classCallCheck(this, Inside);
 
-        return _possibleConstructorReturn(this, (Inside.__proto__ || Object.getPrototypeOf(Inside)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (Inside.__proto__ || Object.getPrototypeOf(Inside)).call(this, props));
     }
 
     _createClass(Inside, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var refreshUser = this.props.refreshUser;
+
+            refreshUser();
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var children = this.props.children;
+
+
             return _react2.default.createElement(
                 'div',
-                null,
-                'aaa'
+                { className: 'full-height' },
+                _react2.default.createElement(_menu2.default, { ref: 'menu' }),
+                _react2.default.createElement(
+                    _page2.default,
+                    null,
+                    children
+                )
             );
         }
     }]);
@@ -41,4 +80,21 @@ var Inside = function (_Component) {
     return Inside;
 }(_react.Component);
 
-exports.default = Inside;
+Inside.propTypes = {
+    children: _react.PropTypes.object.isRequired,
+    refreshUser: _react.PropTypes.func.isRequired
+};
+
+exports.default = (0, _reactRedux.connect)(function (state) {
+    return {};
+}, function (dispatch) {
+    return {
+        refreshUser: function refreshUser() {
+            var api = new _api2.default(new _http2.default(fetch));
+            return api.get('/users', 'me').then(function (user) {
+                dispatch(actions.setUser(user));
+                return user;
+            });
+        }
+    };
+})(Inside);

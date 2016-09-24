@@ -14,6 +14,20 @@ var _signupForm = require('../components/signup-form');
 
 var _signupForm2 = _interopRequireDefault(_signupForm);
 
+var _api = require('../services/api');
+
+var _api2 = _interopRequireDefault(_api);
+
+var _http = require('../services/http');
+
+var _http2 = _interopRequireDefault(_http);
+
+var _user = require('../services/user');
+
+var _user2 = _interopRequireDefault(_user);
+
+var _reduxForm = require('redux-form');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37,7 +51,25 @@ var SignupPage = function (_Component) {
 
     _createClass(SignupPage, [{
         key: 'onSubmit',
-        value: function onSubmit() {}
+        value: function onSubmit(signupData) {
+            var router = this.context.router;
+
+
+            var api = new _api2.default(new _http2.default(fetch));
+
+            return api.signup(signupData).then(function (data) {
+                var token = data.token;
+
+
+                if (token) {
+                    _user2.default.setToken(token);
+                }
+
+                router.push('/topics');
+            }).catch(function (err) {
+                throw new _reduxForm.SubmissionError({ _error: err.message });
+            });
+        }
     }, {
         key: 'onLogin',
         value: function onLogin() {

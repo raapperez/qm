@@ -15,25 +15,30 @@ var _reduxForm = require('redux-form');
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var value = function value() {
-    var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+var user = function user() {
+    var state = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
     var action = arguments[1];
 
     switch (action.type) {
-        case actions.SET_VALUE:
-            return action.value;
+        case actions.SET_USER:
+            return action.user;
         default:
             return state;
     }
 };
 
 var combinedReducers = (0, _redux.combineReducers)({
-    value: value,
+    user: user,
     form: _reduxForm.reducer
 });
 
 var rootReducer = function rootReducer(state, action) {
-    return combinedReducers(state, action);
+    switch (action.type) {
+        case actions.USER_LOGOUT:
+            return combinedReducers(undefined, action);
+        default:
+            return combinedReducers(state, action);
+    }
 };
 
 var getStore = exports.getStore = function getStore(initialState) {

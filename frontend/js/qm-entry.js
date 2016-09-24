@@ -1,5 +1,7 @@
 'use strict';
 
+require('core-js');
+
 var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);

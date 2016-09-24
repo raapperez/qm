@@ -1,5 +1,7 @@
 'use strict';
 
+import 'core-js';
+
 import ReactDOM from 'react-dom';
 import {clientSide, routes} from './qm';
 import { browserHistory  } from 'react-router';

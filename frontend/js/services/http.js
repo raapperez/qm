@@ -13,7 +13,7 @@ function json(response) {
         return response.json();
     }
 
-    return null;
+    return Promise.resolve(null);
 }
 
 function status(response) {

@@ -2,6 +2,10 @@
 
 import React, {Component, PropTypes} from 'react';
 import SignupForm from '../components/signup-form';
+import Api from '../services/api';
+import Http from '../services/http';
+import userService from '../services/user';
+import { SubmissionError } from 'redux-form';
 
 class SignupPage extends Component {
 
@@ -12,7 +16,24 @@ class SignupPage extends Component {
         this.onLogin = this.onLogin.bind(this);
     }
 
-    onSubmit() {
+    onSubmit(signupData) {
+        const {router} = this.context;
+
+        const api = new Api(new Http(fetch));
+
+        return api.signup(signupData).then(data => {
+
+            const {token} = data;
+            
+            if(token) {
+                userService.setToken(token);
+            }
+            
+            router.push('/topics');
+            
+        }).catch(err => {
+            throw new SubmissionError({_error: err.message});
+        });
 
     }
 

@@ -22,11 +22,15 @@ class Api {
     }
 
     get(path, id) {
-        return this.http.get(`${path}/${id}`, undefined, this.getDefaultOptions());
+        return this.http.get(`${apiHost}${path}/${id}`, undefined, this.getDefaultOptions());
     }
 
     login(email, password) {
         return this.http.post(`${apiHost}/auth/login`, { email, password }, { headers: { 'content-type': 'application/json;charset=UTF-8', accept: 'application/json' } });
+    }
+
+    signup(data) {
+        return this.http.post(`${apiHost}/users`, data, { headers: { 'content-type': 'application/json;charset=UTF-8', accept: 'application/json' } });
     }
 }
 

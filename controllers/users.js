@@ -24,8 +24,12 @@ module.exports.create = (req, res, next) => {
 
 
 module.exports.get = (req, res, next) => {
-    const {id} = req.params;
-console.log('get');
+    let {id} = req.params;
+
+    if(id === 'me') {
+        id = req.user.id;
+    }
+
     User.findById(id).then(user => {
         if(!user) {
             const error = new Error('Not found');
