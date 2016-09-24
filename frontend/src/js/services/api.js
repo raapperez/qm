@@ -22,12 +22,27 @@ class Api {
         return { headers };
     }
 
-    get(path, id) {
-        return this.http.get(`${apiHost}${path}/${id}`, undefined, this.getDefaultOptions());
+    verifyAuthorization (err) {
+        if (err.status === 401) {
+            window.location.href = '/login';
+        }
+
+        throw err;
     }
 
-    post(path, body) {
-        return this.http.post(`${apiHost}${path}`, body, this.getDefaultOptions());        
+    get(resource, id) {
+        return this.http.get(`${apiHost}${resource}/${id}`, undefined, this.getDefaultOptions()).catch(this.verifyAuthorization);
+    }
+
+    list(resource, page, pageSize, where, order) {
+        where = encodeURIComponent(JSON.stringify(where));
+        order = encodeURIComponent(JSON.stringify(order));
+
+        return this.http.get(`${apiHost}/${resource}?page=${page}&pageSize=${pageSize}&where=${where}&order=${order}`, {}, this.getDefaultOptions()).catch(this.verifyAuthorization);
+    }
+
+    post(resource, body) {
+        return this.http.post(`${apiHost}${resource}`, body, this.getDefaultOptions()).catch(this.verifyAuthorization);        
     }
 
     login(email, password) {

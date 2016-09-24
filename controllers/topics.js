@@ -42,7 +42,7 @@ module.exports.list = (req, res, next) => {
         include: [
             {
                 model: User,
-                as: 'createdByUser'
+                as: 'author'
             },
             {
                 model: Answer,

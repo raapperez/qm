@@ -30,7 +30,7 @@ module.exports = (sequelize, Sequelize) => {
                 associate: function (models) {
 
                     Topic.belongsTo(models.User, {
-                        as: 'createdByUser',
+                        as: 'author',
                         foreignKey: {
                             name: 'createdByUserId',
                             allowNull: false

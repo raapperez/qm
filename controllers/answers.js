@@ -42,7 +42,7 @@ module.exports.list = (req, res, next) => {
         include: [
             {
                 model: User,
-                as: 'createdByUser'
+                as: 'author'
             }]
     }).then(answers => {
         res.status(200).json({
@@ -61,7 +61,7 @@ module.exports.get = (req, res, next) => {
         include: [
             {
                 model: User,
-                as: 'createdByUser'
+                as: 'author'
             }
         ]
     }).then(answer => {

@@ -7,9 +7,9 @@ const auth = require('../../../middlewares/auth');
 const pagination = require('../../../middlewares/pagination');
 
 router.post('/:topicId/answers', auth, answersController.create);
-router.get('', auth, pagination, answersController.list);
-router.get('/:id', auth, answersController.get);
-router.put('/:id', auth, answersController.update);
-router.delete('/:id', auth, answersController.destroy);
+router.get('/:topicId/answers', auth, pagination, answersController.list);
+router.get('/:topicId/answers/:id', auth, answersController.get);
+router.put('/:topicId/answers/:id', auth, answersController.update);
+router.delete('/:topicId/answers/:id', auth, answersController.destroy);
 
 module.exports = router;

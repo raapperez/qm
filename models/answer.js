@@ -25,7 +25,7 @@ module.exports = (sequelize, Sequelize) => {
                 },
                 associate: function (models) {
                     Answer.belongsTo(models.User, {         
-                        as: 'createdByUser',               
+                        as: 'author',               
                         foreignKey: {
                             name: 'createdByUserId',
                             allowNull: false
