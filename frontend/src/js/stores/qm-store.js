@@ -22,9 +22,19 @@ const topic = (state = null, action) => {
     }
 };
 
+const topics = (state = null, action) => {
+    switch (action.type) {
+        case actions.SET_TOPICS:
+            return action.topics;
+        default:
+            return state;
+    }
+};
+
 const combinedReducers = combineReducers({
     user,
     topic,
+    topics,
     form: formReducer
 });
 

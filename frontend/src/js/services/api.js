@@ -34,11 +34,11 @@ class Api {
         return this.http.get(`${apiHost}${resource}/${id}`, undefined, this.getDefaultOptions()).catch(this.verifyAuthorization);
     }
 
-    list(resource, page, pageSize, where, order) {
-        where = encodeURIComponent(JSON.stringify(where));
-        order = encodeURIComponent(JSON.stringify(order));
+    list(resource, page, pageSize, where, order) {        
+        where = where ? `&where=${encodeURIComponent(JSON.stringify(where))}` : '';
+        order = order ? `&order=${encodeURIComponent(JSON.stringify(order))}` : '';
 
-        return this.http.get(`${apiHost}/${resource}?page=${page}&pageSize=${pageSize}&where=${where}&order=${order}`, {}, this.getDefaultOptions()).catch(this.verifyAuthorization);
+        return this.http.get(`${apiHost}/${resource}?page=${page}&pageSize=${pageSize}${where}${order}`, {}, this.getDefaultOptions()).catch(this.verifyAuthorization);
     }
 
     post(resource, body) {

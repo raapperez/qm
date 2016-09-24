@@ -115,7 +115,7 @@ var TopicPage = function (_Component) {
                     topic.message
                 ),
                 _react2.default.createElement(_answerForm2.default, { ref: 'answerForm', onSubmit: this.doAnswer }),
-                topic.answers.map(function (answer) {
+                topic.answers && topic.answers.map(function (answer) {
                     return _react2.default.createElement(
                         'div',
                         { key: answer.id },

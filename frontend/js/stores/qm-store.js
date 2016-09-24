@@ -39,9 +39,22 @@ var topic = function topic() {
     }
 };
 
+var topics = function topics() {
+    var state = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+    var action = arguments[1];
+
+    switch (action.type) {
+        case actions.SET_TOPICS:
+            return action.topics;
+        default:
+            return state;
+    }
+};
+
 var combinedReducers = (0, _redux.combineReducers)({
     user: user,
     topic: topic,
+    topics: topics,
     form: _reduxForm.reducer
 });
 

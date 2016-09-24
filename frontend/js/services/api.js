@@ -38,14 +38,31 @@ var Api = function () {
             return { headers: headers };
         }
     }, {
+        key: 'verifyAuthorization',
+        value: function verifyAuthorization(err) {
+            if (err.status === 401) {
+                window.location.href = '/login';
+            }
+
+            throw err;
+        }
+    }, {
         key: 'get',
-        value: function get(path, id) {
-            return this.http.get('' + _config.apiHost + path + '/' + id, undefined, this.getDefaultOptions());
+        value: function get(resource, id) {
+            return this.http.get('' + _config.apiHost + resource + '/' + id, undefined, this.getDefaultOptions()).catch(this.verifyAuthorization);
+        }
+    }, {
+        key: 'list',
+        value: function list(resource, page, pageSize, where, order) {
+            where = where ? '&where=' + encodeURIComponent(JSON.stringify(where)) : '';
+            order = order ? '&order=' + encodeURIComponent(JSON.stringify(order)) : '';
+
+            return this.http.get(_config.apiHost + '/' + resource + '?page=' + page + '&pageSize=' + pageSize + where + order, {}, this.getDefaultOptions()).catch(this.verifyAuthorization);
         }
     }, {
         key: 'post',
-        value: function post(path, body) {
-            return this.http.post('' + _config.apiHost + path, body, this.getDefaultOptions());
+        value: function post(resource, body) {
+            return this.http.post('' + _config.apiHost + resource, body, this.getDefaultOptions()).catch(this.verifyAuthorization);
         }
     }, {
         key: 'login',

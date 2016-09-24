@@ -5,6 +5,7 @@ const {Topic, User, Answer} = models;
 
 const uuid = require('uuid');
 const _ = require('lodash');
+const sequelize = require('sequelize');
 
 
 module.exports.create = (req, res, next) => {
@@ -34,27 +35,36 @@ module.exports.create = (req, res, next) => {
 module.exports.list = (req, res, next) => {
     const {pagination} = req;
 
-    Topic.findAll({
-        where: Object.assign({}, pagination.where, {isDeleted: false}),
-        order: pagination.order,
-        offset: pagination.pageSize * (pagination.page - 1),
-        limit: pagination.pageSize,
-        include: [
-            {
-                model: User,
-                as: 'author'
-            },
-            {
-                model: Answer,
-                as: 'answers',
-                where: {isDeleted: false}
-            }]
-    }).then(topics => {
+    const where = Object.assign({ isDeleted: false }, pagination.where);
+    const order = [['createdAt', 'DESC']];
+
+    Promise.all([
+        Topic.count({ where }),
+        Topic.findAll({
+            where,
+            order,
+            offset: pagination.pageSize * (pagination.page - 1),
+            limit: pagination.pageSize,
+            include: [
+                {
+                    model: User,
+                    as: 'author'
+                },
+                {
+                    model: Answer,
+                    as: 'answers',
+                    where: { isDeleted: false },
+                    required: false
+                }]
+        })
+    ]).then(_.spread((count, topics) => {
+        pagination.total = count;
+        pagination.totalPages = Math.ceil(count / pagination.pageSize);
         res.status(200).json({
             pagination,
             data: topics
         });
-    }).catch(err => {
+    })).catch(err => {
         next(err);
     });
 };
@@ -63,14 +73,14 @@ module.exports.list = (req, res, next) => {
 module.exports.get = (req, res, next) => {
     const {id} = req.params;
 
-    if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
         const error = new Error('Invalid topic\'s id');
         error.status = 400;
         next(error);
         return;
     }
 
-    Topic.findById(id, {        
+    Topic.findById(id, {
         include: [
             {
                 model: Answer,
@@ -78,7 +88,7 @@ module.exports.get = (req, res, next) => {
             }
         ],
         order: [
-            [{model: Answer, as: 'answers'}, 'createdAt', 'DESC']
+            [{ model: Answer, as: 'answers' }, 'createdAt', 'DESC']
         ]
     }).then(topic => {
         if (!topic) {

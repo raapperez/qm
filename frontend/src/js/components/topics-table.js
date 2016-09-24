@@ -1,6 +1,7 @@
 'use strict';
 
 import React, {Component, PropTypes} from 'react';
+import moment from 'moment';
 
 
 class TopicsTable extends Component {
@@ -11,11 +12,10 @@ class TopicsTable extends Component {
 
     render() {
 
-        const {topics} = this.props;
-        
+        const {topics, openTopic} = this.props;
+
         return (
             <div>
-
                 <table className="table table-hover">
                     <thead>
                         <tr>
@@ -29,7 +29,7 @@ class TopicsTable extends Component {
                                 Responses
                             </th>
                             <th>
-                                Created at
+                                Created
                             </th>
                         </tr>
                     </thead>
@@ -37,11 +37,16 @@ class TopicsTable extends Component {
 
                         {
                             topics.map(topic => (
-                                <tr key={topic.id}>
+                                <tr key={topic.id} onClick={
+                                    e => {
+                                        e.preventDefault();
+                                        openTopic(topic);
+                                    }
+                                }>
                                     <td>{`${topic.subject}`}</td>
                                     <td>{`${topic.author.firstName} ${topic.author.lastName}`}</td>
-                                    <td>{`${topic.responses}`}</td>
-                                    <td>{`${topic.createdAt}`}</td>
+                                    <td>{`${topic.answers.length}`}</td>
+                                    <td>{`${moment(topic.createdAt).fromNow()}`}</td>
                                 </tr>
                             ))
                         }
@@ -54,7 +59,8 @@ class TopicsTable extends Component {
 }
 
 TopicsTable.propTypes = {
-    topics: PropTypes.array.isRequired
+    topics: PropTypes.array.isRequired,
+    openTopic: PropTypes.func.isRequired
 };
 
 export default TopicsTable;

@@ -25,38 +25,38 @@ const Pagination = ({
     for (let i = minPage; i <= maxPage; i++) {
         pages.push(i);
     }
-    
+
     return (
 
         <ul className="pagination">
-            <li className={classNames({disabled: page === 1})}>
-                <a aria-label="Previous" onClick={e => {
-                                                    e.preventDefault();
-                                                    goToPage(1);
-                                                }}>
-                    <span aria-hidden="true">&laquo;</span>
+            <li className={classNames({ disabled: page === 1 }) } title="First">
+                <a onClick={e => {
+                    e.preventDefault();
+                    goToPage(1);
+                } }>
+                    <span aria-hidden="true">&laquo; </span>
                 </a>
             </li>
 
             {pages.map(p => (
-                <li className={classNames({active: page === p})} key={p}>
+                <li className={classNames({ active: page === p }) } key={p}>
                     <a onClick={e => {
-                                    e.preventDefault();
-                                    goToPage(p);
-                                }}>
+                        e.preventDefault();
+                        goToPage(p);
+                    } }>
                         {p}
                     </a>
                 </li>
-            ))}
+            )) }
 
-            <li className={classNames({disabled: page === totalPages})}>
+            <li className={classNames({ disabled: page === totalPages }) } title="Last">
                 <a onClick={e => {
-                                e.preventDefault();
-                                goToPage(totalPages);
-                            }}>
-                    <span aria-hidden="true">&raquo;</span>
+                    e.preventDefault();
+                    goToPage(totalPages);
+                } }>
+                    <span aria-hidden="true">&raquo; </span>
                 </a>
-            </li>          
+            </li>
         </ul>
 
     );

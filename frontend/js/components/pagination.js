@@ -42,17 +42,17 @@ var Pagination = function Pagination(_ref) {
         { className: 'pagination' },
         _react2.default.createElement(
             'li',
-            { className: (0, _classnames2.default)({ disabled: page === 1 }) },
+            { className: (0, _classnames2.default)({ disabled: page === 1 }), title: 'First' },
             _react2.default.createElement(
                 'a',
-                { 'aria-label': 'Previous', onClick: function onClick(e) {
+                { onClick: function onClick(e) {
                         e.preventDefault();
                         goToPage(1);
                     } },
                 _react2.default.createElement(
                     'span',
                     { 'aria-hidden': 'true' },
-                    '«'
+                    '« '
                 )
             )
         ),
@@ -72,7 +72,7 @@ var Pagination = function Pagination(_ref) {
         }),
         _react2.default.createElement(
             'li',
-            { className: (0, _classnames2.default)({ disabled: page === totalPages }) },
+            { className: (0, _classnames2.default)({ disabled: page === totalPages }), title: 'Last' },
             _react2.default.createElement(
                 'a',
                 { onClick: function onClick(e) {
@@ -82,7 +82,7 @@ var Pagination = function Pagination(_ref) {
                 _react2.default.createElement(
                     'span',
                     { 'aria-hidden': 'true' },
-                    '»'
+                    '» '
                 )
             )
         )

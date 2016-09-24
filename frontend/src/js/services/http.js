@@ -47,13 +47,6 @@ function Http(fetch) {
         return fetch(`${path}`, Object.assign({}, options, { method: 'POST', body: JSON.stringify(body) })).then(status).then(json);
     }
 
-    list(resource, page, pageSize, where, orderBy) {
-        where = encodeURIComponent(JSON.stringify(where));
-        orderBy = encodeURIComponent(JSON.stringify(orderBy));
-
-        return http.get(`${this.fleetHost}/${resource}?page=${page}&pageSize=${pageSize}&where=${where}&orderBy=${orderBy}`, {}, this.getDefaultOptions()).catch(verifyAuthorization);
-    }
-
     function put(path, body = {}, options = {}) {
         return fetch(`${path}`, Object.assign({}, options, { method: 'PUT', body: JSON.stringify(body) })).then(status).then(json);
     }

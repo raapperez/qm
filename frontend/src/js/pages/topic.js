@@ -57,7 +57,7 @@ class TopicPage extends Component {
                 <AnswerForm ref="answerForm" onSubmit={this.doAnswer}/>
 
                 {
-                    topic.answers.map(answer => (
+                    topic.answers && topic.answers.map(answer => (
                         <div key={answer.id}>{answer.message}</div>
                     ))
                 }

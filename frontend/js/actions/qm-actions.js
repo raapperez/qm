@@ -25,3 +25,11 @@ var setTopic = exports.setTopic = function setTopic(topic) {
         topic: topic
     };
 };
+
+var SET_TOPICS = exports.SET_TOPICS = 'SET_TOPICS';
+var setTopics = exports.setTopics = function setTopics(topics) {
+    return {
+        type: SET_TOPICS,
+        topics: topics
+    };
+};

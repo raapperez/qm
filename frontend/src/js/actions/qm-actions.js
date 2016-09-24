@@ -16,3 +16,10 @@ export const setTopic = topic => ({
     type: SET_TOPIC,
     topic
 });
+
+
+export const SET_TOPICS = 'SET_TOPICS';
+export const setTopics = topics => ({
+    type: SET_TOPICS,
+    topics
+});
