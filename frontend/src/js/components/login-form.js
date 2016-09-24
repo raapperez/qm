@@ -7,13 +7,22 @@ class LoginForm extends Component {
 
     constructor(props) {
         super(props);
+
+        this.onSignup = this.onSignup.bind(this);
+    }
+
+    onSignup(e) {
+        e.preventDefault();
+
+        const {onSignup} = this.props;
+        onSignup();
     }
 
     render() {
         const {handleSubmit, submitting, onSubmit, error} = this.props;
 
         return (
-            <div className="login-form panel panel-default">
+            <div className="login-form-component panel panel-default">
                 <div className="panel-heading">
                     <h3>Login</h3>
                 </div>
@@ -28,7 +37,7 @@ class LoginForm extends Component {
                             <Field name="password" id="password" className="form-control" component="input" type="password" required />
                         </div>
 
-                        {error  ?
+                        {error ?
                             <div className="alert alert-danger" role="alert">
                                 <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                                 <span className="sr-only">Error: </span> {error}
@@ -37,6 +46,7 @@ class LoginForm extends Component {
                         }
 
                         <button type="submit" className="btn btn-default" disabled={submitting}>Enter</button>
+                        <a className="sigup-button" onClick={this.onSignup}>Not a member yet?</a>
 
                     </form>
                 </div>
@@ -49,7 +59,8 @@ LoginForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
-    error: PropTypes.string
+    error: PropTypes.string,
+    onSignup: PropTypes.func.isRequired
 };
 
 export default reduxForm({

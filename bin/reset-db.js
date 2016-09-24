@@ -30,5 +30,5 @@ const {User, Topic, Answer} = models;
 bb.each([User, Topic, Answer], item => {
     return item.sync({ force: true });
 }).catch(err => {
-    logger.log(err);
+    logger.error(err);
 });

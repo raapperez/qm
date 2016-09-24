@@ -20,26 +20,26 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var LoginForm = function (_Component) {
-    _inherits(LoginForm, _Component);
+var SignupForm = function (_Component) {
+    _inherits(SignupForm, _Component);
 
-    function LoginForm(props) {
-        _classCallCheck(this, LoginForm);
+    function SignupForm(props) {
+        _classCallCheck(this, SignupForm);
 
-        var _this = _possibleConstructorReturn(this, (LoginForm.__proto__ || Object.getPrototypeOf(LoginForm)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (SignupForm.__proto__ || Object.getPrototypeOf(SignupForm)).call(this, props));
 
-        _this.onSignup = _this.onSignup.bind(_this);
+        _this.onLogin = _this.onLogin.bind(_this);
         return _this;
     }
 
-    _createClass(LoginForm, [{
-        key: 'onSignup',
-        value: function onSignup(e) {
+    _createClass(SignupForm, [{
+        key: 'onLogin',
+        value: function onLogin(e) {
             e.preventDefault();
 
-            var onSignup = this.props.onSignup;
+            var onLogin = this.props.onLogin;
 
-            onSignup();
+            onLogin();
         }
     }, {
         key: 'render',
@@ -53,14 +53,14 @@ var LoginForm = function (_Component) {
 
             return _react2.default.createElement(
                 'div',
-                { className: 'login-form-component panel panel-default' },
+                { className: 'signup-form-component panel panel-default' },
                 _react2.default.createElement(
                     'div',
                     { className: 'panel-heading' },
                     _react2.default.createElement(
                         'h3',
                         null,
-                        'Login'
+                        'Sign up'
                     )
                 ),
                 _react2.default.createElement(
@@ -84,10 +84,63 @@ var LoginForm = function (_Component) {
                             { className: 'form-group' },
                             _react2.default.createElement(
                                 'label',
+                                { htmlFor: 'firstName' },
+                                'First name'
+                            ),
+                            _react2.default.createElement(_reduxForm.Field, { name: 'firstName', id: 'firstName', className: 'form-control', component: 'input', type: 'text', required: true })
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'form-group' },
+                            _react2.default.createElement(
+                                'label',
+                                { htmlFor: 'lastName' },
+                                'Last name'
+                            ),
+                            _react2.default.createElement(_reduxForm.Field, { name: 'lastName', id: 'lastName', className: 'form-control', component: 'input', type: 'text', required: true })
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'form-group' },
+                            _react2.default.createElement(
+                                'label',
+                                null,
+                                'Role'
+                            ),
+                            _react2.default.createElement('br', null),
+                            _react2.default.createElement(
+                                'label',
+                                null,
+                                _react2.default.createElement(_reduxForm.Field, { name: 'role', component: 'input', type: 'radio', value: 'student' }),
+                                'Student'
+                            ),
+                            _react2.default.createElement('br', null),
+                            _react2.default.createElement(
+                                'label',
+                                null,
+                                _react2.default.createElement(_reduxForm.Field, { name: 'role', component: 'input', type: 'radio', value: 'admin' }),
+                                'Administrator'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'form-group' },
+                            _react2.default.createElement(
+                                'label',
                                 { htmlFor: 'password' },
                                 'Password'
                             ),
                             _react2.default.createElement(_reduxForm.Field, { name: 'password', id: 'password', className: 'form-control', component: 'input', type: 'password', required: true })
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'form-group' },
+                            _react2.default.createElement(
+                                'label',
+                                { htmlFor: 'passwordConfirm' },
+                                'Confirm password'
+                            ),
+                            _react2.default.createElement(_reduxForm.Field, { name: 'passwordConfirm', id: 'passwordConfirm', className: 'form-control', component: 'input', type: 'password', required: true })
                         ),
                         error ? _react2.default.createElement(
                             'div',
@@ -104,12 +157,12 @@ var LoginForm = function (_Component) {
                         _react2.default.createElement(
                             'button',
                             { type: 'submit', className: 'btn btn-default', disabled: submitting },
-                            'Enter'
+                            'Register'
                         ),
                         _react2.default.createElement(
                             'a',
-                            { className: 'sigup-button', onClick: this.onSignup },
-                            'Not a member yet?'
+                            { className: 'login-button', onClick: this.onLogin },
+                            'Already a member?'
                         )
                     )
                 )
@@ -117,17 +170,18 @@ var LoginForm = function (_Component) {
         }
     }]);
 
-    return LoginForm;
+    return SignupForm;
 }(_react.Component);
 
-LoginForm.propTypes = {
+SignupForm.propTypes = {
     onSubmit: _react.PropTypes.func.isRequired,
     handleSubmit: _react.PropTypes.func.isRequired,
     submitting: _react.PropTypes.bool.isRequired,
     error: _react.PropTypes.string,
-    onSignup: _react.PropTypes.func.isRequired
+    onLogin: _react.PropTypes.func.isRequired
 };
 
 exports.default = (0, _reduxForm.reduxForm)({
-    form: 'login'
-})(LoginForm);
+    form: 'login',
+    initialValues: { role: 'student' }
+})(SignupForm);

@@ -45,6 +45,7 @@ var LoginPage = function (_Component) {
         var _this = _possibleConstructorReturn(this, (LoginPage.__proto__ || Object.getPrototypeOf(LoginPage)).call(this, props));
 
         _this.onSubmit = _this.onSubmit.bind(_this);
+        _this.onSignup = _this.onSignup.bind(_this);
         return _this;
     }
 
@@ -72,6 +73,13 @@ var LoginPage = function (_Component) {
             });
         }
     }, {
+        key: 'onSignup',
+        value: function onSignup() {
+            var router = this.context.router;
+
+            router.push('/signup');
+        }
+    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
@@ -82,7 +90,7 @@ var LoginPage = function (_Component) {
                     { className: 'title' },
                     'Qm Forum'
                 ),
-                _react2.default.createElement(_loginForm2.default, { onSubmit: this.onSubmit })
+                _react2.default.createElement(_loginForm2.default, { onSubmit: this.onSubmit, onSignup: this.onSignup })
             );
         }
     }]);

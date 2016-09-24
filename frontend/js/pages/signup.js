@@ -10,6 +10,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _signupForm = require('../components/signup-form');
+
+var _signupForm2 = _interopRequireDefault(_signupForm);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21,20 +25,47 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var SignupPage = function (_Component) {
     _inherits(SignupPage, _Component);
 
-    function SignupPage() {
+    function SignupPage(props) {
         _classCallCheck(this, SignupPage);
 
-        return _possibleConstructorReturn(this, (SignupPage.__proto__ || Object.getPrototypeOf(SignupPage)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (SignupPage.__proto__ || Object.getPrototypeOf(SignupPage)).call(this, props));
+
+        _this.onSubmit = _this.onSubmit.bind(_this);
+        _this.onLogin = _this.onLogin.bind(_this);
+        return _this;
     }
 
     _createClass(SignupPage, [{
+        key: 'onSubmit',
+        value: function onSubmit() {}
+    }, {
+        key: 'onLogin',
+        value: function onLogin() {
+            var router = this.context.router;
+
+            router.push('/login');
+        }
+    }, {
         key: 'render',
         value: function render() {
-            return _react2.default.createElement('div', null);
+            return _react2.default.createElement(
+                'div',
+                { className: 'signup-page' },
+                _react2.default.createElement(
+                    'h1',
+                    { className: 'title' },
+                    'Qm Forum'
+                ),
+                _react2.default.createElement(_signupForm2.default, { onSubmit: this.onSubmit, onLogin: this.onLogin })
+            );
         }
     }]);
 
     return SignupPage;
 }(_react.Component);
+
+SignupPage.contextTypes = {
+    router: _react.PropTypes.object.isRequired
+};
 
 exports.default = SignupPage;

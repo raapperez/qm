@@ -13,6 +13,7 @@ class LoginPage extends Component {
         super(props);
 
         this.onSubmit = this.onSubmit.bind(this);
+        this.onSignup = this.onSignup.bind(this);
     }
 
     onSubmit(formData) {
@@ -37,11 +38,16 @@ class LoginPage extends Component {
         });
     }
 
+    onSignup(){
+        const {router} = this.context;
+        router.push('/signup');
+    }
+
     render() {
         return (
             <div className="login-page">
                 <h1 className="title">Qm Forum</h1>                
-                <LoginForm onSubmit={this.onSubmit} />
+                <LoginForm onSubmit={this.onSubmit} onSignup={this.onSignup} />
             </div>
         );
     }

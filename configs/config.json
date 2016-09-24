@@ -27,7 +27,7 @@
         "db": {
             "user": "postgres",
             "password": "muddy",
-            "database": "qmdev",
+            "database": "qm",
             "options": {
                 "host": "localhost",
                 "dialect": "postgres",
