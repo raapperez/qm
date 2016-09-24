@@ -10,3 +10,9 @@ export const setUser = user => ({
     type: SET_USER,
     user
 });
+
+export const SET_TOPIC = 'SET_TOPIC';
+export const setTopic = topic => ({
+    type: SET_TOPIC,
+    topic
+});

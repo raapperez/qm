@@ -156,7 +156,7 @@ var SignupForm = function (_Component) {
                         ) : null,
                         _react2.default.createElement(
                             'button',
-                            { type: 'submit', className: 'btn btn-default', disabled: submitting },
+                            { type: 'submit', className: 'btn btn-primary', disabled: submitting },
                             'Register'
                         ),
                         _react2.default.createElement(

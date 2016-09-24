@@ -11,11 +11,13 @@ import LoginPage from './pages/login';
 import SignupPage from './pages/signup';
 import TopicsPage from './pages/topics';
 import TopicPage from './pages/topic';
+import TopicCreatePage from './pages/topic-create';
 
 export const routes = (
     <Route path="" component={App}>
         <Route path="" component={Inside}>
             <Route path="/topics" component={TopicsPage} />
+            <Route path="/topic/create" component={TopicCreatePage} />
             <Route path="/topic/:id" component={TopicPage} />
         </Route>
 

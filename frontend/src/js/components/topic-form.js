@@ -3,38 +3,39 @@
 import React, {Component, PropTypes} from 'react';
 import {Field, reduxForm} from 'redux-form';
 
-class LoginForm extends Component {
+class TopicForm extends Component {
 
     constructor(props) {
         super(props);
 
-        this.onSignup = this.onSignup.bind(this);
+        this.onCancel = this.onCancel.bind(this);
     }
 
-    onSignup(e) {
+    onCancel(e) {
         e.preventDefault();
 
-        const {onSignup} = this.props;
-        onSignup();
+        const {onCancel} = this.props;
+        onCancel();
     }
 
     render() {
         const {handleSubmit, submitting, onSubmit, error} = this.props;
 
         return (
-            <div className="login-form-component panel panel-default">
+            <div className="topic-form-component panel panel-default">
                 <div className="panel-heading">
-                    <h3>Login</h3>
+                    <h3>New topic</h3>
                 </div>
                 <div className="panel-body">
                     <form onSubmit={handleSubmit(onSubmit) }>
                         <div className="form-group">
-                            <label htmlFor="email">Email address</label>
-                            <Field name="email" id="email" className="form-control" placeholder="user@email.com" component="input" type="email" required />
+                            <label htmlFor="subject">Subject</label>
+                            <Field name="subject" id="subject" className="form-control" component="input" type="text" required />
                         </div>
+
                         <div className="form-group">
-                            <label htmlFor="password">Password</label>
-                            <Field name="password" id="password" className="form-control" component="input" type="password" required />
+                            <label htmlFor="message">Question</label>
+                            <Field name="message" id="message" className="form-control" component="textarea" required />
                         </div>
 
                         {error ?
@@ -45,8 +46,8 @@ class LoginForm extends Component {
                             : null
                         }
 
-                        <button type="submit" className="btn btn-primary" disabled={submitting}>Enter</button>
-                        <a className="sigup-button" onClick={this.onSignup}>Not a member yet?</a>
+                        <button type="submit" className="btn btn-primary" disabled={submitting}>Post</button>
+                        <a className="btn btn-default cancel-button" onClick={this.onCancel}>Cancel</a>
 
                     </form>
                 </div>
@@ -55,14 +56,14 @@ class LoginForm extends Component {
     }
 }
 
-LoginForm.propTypes = {
+TopicForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     error: PropTypes.string,
-    onSignup: PropTypes.func.isRequired
+    onCancel: PropTypes.func.isRequired
 };
 
 export default reduxForm({
-    form: 'login'
-})(LoginForm);
+    form: 'topic'
+})(TopicForm);

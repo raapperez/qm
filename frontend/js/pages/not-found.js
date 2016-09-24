@@ -10,6 +10,8 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouter = require('react-router');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18,31 +20,39 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var TopicsPage = function (_Component) {
-    _inherits(TopicsPage, _Component);
+var NotFoundPage = function (_Component) {
+    _inherits(NotFoundPage, _Component);
 
-    function TopicsPage(props) {
-        _classCallCheck(this, TopicsPage);
+    function NotFoundPage(props) {
+        _classCallCheck(this, NotFoundPage);
 
-        return _possibleConstructorReturn(this, (TopicsPage.__proto__ || Object.getPrototypeOf(TopicsPage)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (NotFoundPage.__proto__ || Object.getPrototypeOf(NotFoundPage)).call(this, props));
+
+        console.log('not found');
+        return _this;
     }
 
-    _createClass(TopicsPage, [{
+    _createClass(NotFoundPage, [{
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                { className: 'row' },
+                { className: 'not-fournd-page' },
                 _react2.default.createElement(
-                    'div',
-                    { className: 'col-md-12' },
-                    'oi'
+                    'h1',
+                    { className: 'title' },
+                    'Page not found'
+                ),
+                _react2.default.createElement(
+                    _reactRouter.Link,
+                    { to: '/login' },
+                    'Go to login page'
                 )
             );
         }
     }]);
 
-    return TopicsPage;
+    return NotFoundPage;
 }(_react.Component);
 
-exports.default = TopicsPage;
+exports.default = NotFoundPage;

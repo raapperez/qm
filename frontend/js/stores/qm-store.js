@@ -27,8 +27,21 @@ var user = function user() {
     }
 };
 
+var topic = function topic() {
+    var state = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+    var action = arguments[1];
+
+    switch (action.type) {
+        case actions.SET_TOPIC:
+            return action.topic;
+        default:
+            return state;
+    }
+};
+
 var combinedReducers = (0, _redux.combineReducers)({
     user: user,
+    topic: topic,
     form: _reduxForm.reducer
 });
 

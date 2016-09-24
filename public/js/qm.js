@@ -28360,6 +28360,10 @@
 
 	var _topic2 = _interopRequireDefault(_topic);
 
+	var _topicCreate = __webpack_require__(753);
+
+	var _topicCreate2 = _interopRequireDefault(_topicCreate);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var routes = exports.routes = _react2.default.createElement(
@@ -28369,6 +28373,7 @@
 	        _reactRouter.Route,
 	        { path: '', component: _inside2.default },
 	        _react2.default.createElement(_reactRouter.Route, { path: '/topics', component: _topics2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/topic/create', component: _topicCreate2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/topic/:id', component: _topic2.default })
 	    ),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _login2.default }),
@@ -36097,8 +36102,21 @@
 	    }
 	};
 
+	var topic = function topic() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case actions.SET_TOPIC:
+	            return action.topic;
+	        default:
+	            return state;
+	    }
+	};
+
 	var combinedReducers = (0, _redux.combineReducers)({
 	    user: user,
+	    topic: topic,
 	    form: _reduxForm.reducer
 	});
 
@@ -36136,6 +36154,14 @@
 	    return {
 	        type: SET_USER,
 	        user: user
+	    };
+	};
+
+	var SET_TOPIC = exports.SET_TOPIC = 'SET_TOPIC';
+	var setTopic = exports.setTopic = function setTopic(topic) {
+	    return {
+	        type: SET_TOPIC,
+	        topic: topic
 	    };
 	};
 
@@ -45537,7 +45563,7 @@
 	                            null,
 	                            _react2.default.createElement(
 	                                _reactRouter.Link,
-	                                { to: '/topics/create', activeClassName: 'active' },
+	                                { to: '/topic/create', activeClassName: 'active' },
 	                                'New topic'
 	                            )
 	                        )
@@ -45739,6 +45765,11 @@
 	        key: 'get',
 	        value: function get(path, id) {
 	            return this.http.get('' + _config.apiHost + path + '/' + id, undefined, this.getDefaultOptions());
+	        }
+	    }, {
+	        key: 'post',
+	        value: function post(path, body) {
+	            return this.http.post('' + _config.apiHost + path, body, this.getDefaultOptions());
 	        }
 	    }, {
 	        key: 'login',
@@ -46074,7 +46105,7 @@
 	                        ) : null,
 	                        _react2.default.createElement(
 	                            'button',
-	                            { type: 'submit', className: 'btn btn-default', disabled: submitting },
+	                            { type: 'submit', className: 'btn btn-primary', disabled: submitting },
 	                            'Enter'
 	                        ),
 	                        _react2.default.createElement(
@@ -46373,7 +46404,7 @@
 	                        ) : null,
 	                        _react2.default.createElement(
 	                            'button',
-	                            { type: 'submit', className: 'btn btn-default', disabled: submitting },
+	                            { type: 'submit', className: 'btn btn-primary', disabled: submitting },
 	                            'Register'
 	                        ),
 	                        _react2.default.createElement(
@@ -46430,16 +46461,24 @@
 	var TopicsPage = function (_Component) {
 	    _inherits(TopicsPage, _Component);
 
-	    function TopicsPage() {
+	    function TopicsPage(props) {
 	        _classCallCheck(this, TopicsPage);
 
-	        return _possibleConstructorReturn(this, (TopicsPage.__proto__ || Object.getPrototypeOf(TopicsPage)).apply(this, arguments));
+	        return _possibleConstructorReturn(this, (TopicsPage.__proto__ || Object.getPrototypeOf(TopicsPage)).call(this, props));
 	    }
 
 	    _createClass(TopicsPage, [{
 	        key: 'render',
 	        value: function render() {
-	            return _react2.default.createElement('div', null);
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'row' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-12' },
+	                    'oi'
+	                )
+	            );
 	        }
 	    }]);
 
@@ -46492,6 +46531,265 @@
 	}(_react.Component);
 
 	exports.default = TopicPage;
+
+/***/ },
+/* 753 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(474);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(543);
+
+	var _api = __webpack_require__(744);
+
+	var _api2 = _interopRequireDefault(_api);
+
+	var _http = __webpack_require__(746);
+
+	var _http2 = _interopRequireDefault(_http);
+
+	var _qmActions = __webpack_require__(565);
+
+	var actions = _interopRequireWildcard(_qmActions);
+
+	var _topicForm = __webpack_require__(754);
+
+	var _topicForm2 = _interopRequireDefault(_topicForm);
+
+	var _reduxForm = __webpack_require__(566);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TopicCreatePage = function (_Component) {
+	    _inherits(TopicCreatePage, _Component);
+
+	    function TopicCreatePage(props) {
+	        _classCallCheck(this, TopicCreatePage);
+
+	        var _this = _possibleConstructorReturn(this, (TopicCreatePage.__proto__ || Object.getPrototypeOf(TopicCreatePage)).call(this, props));
+
+	        _this.onSubmit = _this.onSubmit.bind(_this);
+	        _this.goBack = _this.goBack.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(TopicCreatePage, [{
+	        key: 'onSubmit',
+	        value: function onSubmit(topicData) {
+	            var createTopic = this.props.createTopic;
+	            var router = this.context.router;
+
+
+	            createTopic(topicData).then(function (topic) {
+	                console.log(topic);
+	                router.push('/topic/' + topic.id);
+	            }).catch(function (err) {
+	                throw new _reduxForm.SubmissionError({ _error: err.message });
+	            });
+	        }
+	    }, {
+	        key: 'goBack',
+	        value: function goBack() {
+	            var router = this.context.router;
+
+	            router.push('/topics');
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'row' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-12' },
+	                    _react2.default.createElement('br', null),
+	                    _react2.default.createElement(_topicForm2.default, { onSubmit: this.onSubmit, onCancel: this.goBack })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return TopicCreatePage;
+	}(_react.Component);
+
+	TopicCreatePage.propTypes = {
+	    createTopic: _react.PropTypes.func.isRequired
+	};
+
+	TopicCreatePage.contextTypes = {
+	    router: _react.PropTypes.object.isRequired
+	};
+
+	exports.default = (0, _reactRedux.connect)(function (state) {
+	    return {};
+	}, function (dispatch) {
+	    return {
+	        createTopic: function createTopic(topicData) {
+	            var api = new _api2.default(new _http2.default(fetch));
+	            return api.post('/topics', topicData).then(function (topic) {
+	                dispatch(actions.setTopic(topic));
+	                return topic;
+	            });
+	        }
+	    };
+	})(TopicCreatePage);
+
+/***/ },
+/* 754 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(474);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reduxForm = __webpack_require__(566);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TopicForm = function (_Component) {
+	    _inherits(TopicForm, _Component);
+
+	    function TopicForm(props) {
+	        _classCallCheck(this, TopicForm);
+
+	        var _this = _possibleConstructorReturn(this, (TopicForm.__proto__ || Object.getPrototypeOf(TopicForm)).call(this, props));
+
+	        _this.onCancel = _this.onCancel.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(TopicForm, [{
+	        key: 'onCancel',
+	        value: function onCancel(e) {
+	            e.preventDefault();
+
+	            var onCancel = this.props.onCancel;
+
+	            onCancel();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _props = this.props;
+	            var handleSubmit = _props.handleSubmit;
+	            var submitting = _props.submitting;
+	            var onSubmit = _props.onSubmit;
+	            var error = _props.error;
+
+
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'topic-form-component panel panel-default' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'panel-heading' },
+	                    _react2.default.createElement(
+	                        'h3',
+	                        null,
+	                        'New topic'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'panel-body' },
+	                    _react2.default.createElement(
+	                        'form',
+	                        { onSubmit: handleSubmit(onSubmit) },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'form-group' },
+	                            _react2.default.createElement(
+	                                'label',
+	                                { htmlFor: 'subject' },
+	                                'Subject'
+	                            ),
+	                            _react2.default.createElement(_reduxForm.Field, { name: 'subject', id: 'subject', className: 'form-control', component: 'input', type: 'text', required: true })
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'form-group' },
+	                            _react2.default.createElement(
+	                                'label',
+	                                { htmlFor: 'message' },
+	                                'Question'
+	                            ),
+	                            _react2.default.createElement(_reduxForm.Field, { name: 'message', id: 'message', className: 'form-control', component: 'textarea', required: true })
+	                        ),
+	                        error ? _react2.default.createElement(
+	                            'div',
+	                            { className: 'alert alert-danger', role: 'alert' },
+	                            _react2.default.createElement('span', { className: 'glyphicon glyphicon-exclamation-sign', 'aria-hidden': 'true' }),
+	                            _react2.default.createElement(
+	                                'span',
+	                                { className: 'sr-only' },
+	                                'Error: '
+	                            ),
+	                            ' ',
+	                            error
+	                        ) : null,
+	                        _react2.default.createElement(
+	                            'button',
+	                            { type: 'submit', className: 'btn btn-primary', disabled: submitting },
+	                            'Post'
+	                        ),
+	                        _react2.default.createElement(
+	                            'a',
+	                            { className: 'btn btn-default cancel-button', onClick: this.onCancel },
+	                            'Cancel'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return TopicForm;
+	}(_react.Component);
+
+	TopicForm.propTypes = {
+	    onSubmit: _react.PropTypes.func.isRequired,
+	    handleSubmit: _react.PropTypes.func.isRequired,
+	    submitting: _react.PropTypes.bool.isRequired,
+	    error: _react.PropTypes.string,
+	    onCancel: _react.PropTypes.func.isRequired
+	};
+
+	exports.default = (0, _reduxForm.reduxForm)({
+	    form: 'topic'
+	})(TopicForm);
 
 /***/ }
 /******/ ]);

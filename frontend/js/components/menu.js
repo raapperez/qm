@@ -107,7 +107,7 @@ var Menu = function (_Component) {
                             null,
                             _react2.default.createElement(
                                 _reactRouter.Link,
-                                { to: '/topics/create', activeClassName: 'active' },
+                                { to: '/topic/create', activeClassName: 'active' },
                                 'New topic'
                             )
                         )

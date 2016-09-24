@@ -17,3 +17,11 @@ var setUser = exports.setUser = function setUser(user) {
         user: user
     };
 };
+
+var SET_TOPIC = exports.SET_TOPIC = 'SET_TOPIC';
+var setTopic = exports.setTopic = function setTopic(topic) {
+    return {
+        type: SET_TOPIC,
+        topic: topic
+    };
+};

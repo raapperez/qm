@@ -39,6 +39,10 @@ var _topic = require('./pages/topic');
 
 var _topic2 = _interopRequireDefault(_topic);
 
+var _topicCreate = require('./pages/topic-create');
+
+var _topicCreate2 = _interopRequireDefault(_topicCreate);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var routes = exports.routes = _react2.default.createElement(
@@ -48,6 +52,7 @@ var routes = exports.routes = _react2.default.createElement(
         _reactRouter.Route,
         { path: '', component: _inside2.default },
         _react2.default.createElement(_reactRouter.Route, { path: '/topics', component: _topics2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: '/topic/create', component: _topicCreate2.default }),
         _react2.default.createElement(_reactRouter.Route, { path: '/topic/:id', component: _topic2.default })
     ),
     _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _login2.default }),

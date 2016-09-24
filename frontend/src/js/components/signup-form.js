@@ -68,7 +68,7 @@ class SignupForm extends Component {
                             : null
                         }
 
-                        <button type="submit" className="btn btn-default" disabled={submitting}>Register</button>
+                        <button type="submit" className="btn btn-primary" disabled={submitting}>Register</button>
                         <a className="login-button" onClick={this.onLogin}>Already a member?</a>
 
                     </form>

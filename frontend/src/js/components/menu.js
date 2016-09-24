@@ -55,7 +55,7 @@ class Menu extends Component {
                         <Link to="/topics" activeClassName="active">Topics</Link>
                     </li>
                         <li>
-                            <Link to="/topics/create" activeClassName="active">New topic</Link>
+                            <Link to="/topic/create" activeClassName="active">New topic</Link>
                         </li>
                     </ul>
                 </div>

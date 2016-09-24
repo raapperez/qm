@@ -13,8 +13,18 @@ const user = (state = {}, action) => {
     }
 };
 
+const topic = (state = null, action) => {
+    switch (action.type) {
+        case actions.SET_TOPIC:
+            return action.topic;
+        default:
+            return state;
+    }
+};
+
 const combinedReducers = combineReducers({
     user,
+    topic,
     form: formReducer
 });
 

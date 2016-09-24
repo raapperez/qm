@@ -42,6 +42,11 @@ var Api = function () {
             return this.http.get('' + _config.apiHost + path + '/' + id, undefined, this.getDefaultOptions());
         }
     }, {
+        key: 'post',
+        value: function post(path, body) {
+            return this.http.post('' + _config.apiHost + path, body, this.getDefaultOptions());
+        }
+    }, {
         key: 'login',
         value: function login(email, password) {
             return this.http.post(_config.apiHost + '/auth/login', { email: email, password: password }, { headers: { 'content-type': 'application/json;charset=UTF-8', accept: 'application/json' } });
