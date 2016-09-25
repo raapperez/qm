@@ -27,14 +27,14 @@ A solução foi feita utilizando principalmente **React** e **Node.js**.
 
 ### Para executar em modo produção:
 
-O modo em produção faz uglify dos arquivos javascripts e configura o Express para fazer compressão dos arquivos.
+O modo em produção faz uglify dos arquivos javascript e configura o Express para fazer compressão dos arquivos.
 
 ```
 npm run compile
 npm run start
 ```
 
-Acessar na url http://localhost:3000
+Acessar na url [http://localhost:3000](http://localhost:3000)
 
 ### Para executar em modo desenvolvimento:
 
@@ -42,7 +42,7 @@ Acessar na url http://localhost:3000
 npm run start-dev
 ```
 
-Acessar na url http://localhost:3000
+Acessar na url [http://localhost:3000](http://localhost:3000)
 
 ### Para executar testes:
 ```
@@ -57,12 +57,12 @@ npm run test
 
 * Sempre que um arquivo for alterado dentro da pasta **/frontend/src/**, o projeto tem que ser recompilado.
 
-* Como não havia um layout definido, foi utilizado o **bootstrap**. Mas estou bem acostumado a montar layouts feitos por designers.
+* Como não havia um layout definido, foi utilizado o **bootstrap**. Mas também estou confortável a montar layouts feitos por designers.
 
 * Foi utilizado um **ORM** para Node.js chamado **sequelize** para comunicação com o banco de dados.
 
 * O backend foi feito usando padrão **REST**.
 
-* A solução está em inglês, mas estou acostumado a fazer ter suporte a vários idiomas (**localização**).
+* A solução está em inglês, mas estou acostumado a fazer aplicações com suporte a vários idiomas (**localização**).
 
-* Sobre testes no frontend, eu pretendia utilizar **Selenium** para criar casos de testes. Porém quando fui fazer, notei que ele não é compatível com aplicações **React** já que os inputs dos formulários dependem essencialmente do evento **onChange** dos componentes. E o **Selenium** altera os **value** dos componentes sem chamar esse evento. Para resolver esse problema a comunidade **React** está utilizando o [Jest](https://facebook.github.io/jest/). Eu teria que ter mais tempo para estudar e fazer os testes, e até esse momento não está feito.
+* Sobre testes no frontend, eu pretendia utilizar **Selenium** para criar casos de testes. Porém quando fui fazer, notei que ele não é compatível com aplicações **React** já que os inputs dos formulários dependem essencialmente do evento **onChange** dos componentes. O **Selenium** altera os **value** dos componentes sem chamar esse evento. Para resolver esse problema a comunidade **React** está utilizando o [Jest](https://facebook.github.io/jest/). Eu teria que ter mais tempo para estudar e criar os testes.

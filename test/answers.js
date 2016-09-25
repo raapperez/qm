@@ -382,4 +382,15 @@ describe('qm forum api', () => {
             });
         });
     });
+
+    after(() => {
+        return rp.delete({
+            uri: `${host}/topics/${topicId}`,
+            json: true,
+            body: topic,
+            headers: {
+                Authorization: `JWT ${studentUser.token}`
+            }
+        });
+    });
 });
