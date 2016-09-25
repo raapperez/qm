@@ -23,7 +23,8 @@ const include = [
                 as: 'author'
             }
         ]
-    }];
+    }
+];
 
 module.exports.create = (req, res, next) => {
     const topicData = req.body;
@@ -42,7 +43,9 @@ module.exports.create = (req, res, next) => {
     }));
 
     topic.save().then(newTopic => {
-        res.status(201).json(newTopic);
+        return Topic.findById(newTopic.id, {include}).then(result => {
+            res.status(201).json(result);        
+        });
     }).catch(err => {
         next(err);
     });
@@ -112,7 +115,7 @@ module.exports.update = (req, res, next) => {
     Topic.update(topicData, {
         where: { id }
     }).then(() => {
-        Topic.findById(id, {
+        return Topic.findById(id, {
             include,
             order: [
                 [{ model: Answer, as: 'answers' }, 'createdAt', 'DESC']

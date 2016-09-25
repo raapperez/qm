@@ -32,33 +32,9 @@ module.exports = (req, res, next) => {
         return;
     }
 
-    if (where) {
-        try {
-            where = JSON.parse(where);
-        } catch (err) {
-            const error = new Error('Invalid where query param.');
-            error.status = 400;
-            next(error);
-            return;
-        }
-    }
-
-    if (order) {
-        try {
-            order = JSON.parse(order);
-        } catch (err) {
-            const error = new Error('Invalid orderBy query param.');
-            error.status = 400;
-            next(error);
-            return;
-        }
-    }
-
     req.pagination = {
         page,
-        pageSize,
-        where,
-        order
+        pageSize
     };
 
     next();

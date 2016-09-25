@@ -24,15 +24,15 @@ module.exports = (sequelize, Sequelize) => {
                     return data && _.has(data, 'message') && _.isString(data.message) && _.has(data, 'topicId') && _.isString(data.topicId);
                 },
                 associate: function (models) {
-                    Answer.belongsTo(models.User, {         
-                        as: 'author',               
+                    Answer.belongsTo(models.User, {
+                        as: 'author',
                         foreignKey: {
                             name: 'createdByUserId',
                             allowNull: false
                         }
                     });
 
-                    Answer.belongsTo(models.Topic, {                        
+                    Answer.belongsTo(models.Topic, {
                         foreignKey: {
                             name: 'topicId',
                             allowNull: false

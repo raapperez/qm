@@ -6,6 +6,12 @@ const {Topic, User, Answer} = models;
 const uuid = require('uuid');
 const _ = require('lodash');
 
+const include = [
+    {
+        model: User,
+        as: 'author'
+    }
+];
 
 module.exports.create = (req, res, next) => {
     const answerData = Object.assign({}, req.body, { topicId: req.params.topicId });
@@ -24,30 +30,8 @@ module.exports.create = (req, res, next) => {
     }));
 
     answer.save().then(newAnswer => {
-        res.status(201).json(newAnswer);
-    }).catch(err => {
-        next(err);
-    });
-};
-
-module.exports.list = (req, res, next) => {
-    const {pagination} = req;
-    const {topicId} = req.params;
-
-    Answer.findAll({
-        where: Object.assign({}, pagination.where, {isDeleted: false, topicId}),
-        order: pagination.order,
-        offset: pagination.pageSize * (pagination.page - 1),
-        limit: pagination.pageSize,
-        include: [
-            {
-                model: User,
-                as: 'author'
-            }]
-    }).then(answers => {
-        res.status(200).json({
-            pagination,
-            data: answers
+        return Answer.findById(newAnswer.id, { include }).then(result => {
+            res.status(201).json(result);
         });
     }).catch(err => {
         next(err);
@@ -58,12 +42,7 @@ module.exports.get = (req, res, next) => {
     const {id} = req.params;
 
     Answer.findById(id, {
-        include: [
-            {
-                model: User,
-                as: 'author'
-            }
-        ]
+        include
     }).then(answer => {
         if (!answer || answer.isDeleted) {
             const error = new Error('Not found');
@@ -82,19 +61,24 @@ module.exports.update = (req, res, next) => {
     const {id} = req.params;
     const answerData = _.omit(req.body, 'id', 'isDeleted', 'createdByUserId', 'createdAt', 'updatedAt', 'topicId'); // These attributes are not allowed to update
 
+    Answer.update(answerData, {
+        where: { id }
+    }).then(() => {
 
-    Answer.findById(id).then(answer => {
+        return Answer.findById(id, {
+            include
+        }).then(answer => {
 
-        if (!answer|| answer.isDeleted) {
-            const error = new Error('Not found');
-            error.status = 404;
-            next(error);
-            return;
-        }
+            if (!answer || answer.isDeleted) {
+                const error = new Error('Not found');
+                error.status = 404;
+                next(error);
+                return;
+            }
 
-        return answer.update(answerData).then(answer => {
             res.status(200).json(answer);
         });
+
     }).catch(err => {
         next(err);
     });

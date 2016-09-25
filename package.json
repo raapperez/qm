@@ -7,7 +7,7 @@
     "compile": "node ./node_modules/cross-env/bin/cross-env.js NODE_ENV=production node ./node_modules/concurrently/src/main.js \"node ./node_modules/webpack/bin/webpack.js\" \"node ./node_modules/gulp/bin/gulp.js\"",
     "start-dev": "node ./node_modules/concurrently/src/main.js --kill-others \"node ./node_modules/nodemon/bin/nodemon.js --delay 1 ./bin/www.js\" \"node ./node_modules/webpack/bin/webpack.js --colors --watch\" \"node ./node_modules/gulp/bin/gulp.js watch\"",
     "reset-db-dev": "node ./bin/reset-db",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./node_modules/mocha/bin/mocha"
   },
   "author": "Rodrigo Perez",
   "license": "MIT",
@@ -39,6 +39,7 @@
     "react-router": "^2.8.0",
     "redux": "^3.6.0",
     "redux-form": "^6.0.2",
+    "request": "^2.75.0",
     "request-promise": "^4.1.1",
     "sequelize": "^3.24.3",
     "serve-favicon": "~2.3.0",

@@ -47,6 +47,11 @@ passport.use(new Strategy({
 
 app.use(passport.initialize());
 
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'UP' });
+});
+
+
 const v1Routes = require('./routes/api/v1-routes');
 app.use('/api/v1', v1Routes);
 
