@@ -14,13 +14,11 @@ function configureLog() {
         maxsize: 5242880,
         colorize: false
     });
-
-    if (env === 'production') {
-        logger.remove(logger.transports.Console);
-    }
 }
 
 configureLog();
+
+logger.info(`Resetting db in ${env}`);
 
 
 const models = require('../models');

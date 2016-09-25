@@ -6,7 +6,7 @@
     "start": "node ./node_modules/cross-env/bin/cross-env.js NODE_ENV=production node ./bin/www",
     "compile": "node ./node_modules/cross-env/bin/cross-env.js NODE_ENV=production node ./node_modules/concurrently/src/main.js \"node ./node_modules/webpack/bin/webpack.js\" \"node ./node_modules/gulp/bin/gulp.js\"",
     "start-dev": "node ./node_modules/concurrently/src/main.js --kill-others \"node ./node_modules/nodemon/bin/nodemon.js --delay 1 ./bin/www.js\" \"node ./node_modules/webpack/bin/webpack.js --colors --watch\" \"node ./node_modules/gulp/bin/gulp.js watch\"",
-    "reset-db-dev": "node ./bin/reset-db",
+    "reset-db": "node ./bin/reset-db",
     "test": "node ./node_modules/mocha/bin/mocha"
   },
   "author": "Rodrigo Perez",
