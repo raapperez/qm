@@ -8,20 +8,20 @@ A solução foi feita utilizando principalmente **React** e **Node.js**.
 1. Instalar [node v6.5.0](https://nodejs.org) (ou superior)
 2. Fazer clone do repositório no github: https://github.com/raapperez/qm
 3. Executar o comando na pasta do projeto para instalar as dependências:
-```
-npm install
-```
+    ```
+    npm install
+    ```
 4. Instalar [postgresql](https://www.postgresql.org/download/)
 5. Criar as databases **qm** e **qmdev** no banco de dados postgresql
 6. Editar as configurações de banco de dados (por exemplo: user e password) no arquivo **/configs/config.json**
 7. Executar o comando na pasta do projeto para criar as tabelas na database de dev:
-```
-npm run reset-db
-```
+    ```
+    npm run reset-db
+    ```
 8. Executar o comando na pasta do projeto para criar as tabelas na database de produção:
-```
-NODE_ENV=production npm run reset-db
-```
+    ```
+    NODE_ENV=production npm run reset-db
+    ```
 
 ## Execução
 
