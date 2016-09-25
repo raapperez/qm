@@ -14,11 +14,11 @@ A solução foi feita utilizando principalmente **React** e **Node.js**.
 4. Instalar [postgresql](https://www.postgresql.org/download/)
 5. Criar as databases **qm** e **qmdev** no banco de dados postgresql
 6. Editar as configurações de banco de dados (por exemplo: user e password) no arquivo **/configs/config.json**
-7. Executar o comando na pasta do projeto para criar as tabelas na database de dev:
+7. Executar o comando na pasta do projeto para criar as tabelas na database de **dev**:
  ```
  npm run reset-db
  ```
-8. Executar o comando na pasta do projeto para criar as tabelas na database de produção:
+8. Executar o comando na pasta do projeto para criar as tabelas na database de **produção**:
  ```
  NODE_ENV=production npm run reset-db
  ```
