@@ -24,7 +24,7 @@ class Popup extends React.Component {
         return new Promise((resolve, reject) => {
 
             self.show({
-                title: ('form.confirmation'),
+                title: 'Confirmation',
                 content,
                 isSmall: true,
                 onClose: () => {
@@ -32,15 +32,15 @@ class Popup extends React.Component {
                     resolve(false);
                 },
                 buttons: [{
-                    className: 'negative-btn',
-                    children: ('form.buttons.no'),
+                    className: 'btn btn-default',
+                    children: 'No',
                     onClick: () => {
                         self.hide();
                         resolve(false);
                     }
                 }, {
-                        className: 'positive-btn',
-                        children: ('form.buttons.yes'),
+                        className: 'btn btn-primary',
+                        children: 'Yes',
                         onClick: () => {
                             self.hide();
                             resolve(true);
@@ -48,22 +48,6 @@ class Popup extends React.Component {
                     }]
             });
         });
-    }
-
-    showDeleteConfirmation() {
-        return this.showConfirmation(('popup.confirmDelete'));
-    }
-    
-    showDisableConfirmation() {
-        return this.showConfirmation(('popup.confirmDisable'));
-    }
-    
-    showRemoveConfirmation() {
-        return this.showConfirmation(('popup.confirmRemove'));
-    }
-    
-    showArchiveConfirmation() {
-        return this.showConfirmation(('popup.confirmArchive'));
     }
 
     hide() {
@@ -81,7 +65,7 @@ class Popup extends React.Component {
                         : null
                     }
                     {title ?
-                        <span className="title">{title}</span>
+                        <h4 className="title">{title}</h4>
                         : null
                     }
 

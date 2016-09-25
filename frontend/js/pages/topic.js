@@ -53,6 +53,7 @@ var TopicPage = function (_Component) {
         var _this = _possibleConstructorReturn(this, (TopicPage.__proto__ || Object.getPrototypeOf(TopicPage)).call(this, props));
 
         _this.doAnswer = _this.doAnswer.bind(_this);
+        _this.deleteAnswer = _this.deleteAnswer.bind(_this);
         return _this;
     }
 
@@ -90,11 +91,34 @@ var TopicPage = function (_Component) {
             });
         }
     }, {
+        key: 'deleteAnswer',
+        value: function deleteAnswer(answer) {
+            var getPopup = this.context.getPopup;
+            var _props3 = this.props;
+            var deleteAnswer = _props3.deleteAnswer;
+            var getTopic = _props3.getTopic;
+
+
+            getPopup().showConfirmation('Are you sure to remove this reply?').then(function (mustRemove) {
+                if (!mustRemove) {
+                    return;
+                }
+
+                deleteAnswer(answer.topicId, answer.id).then(function () {
+                    getTopic(answer.topicId);
+                }).catch(function (err) {
+                    console.log(err);
+                });
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
-            var _props3 = this.props;
-            var topic = _props3.topic;
-            var params = _props3.params;
+            var _this3 = this;
+
+            var _props4 = this.props;
+            var topic = _props4.topic;
+            var params = _props4.params;
 
 
             if (!topic || topic.id !== params.id) {
@@ -122,16 +146,16 @@ var TopicPage = function (_Component) {
                         _react2.default.createElement(
                             'h3',
                             { className: 'panel-title fill' },
-                            topic.author.firstName + ' ' + topic.author.lastName + ' - ' + (0, _moment2.default)(topic.updatedAt).fromNow()
+                            topic.author.firstName + ' ' + topic.author.lastName + ' - ' + (0, _moment2.default)(topic.updatedAt).fromNow(),
+                            topic.createdAt !== topic.updatedAt ? _react2.default.createElement(
+                                'span',
+                                { className: 'label label-info no-select edited' },
+                                'edited'
+                            ) : null
                         ),
-                        topic.createdAt !== topic.updatedAt ? _react2.default.createElement(
-                            'span',
-                            { className: 'label label-info' },
-                            'edited'
-                        ) : null,
                         _react2.default.createElement(
                             'div',
-                            null,
+                            { className: 'actions-bar' },
                             _react2.default.createElement(
                                 'a',
                                 { title: 'Edit' },
@@ -161,16 +185,16 @@ var TopicPage = function (_Component) {
                             _react2.default.createElement(
                                 'h3',
                                 { className: 'panel-title fill' },
-                                answer.author.firstName + ' ' + answer.author.lastName + ' - ' + (0, _moment2.default)(answer.updatedAt).fromNow()
+                                answer.author.firstName + ' ' + answer.author.lastName + ' - ' + (0, _moment2.default)(answer.updatedAt).fromNow(),
+                                answer.createdAt !== answer.updatedAt ? _react2.default.createElement(
+                                    'span',
+                                    { className: 'label label-info no-select edited' },
+                                    'edited'
+                                ) : null
                             ),
-                            answer.createdAt !== answer.updatedAt ? _react2.default.createElement(
-                                'span',
-                                { className: 'label label-info' },
-                                'edited'
-                            ) : null,
                             _react2.default.createElement(
                                 'div',
-                                null,
+                                { className: 'actions-bar' },
                                 _react2.default.createElement(
                                     'a',
                                     { title: 'Edit' },
@@ -178,7 +202,10 @@ var TopicPage = function (_Component) {
                                 ),
                                 _react2.default.createElement(
                                     'a',
-                                    { title: 'Remove' },
+                                    { title: 'Remove', onClick: function onClick(e) {
+                                            e.preventDefault();
+                                            _this3.deleteAnswer(answer);
+                                        } },
                                     _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' })
                                 )
                             )
@@ -201,7 +228,12 @@ TopicPage.propTypes = {
     topic: _react.PropTypes.object,
     params: _react.PropTypes.object.isRequired,
     getTopic: _react.PropTypes.func.isRequired,
-    postAnswer: _react.PropTypes.func.isRequired
+    postAnswer: _react.PropTypes.func.isRequired,
+    deleteAnswer: _react.PropTypes.func.isRequired
+};
+
+TopicPage.contextTypes = {
+    getPopup: _react.PropTypes.func.isRequired
 };
 
 exports.default = (0, _reactRedux.connect)(function (state) {
@@ -220,6 +252,10 @@ exports.default = (0, _reactRedux.connect)(function (state) {
         postAnswer: function postAnswer(topicId, answer) {
             var api = new _api2.default(new _http2.default(fetch));
             return api.post('/topics/' + topicId + '/answers', answer);
+        },
+        deleteAnswer: function deleteAnswer(topicId, answerId) {
+            var api = new _api2.default(new _http2.default(fetch));
+            return api.delete('/topics/' + topicId + '/answers', answerId);
         }
     };
 })(TopicPage);

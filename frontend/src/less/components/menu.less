@@ -1,6 +1,18 @@
 .menu-component {
     position: relative;
 
+    @media (max-width: @mobileWidth) {
+        .navbar-brand {
+            float: none;
+            display: block;
+        }
+
+        .collapse.navbar-collapse {
+            display: block;
+        }
+
+    }
+
     .user-menu {
         position: absolute;
         top: 0;

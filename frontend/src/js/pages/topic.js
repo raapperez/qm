@@ -15,6 +15,7 @@ class TopicPage extends Component {
         super(props);
 
         this.doAnswer = this.doAnswer.bind(this);
+        this.deleteAnswer = this.deleteAnswer.bind(this);
     }
 
     componentDidMount() {
@@ -39,6 +40,25 @@ class TopicPage extends Component {
 
     }
 
+    deleteAnswer(answer) {
+
+        const {getPopup, } = this.context;
+        const {deleteAnswer, getTopic} = this.props;
+
+        getPopup().showConfirmation('Are you sure to remove this reply?').then(mustRemove => {
+            if(!mustRemove) {
+                return;
+            }
+
+            deleteAnswer(answer.topicId, answer.id).then(() => {
+                getTopic(answer.topicId);
+            }).catch(err => {
+                console.log(err);
+            });
+
+        });
+    }
+
     render() {
         const {topic, params} = this.props;
 
@@ -56,14 +76,14 @@ class TopicPage extends Component {
 
                 <div className="panel panel-default">
                     <div className="panel-heading box">
-                        <h3 className="panel-title fill">{`${topic.author.firstName} ${topic.author.lastName} - ${moment(topic.updatedAt).fromNow()}`}</h3>
+                        <h3 className="panel-title fill">{`${topic.author.firstName} ${topic.author.lastName} - ${moment(topic.updatedAt).fromNow()}`}
                         {
                             topic.createdAt !== topic.updatedAt ?
-                                <span className="label label-info">edited</span>
+                                <span className="label label-info no-select edited">edited</span>
                                 : null
                         }
-
-                        <div>
+                        </h3>
+                        <div className="actions-bar">
                             <a title="Edit"><i className="glyphicon glyphicon-pencil"></i></a>
                             <a title="Remove"><i className="glyphicon glyphicon-trash"></i></a>
                         </div>
@@ -80,16 +100,20 @@ class TopicPage extends Component {
                     topic.answers && topic.answers.map(answer => (
                         <div key={answer.id} className="panel panel-default">
                             <div className="panel-heading box">
-                                <h3 className="panel-title fill">{`${answer.author.firstName} ${answer.author.lastName} - ${moment(answer.updatedAt).fromNow()}`}</h3>
+                                <h3 className="panel-title fill">{`${answer.author.firstName} ${answer.author.lastName} - ${moment(answer.updatedAt).fromNow()}`}
                                 {
                                     answer.createdAt !== answer.updatedAt ?
-                                        <span className="label label-info">edited</span>
+                                        <span className="label label-info no-select edited">edited</span>
                                         : null
                                 }
+                                </h3>
 
-                                <div>
+                                <div className="actions-bar">
                                     <a title="Edit"><i className="glyphicon glyphicon-pencil"></i></a>
-                                    <a title="Remove"><i className="glyphicon glyphicon-trash"></i></a>
+                                    <a title="Remove" onClick={e => {
+                                        e.preventDefault();
+                                        this.deleteAnswer(answer);
+                                    }}><i className="glyphicon glyphicon-trash"></i></a>
                                 </div>
 
                             </div>
@@ -108,7 +132,12 @@ TopicPage.propTypes = {
     topic: PropTypes.object,
     params: PropTypes.object.isRequired,
     getTopic: PropTypes.func.isRequired,
-    postAnswer: PropTypes.func.isRequired
+    postAnswer: PropTypes.func.isRequired,
+    deleteAnswer: PropTypes.func.isRequired
+};
+
+TopicPage.contextTypes = {
+    getPopup: PropTypes.func.isRequired
 };
 
 export default connect(
@@ -127,6 +156,10 @@ export default connect(
         postAnswer: (topicId, answer) => {
             const api = new Api(new Http(fetch));
             return api.post(`/topics/${topicId}/answers`, answer);
+        },
+        deleteAnswer: (topicId, answerId) => {
+            const api = new Api(new Http(fetch));
+            return api.delete(`/topics/${topicId}/answers`, answerId);
         }
     })
 )(TopicPage);

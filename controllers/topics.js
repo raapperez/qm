@@ -94,6 +94,8 @@ module.exports.get = (req, res, next) => {
             {
                 model: Answer,
                 as: 'answers',
+                required: false,
+                where: { isDeleted: false },
                 include: [
                     {
                         model: User,

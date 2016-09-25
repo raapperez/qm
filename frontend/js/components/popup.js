@@ -54,7 +54,7 @@ var Popup = function (_React$Component) {
             return new Promise(function (resolve, reject) {
 
                 self.show({
-                    title: 'form.confirmation',
+                    title: 'Confirmation',
                     content: content,
                     isSmall: true,
                     onClose: function onClose() {
@@ -62,15 +62,15 @@ var Popup = function (_React$Component) {
                         resolve(false);
                     },
                     buttons: [{
-                        className: 'negative-btn',
-                        children: 'form.buttons.no',
+                        className: 'btn btn-default',
+                        children: 'No',
                         onClick: function onClick() {
                             self.hide();
                             resolve(false);
                         }
                     }, {
-                        className: 'positive-btn',
-                        children: 'form.buttons.yes',
+                        className: 'btn btn-primary',
+                        children: 'Yes',
                         onClick: function onClick() {
                             self.hide();
                             resolve(true);
@@ -78,26 +78,6 @@ var Popup = function (_React$Component) {
                     }]
                 });
             });
-        }
-    }, {
-        key: 'showDeleteConfirmation',
-        value: function showDeleteConfirmation() {
-            return this.showConfirmation('popup.confirmDelete');
-        }
-    }, {
-        key: 'showDisableConfirmation',
-        value: function showDisableConfirmation() {
-            return this.showConfirmation('popup.confirmDisable');
-        }
-    }, {
-        key: 'showRemoveConfirmation',
-        value: function showRemoveConfirmation() {
-            return this.showConfirmation('popup.confirmRemove');
-        }
-    }, {
-        key: 'showArchiveConfirmation',
-        value: function showArchiveConfirmation() {
-            return this.showConfirmation('popup.confirmArchive');
         }
     }, {
         key: 'hide',
@@ -125,7 +105,7 @@ var Popup = function (_React$Component) {
                     { className: (0, _classnames2.default)('panel', { 'small': isSmall }) },
                     onClose ? _react2.default.createElement('a', { className: 'fleet-icon-bt_close close-btn', onClick: onClose }) : null,
                     title ? _react2.default.createElement(
-                        'span',
+                        'h4',
                         { className: 'title' },
                         title
                     ) : null,
