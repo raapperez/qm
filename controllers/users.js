@@ -16,7 +16,7 @@ module.exports.create = (req, res, next) => {
     user.setPassword(userData.password);
     
     user.save().then(newuser => {
-        res.status(201).json(newuser.getPublicInfo());
+        res.status(201).send(newuser.getPublicInfo());
     }).catch(err => {
         next(err);
     });

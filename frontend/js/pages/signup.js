@@ -57,15 +57,18 @@ var SignupPage = function (_Component) {
 
             var api = new _api2.default(new _http2.default(fetch));
 
-            return api.signup(signupData).then(function (data) {
-                var token = data.token;
+            return api.signup(signupData).then(function (user) {
+
+                return api.login(user.email, signupData.password).then(function (data) {
+                    var token = data.token;
 
 
-                if (token) {
-                    _user2.default.setToken(token);
-                }
+                    if (token) {
+                        _user2.default.setToken(token);
+                    }
 
-                router.push('/topics');
+                    router.push('/topics');
+                });
             }).catch(function (err) {
                 throw new _reduxForm.SubmissionError({ _error: err.message });
             });

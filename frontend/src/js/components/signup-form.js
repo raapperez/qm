@@ -2,6 +2,11 @@
 
 import React, {Component, PropTypes} from 'react';
 import {Field, reduxForm} from 'redux-form';
+import classNames from 'classnames';
+
+const renderField = ({ input, placeholder, min, type, className, meta: { touched, error } }) => (
+    <input {...input} placeholder={placeholder} min={min} type={type} className={classNames(className, { error: touched && error }) }/>
+);
 
 class SignupForm extends Component {
 
@@ -57,7 +62,7 @@ class SignupForm extends Component {
 
                         <div className="form-group">
                             <label htmlFor="passwordConfirm">Confirm password</label>
-                            <Field name="passwordConfirm" id="passwordConfirm" className="form-control" component="input" type="password" required />
+                            <Field name="passwordConfirm" id="passwordConfirm" className="form-control" component={renderField} type="password" required />
                         </div>
 
                         {error ?
@@ -86,7 +91,18 @@ SignupForm.propTypes = {
     onLogin: PropTypes.func.isRequired
 };
 
+export const validate = values => {
+    const errors = {};
+
+    if (values.password !== values.passwordConfirm) {
+        errors.passwordConfirm = 'Password confirmation does not match password';
+    }
+
+    return errors;
+};
+
 export default reduxForm({
     form: 'login',
-    initialValues: {role: 'student'}
+    initialValues: {role: 'student'},
+    validate
 })(SignupForm);

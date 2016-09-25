@@ -21,18 +21,21 @@ class SignupPage extends Component {
 
         const api = new Api(new Http(fetch));
 
-        return api.signup(signupData).then(data => {
+        return api.signup(signupData).then(user => {
 
-            const {token} = data;
-            
-            if(token) {
-                userService.setToken(token);
-            }
-            
-            router.push('/topics');
-            
+            return api.login(user.email, signupData.password).then(data => {
+
+                const {token} = data;
+
+                if (token) {
+                    userService.setToken(token);
+                }
+
+                router.push('/topics');
+            });
+
         }).catch(err => {
-            throw new SubmissionError({_error: err.message});
+            throw new SubmissionError({ _error: err.message });
         });
 
     }
@@ -45,7 +48,7 @@ class SignupPage extends Component {
     render() {
         return (
             <div className="signup-page">
-                <h1 className="title">Qm Forum</h1>                
+                <h1 className="title">Qm Forum</h1>
                 <SignupForm onSubmit={this.onSubmit} onLogin={this.onLogin} />
             </div>
         );
