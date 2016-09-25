@@ -108,7 +108,7 @@ var LoginForm = function (_Component) {
                         ),
                         _react2.default.createElement(
                             'a',
-                            { className: 'sigup-button', onClick: this.onSignup },
+                            { id: 'signup-btn', className: 'sigup-button', onClick: this.onSignup },
                             'Not a member yet?'
                         )
                     )

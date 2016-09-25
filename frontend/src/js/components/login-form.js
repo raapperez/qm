@@ -46,7 +46,7 @@ class LoginForm extends Component {
                         }
 
                         <button type="submit" className="btn btn-primary" disabled={submitting}>Enter</button>
-                        <a className="sigup-button" onClick={this.onSignup}>Not a member yet?</a>
+                        <a id="signup-btn" className="sigup-button" onClick={this.onSignup}>Not a member yet?</a>
 
                     </form>
                 </div>

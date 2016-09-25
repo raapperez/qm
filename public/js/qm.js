@@ -46155,7 +46155,7 @@
 	                        ),
 	                        _react2.default.createElement(
 	                            'a',
-	                            { className: 'sigup-button', onClick: this.onSignup },
+	                            { id: 'signup-btn', className: 'sigup-button', onClick: this.onSignup },
 	                            'Not a member yet?'
 	                        )
 	                    )
@@ -46329,10 +46329,11 @@
 	    var min = _ref.min;
 	    var type = _ref.type;
 	    var className = _ref.className;
+	    var id = _ref.id;
 	    var _ref$meta = _ref.meta;
 	    var touched = _ref$meta.touched;
 	    var error = _ref$meta.error;
-	    return _react2.default.createElement('input', _extends({}, input, { placeholder: placeholder, min: min, type: type, className: (0, _classnames2.default)(className, { error: touched && error }) }));
+	    return _react2.default.createElement('input', _extends({}, input, { id: id, placeholder: placeholder, min: min, type: type, className: (0, _classnames2.default)(className, { error: touched && error }) }));
 	};
 
 	var SignupForm = function (_Component) {
@@ -46471,7 +46472,7 @@
 	                        ) : null,
 	                        _react2.default.createElement(
 	                            'button',
-	                            { type: 'submit', className: 'btn btn-primary', disabled: submitting },
+	                            { id: 'register-btn', type: 'submit', className: 'btn btn-primary', disabled: submitting },
 	                            'Register'
 	                        ),
 	                        _react2.default.createElement(

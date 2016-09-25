@@ -4,8 +4,8 @@ import React, {Component, PropTypes} from 'react';
 import {Field, reduxForm} from 'redux-form';
 import classNames from 'classnames';
 
-const renderField = ({ input, placeholder, min, type, className, meta: { touched, error } }) => (
-    <input {...input} placeholder={placeholder} min={min} type={type} className={classNames(className, { error: touched && error }) }/>
+const renderField = ({ input, placeholder, min, type, className, id, meta: { touched, error } }) => (
+    <input {...input} id={id} placeholder={placeholder} min={min} type={type} className={classNames(className, { error: touched && error }) }/>
 );
 
 class SignupForm extends Component {
@@ -73,7 +73,7 @@ class SignupForm extends Component {
                             : null
                         }
 
-                        <button type="submit" className="btn btn-primary" disabled={submitting}>Register</button>
+                        <button id="register-btn" type="submit" className="btn btn-primary" disabled={submitting}>Register</button>
                         <a className="login-button" onClick={this.onLogin}>Already a member?</a>
 
                     </form>
