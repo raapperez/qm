@@ -64,3 +64,5 @@ npm run test
 * O backend foi feito usando padrão **REST**.
 
 * A solução está em inglês, mas estou acostumado a fazer ter suporte a vários idiomas (**localização**).
+
+* Sobre testes no frontend, eu pretendia utilizar **Selenium** para criar casos de testes. Porém quando fui fazer, notei que ele não é compatível com aplicações **React** já que os inputs dos formulários dependem essencialmente do evento **onChange** dos componentes. E o **Selenium** altera os **value** dos componentes sem chamar esse evento. Para resolver esse problema a comunidade **React** está utilizando o [Jest](https://facebook.github.io/jest/). Eu teria que ter mais tempo para estudar e fazer os testes, e até esse momento não está feito.
