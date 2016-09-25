@@ -16,6 +16,10 @@ class LoginPage extends Component {
         this.onSignup = this.onSignup.bind(this);
     }
 
+    componentDidMount() {
+        userService.erase();
+    }
+
     onSubmit(formData) {
 
         const {router} = this.context;

@@ -50,6 +50,11 @@ var LoginPage = function (_Component) {
     }
 
     _createClass(LoginPage, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            _user2.default.erase();
+        }
+    }, {
         key: 'onSubmit',
         value: function onSubmit(formData) {
             var router = this.context.router;

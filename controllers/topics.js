@@ -5,7 +5,6 @@ const {Topic, User, Answer} = models;
 
 const uuid = require('uuid');
 const _ = require('lodash');
-const sequelize = require('sequelize');
 
 
 module.exports.create = (req, res, next) => {
@@ -88,6 +87,10 @@ module.exports.get = (req, res, next) => {
 
     Topic.findById(id, {
         include: [
+            {
+                model: User,
+                as: 'author'
+            },
             {
                 model: Answer,
                 as: 'answers',

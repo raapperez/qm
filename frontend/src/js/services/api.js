@@ -22,7 +22,7 @@ class Api {
         return { headers };
     }
 
-    verifyAuthorization (err) {
+    verifyAuthorization(err) {
         if (err.status === 401) {
             window.location.href = '/login';
         }
@@ -34,7 +34,7 @@ class Api {
         return this.http.get(`${apiHost}${resource}/${id}`, undefined, this.getDefaultOptions()).catch(this.verifyAuthorization);
     }
 
-    list(resource, page, pageSize, where, order) {        
+    list(resource, page, pageSize, where, order) {
         where = where ? `&where=${encodeURIComponent(JSON.stringify(where))}` : '';
         order = order ? `&order=${encodeURIComponent(JSON.stringify(order))}` : '';
 
@@ -42,7 +42,7 @@ class Api {
     }
 
     post(resource, body) {
-        return this.http.post(`${apiHost}${resource}`, body, this.getDefaultOptions()).catch(this.verifyAuthorization);        
+        return this.http.post(`${apiHost}${resource}`, body, this.getDefaultOptions()).catch(this.verifyAuthorization);
     }
 
     login(email, password) {

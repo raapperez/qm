@@ -45865,6 +45865,9 @@
 	        return Promise.resolve(response);
 	    } else {
 	        return json(response).then(function (json) {
+	            if (response.status === 401 && !json) {
+	                return Promise.reject({ status: 401 });
+	            }
 	            return Promise.reject(json);
 	        });
 	    }
@@ -45981,6 +45984,11 @@
 	    }
 
 	    _createClass(LoginPage, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            _user2.default.erase();
+	        }
+	    }, {
 	        key: 'onSubmit',
 	        value: function onSubmit(formData) {
 	            var router = this.context.router;
@@ -61380,7 +61388,7 @@
 
 	            return _react2.default.createElement(
 	                'div',
-	                null,
+	                { className: 'topic-page' },
 	                _react2.default.createElement(
 	                    'h1',
 	                    { className: 'page-header' },
@@ -61389,6 +61397,34 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'panel panel-default' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'panel-heading box' },
+	                        _react2.default.createElement(
+	                            'h3',
+	                            { className: 'panel-title fill' },
+	                            topic.author.firstName + ' ' + topic.author.lastName + ' - ' + (0, _moment2.default)(topic.updatedAt).fromNow()
+	                        ),
+	                        topic.createdAt !== topic.updatedAt ? _react2.default.createElement(
+	                            'span',
+	                            { className: 'label label-info' },
+	                            'edited'
+	                        ) : null,
+	                        _react2.default.createElement(
+	                            'div',
+	                            null,
+	                            _react2.default.createElement(
+	                                'a',
+	                                { title: 'Edit' },
+	                                _react2.default.createElement('i', { className: 'glyphicon glyphicon-pencil' })
+	                            ),
+	                            _react2.default.createElement(
+	                                'a',
+	                                { title: 'Remove' },
+	                                _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' })
+	                            )
+	                        )
+	                    ),
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'panel-body' },
@@ -61402,17 +61438,31 @@
 	                        { key: answer.id, className: 'panel panel-default' },
 	                        _react2.default.createElement(
 	                            'div',
-	                            { className: 'panel-heading' },
+	                            { className: 'panel-heading box' },
 	                            _react2.default.createElement(
 	                                'h3',
-	                                { className: 'panel-title' },
+	                                { className: 'panel-title fill' },
 	                                answer.author.firstName + ' ' + answer.author.lastName + ' - ' + (0, _moment2.default)(answer.updatedAt).fromNow()
 	                            ),
 	                            answer.createdAt !== answer.updatedAt ? _react2.default.createElement(
 	                                'span',
 	                                { className: 'label label-info' },
 	                                'edited'
-	                            ) : null
+	                            ) : null,
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'a',
+	                                    { title: 'Edit' },
+	                                    _react2.default.createElement('i', { className: 'glyphicon glyphicon-pencil' })
+	                                ),
+	                                _react2.default.createElement(
+	                                    'a',
+	                                    { title: 'Remove' },
+	                                    _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' })
+	                                )
+	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',

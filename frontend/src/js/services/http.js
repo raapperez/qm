@@ -18,6 +18,9 @@ function status(response) {
         return Promise.resolve(response);
     } else {
         return json(response).then(json => {
+            if(response.status === 401 && !json) {
+                return Promise.reject({status: 401});
+            }
             return Promise.reject(json);
         });
     }

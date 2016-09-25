@@ -51,11 +51,24 @@ class TopicPage extends Component {
         }
 
         return (
-            <div>
-
+            <div className="topic-page">
                 <h1 className="page-header">{topic.subject}</h1>
 
                 <div className="panel panel-default">
+                    <div className="panel-heading box">
+                        <h3 className="panel-title fill">{`${topic.author.firstName} ${topic.author.lastName} - ${moment(topic.updatedAt).fromNow()}`}</h3>
+                        {
+                            topic.createdAt !== topic.updatedAt ?
+                                <span className="label label-info">edited</span>
+                                : null
+                        }
+
+                        <div>
+                            <a title="Edit"><i className="glyphicon glyphicon-pencil"></i></a>
+                            <a title="Remove"><i className="glyphicon glyphicon-trash"></i></a>
+                        </div>
+
+                    </div>
                     <div className="panel-body">
                         {topic.message}
                     </div>
@@ -66,13 +79,18 @@ class TopicPage extends Component {
                 {
                     topic.answers && topic.answers.map(answer => (
                         <div key={answer.id} className="panel panel-default">
-                            <div className="panel-heading">
-                                <h3 className="panel-title">{`${answer.author.firstName} ${answer.author.lastName} - ${moment(answer.updatedAt).fromNow()}`}</h3>
+                            <div className="panel-heading box">
+                                <h3 className="panel-title fill">{`${answer.author.firstName} ${answer.author.lastName} - ${moment(answer.updatedAt).fromNow()}`}</h3>
                                 {
                                     answer.createdAt !== answer.updatedAt ?
                                         <span className="label label-info">edited</span>
                                         : null
                                 }
+
+                                <div>
+                                    <a title="Edit"><i className="glyphicon glyphicon-pencil"></i></a>
+                                    <a title="Remove"><i className="glyphicon glyphicon-trash"></i></a>
+                                </div>
 
                             </div>
                             <div className="panel-body">
