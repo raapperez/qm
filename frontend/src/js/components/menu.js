@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import {connect} from 'react-redux';
 import userService from '../services/user';
 import * as actions from '../actions/qm-actions';
+import classNames from 'classnames';
 
 class Menu extends Component {
 
@@ -63,7 +64,9 @@ class Menu extends Component {
                     <ul className="nav navbar-nav">
                         <li className="user-drop dropdown">
                             <a className="dropdown-toggle" onClick={this.toogleUserMenu}>
-                                {!user? 'Loading...' : `${user.firstName} ${user.lastName}`} <span className="caret"/>
+                                <i className={classNames({'glyphicon glyphicon-bullhorn': user && user.role === 'admin', 'glyphicon glyphicon-user': user && user.role === 'student'})}></i>
+                                {!user ? 'Loading...' : ` ${user.firstName || ''} ${user.lastName || ''} `}
+                                <span className="caret"/>
                             </a>
                             <ul className="dropdown-menu" style={{display: isShowingUserMenu ? 'block' : 'none'}}>
                                 <li>

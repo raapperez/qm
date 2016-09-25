@@ -45483,6 +45483,10 @@
 
 	var actions = _interopRequireWildcard(_qmActions);
 
+	var _classnames = __webpack_require__(739);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -45586,8 +45590,8 @@
 	                            _react2.default.createElement(
 	                                'a',
 	                                { className: 'dropdown-toggle', onClick: this.toogleUserMenu },
-	                                !user ? 'Loading...' : user.firstName + ' ' + user.lastName,
-	                                ' ',
+	                                _react2.default.createElement('i', { className: (0, _classnames2.default)({ 'glyphicon glyphicon-bullhorn': user && user.role === 'admin', 'glyphicon glyphicon-user': user && user.role === 'student' }) }),
+	                                !user ? 'Loading...' : ' ' + (user.firstName || '') + ' ' + (user.lastName || '') + ' ',
 	                                _react2.default.createElement('span', { className: 'caret' })
 	                            ),
 	                            _react2.default.createElement(
