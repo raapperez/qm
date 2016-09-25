@@ -96,6 +96,26 @@ var TopicsPage = function (_Component) {
             var topics = this.props.topics;
 
 
+            if (topics && topics.error) {
+                return _react2.default.createElement(
+                    'div',
+                    { className: 'topic-page' },
+                    _react2.default.createElement('br', null),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'alert alert-danger', role: 'alert' },
+                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-exclamation-sign', 'aria-hidden': 'true' }),
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'sr-only' },
+                            'Error: '
+                        ),
+                        ' ',
+                        topics.error.message
+                    )
+                );
+            }
+
             if (!topics) {
                 return _react2.default.createElement(
                     'div',

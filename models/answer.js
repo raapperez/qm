@@ -38,6 +38,17 @@ module.exports = (sequelize, Sequelize) => {
                             allowNull: false
                         }
                     });
+                },
+                isOwner: function (userId, id) {
+                    return Answer.findById(id).then(answer => {
+                        if (!answer) {
+                            const error = new Error('Not found');
+                            error.status = 404;
+                            throw error;
+                        }
+
+                        return answer.createdByUserId === userId;
+                    });
                 }
             },
             instanceMethods: {}

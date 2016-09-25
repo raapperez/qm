@@ -44,6 +44,17 @@ module.exports = (sequelize, Sequelize) => {
                             allowNull: false
                         }
                     });
+                },
+                isOwner: function (userId, id) {
+                    return Topic.findById(id).then(topic => {
+                        if (!topic) {
+                            const error = new Error('Not found');
+                            error.status = 404;
+                            throw error;
+                        }
+
+                        return topic.createdByUserId === userId;
+                    });
                 }
             },
             instanceMethods: {

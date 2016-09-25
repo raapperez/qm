@@ -49,6 +49,19 @@ class TopicsPage extends Component {
 
         const {topics} = this.props;
 
+        if (topics && topics.error) {
+            return (
+                <div className="topic-page">
+                    <br />
+                    <div className="alert alert-danger" role="alert">
+                        <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span className="sr-only">Error: </span> {topics.error.message}
+                    </div>
+                </div>
+            );
+        }
+
+
         if (!topics) {
             return (<div>loading...</div>);
         }
