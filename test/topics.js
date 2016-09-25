@@ -18,7 +18,7 @@ const createUserAndLogin = (user) => {
         json: true,
         body: user
     }).catch(err => {
-        if (err.statusCode === 404) {
+        if (err.statusCode === 400) {
             return rp.post({
                 uri: `${host}/users`,
                 json: true,
@@ -28,7 +28,6 @@ const createUserAndLogin = (user) => {
             });
         }
     }).then(result => result.token);
-
 };
 
 describe('qm forum api', () => {
@@ -38,6 +37,15 @@ describe('qm forum api', () => {
         firstName: 'Tester',
         lastName: 'Student',
         password: 'h8gQHWtt',
+        role: 'student',
+        token: null
+    };
+
+    const studentUser2 = {
+        email: 'tester-student2@test.com',
+        firstName: 'Tester2',
+        lastName: 'Student2',
+        password: 'h8ppHWtt',
         role: 'student',
         token: null
     };
@@ -67,9 +75,11 @@ describe('qm forum api', () => {
 
             return Promise.all([
                 createUserAndLogin(studentUser),
+                createUserAndLogin(studentUser2),
                 createUserAndLogin(adminUser)
-            ]).then(_.spread((studentToken, adminToken) => {
+            ]).then(_.spread((studentToken, studentToken2, adminToken) => {
                 studentUser.token = studentToken;
+                studentUser2.token = studentToken2;
                 adminUser.token = adminToken;
             }));
 
@@ -275,6 +285,166 @@ describe('qm forum api', () => {
                     err.statusCode.should.be.equal(401);
                 });
             });
+        });
+
+        describe('UPDATE /topics/:id', () => {
+
+            it('Should be able to a student update self topic', () => {
+                const topicStub = {
+                    subject: uuid.v4(),
+                    message: uuid.v4()
+                };
+                return rp.put({
+                    uri: `${host}/topics/${studentTopicId}`,
+                    json: true,
+                    body: topicStub,
+                    headers: {
+                        Authorization: `JWT ${studentUser.token}`
+                    }
+
+                }).then(topic => {
+                    topic.subject.should.be.equal(topicStub.subject);
+                    topic.message.should.be.equal(topicStub.message);
+                });
+            });
+
+            it('Should receive error 403 if a student update other student topic', () => {
+                const topicStub = {
+                    subject: uuid.v4(),
+                    message: uuid.v4()
+                };
+                return rp.put({
+                    uri: `${host}/topics/${studentTopicId}`,
+                    json: true,
+                    body: topicStub,
+                    headers: {
+                        Authorization: `JWT ${studentUser2.token}`
+                    }
+
+                }).then(() => {
+                    throw 'Should not receive success';
+                }).catch(err => {
+                    err.statusCode.should.be.equal(403);
+                });
+            });
+
+            it('Should receive error 403 if a student update any admin topic', () => {
+                const topicStub = {
+                    subject: uuid.v4(),
+                    message: uuid.v4()
+                };
+                return rp.put({
+                    uri: `${host}/topics/${adminTopicId}`,
+                    json: true,
+                    body: topicStub,
+                    headers: {
+                        Authorization: `JWT ${studentUser.token}`
+                    }
+
+                }).then(() => {
+                    throw 'Should not receive success';
+                }).catch(err => {
+                    err.statusCode.should.be.equal(403);
+                });
+            });
+
+            it('Should be able to a admin update student topic', () => {
+                const topicStub = {
+                    subject: uuid.v4(),
+                    message: uuid.v4()
+                };
+                return rp.put({
+                    uri: `${host}/topics/${studentTopicId}`,
+                    json: true,
+                    body: topicStub,
+                    headers: {
+                        Authorization: `JWT ${adminUser.token}`
+                    }
+
+                }).then(topic => {
+                    topic.subject.should.be.equal(topicStub.subject);
+                    topic.message.should.be.equal(topicStub.message);
+                });
+            });
+
+            it('Should be able to a admin update self topic', () => {
+                const topicStub = {
+                    subject: uuid.v4(),
+                    message: uuid.v4()
+                };
+                return rp.put({
+                    uri: `${host}/topics/${adminTopicId}`,
+                    json: true,
+                    body: topicStub,
+                    headers: {
+                        Authorization: `JWT ${adminUser.token}`
+                    }
+
+                }).then(topic => {
+                    topic.subject.should.be.equal(topicStub.subject);
+                    topic.message.should.be.equal(topicStub.message);
+                });
+            });
+
+        });
+
+        describe('DESTROY /topics/:id', () => {
+
+            it('Should receive error 403 if a student delete other student topic', () => {
+                return rp.delete({
+                    uri: `${host}/topics/${studentTopicId}`,
+                    json: true,
+                    headers: {
+                        Authorization: `JWT ${studentUser2.token}`
+                    }
+                }).then(() => {
+                    throw 'Should not receive success';
+                }).catch(err => {
+                    err.statusCode.should.be.equal(403);
+                });
+            });
+
+            it('Should receive error 403 if a student delete any admin topic', () => {
+
+                return rp.delete({
+                    uri: `${host}/topics/${adminTopicId}`,
+                    json: true,
+                    headers: {
+                        Authorization: `JWT ${studentUser.token}`
+                    }
+                }).then(() => {
+                    throw 'Should not receive success';
+                }).catch(err => {
+                    err.statusCode.should.be.equal(403);
+                });
+            });
+
+            it('Should be able to a student delete self topic', () => {
+                return rp.delete({
+                    uri: `${host}/topics/${studentTopicId}`,
+                    json: true,
+                    headers: {
+                        Authorization: `JWT ${studentUser.token}`
+                    }
+                }).then(() => {
+                }).catch(() => {
+                    throw 'Should not receive error';
+                });
+            });
+
+            it('Should be able to a admin delete self topic', () => {
+                return rp.delete({
+                    uri: `${host}/topics/${adminTopicId}`,
+                    json: true,
+                    headers: {
+                        Authorization: `JWT ${adminUser.token}`
+                    }
+                }).then(() => {
+                }).catch(() => {
+                    throw 'Should not receive error';
+                });
+            });
+
         });
 
     });

@@ -142,7 +142,7 @@ describe('qm forum api', () => {
             });
         });
 
-        describe('DELETE /users/:id', () => {
+        describe('DESTROY /users/:id', () => {
 
             let token;
 
