@@ -62,5 +62,6 @@ TopicForm.propTypes = {
 };
 
 export default reduxForm({
-    form: 'topic'
+    form: 'topic',
+    enableReinitialize: true
 })(TopicForm);

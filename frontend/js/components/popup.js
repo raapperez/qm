@@ -36,8 +36,11 @@ var Popup = function (_React$Component) {
 
         _this.state = {
             isVisible: false
-
         };
+
+        _this.show = _this.show.bind(_this);
+        _this.showConfirmation = _this.showConfirmation.bind(_this);
+        _this.hide = _this.hide.bind(_this);
         return _this;
     }
 
@@ -57,10 +60,7 @@ var Popup = function (_React$Component) {
                     title: 'Confirmation',
                     content: content,
                     isSmall: true,
-                    onClose: function onClose() {
-                        self.hide();
-                        resolve(false);
-                    },
+                    onClose: null,
                     buttons: [{
                         className: 'btn btn-default',
                         children: 'No',
@@ -103,7 +103,11 @@ var Popup = function (_React$Component) {
                 _react2.default.createElement(
                     'div',
                     { className: (0, _classnames2.default)('panel', { 'small': isSmall }) },
-                    onClose ? _react2.default.createElement('a', { className: 'fleet-icon-bt_close close-btn', onClick: onClose }) : null,
+                    onClose ? _react2.default.createElement(
+                        'a',
+                        { onClick: onClose, className: 'close-btn' },
+                        _react2.default.createElement('i', { className: 'glyphicon glyphicon-remove' })
+                    ) : null,
                     title ? _react2.default.createElement(
                         'h4',
                         { className: 'title' },

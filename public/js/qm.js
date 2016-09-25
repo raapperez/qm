@@ -28360,7 +28360,7 @@
 
 	var _topic2 = _interopRequireDefault(_topic);
 
-	var _topicCreate = __webpack_require__(862);
+	var _topicCreate = __webpack_require__(863);
 
 	var _topicCreate2 = _interopRequireDefault(_topicCreate);
 
@@ -45189,8 +45189,11 @@
 
 	        _this.state = {
 	            isVisible: false
-
 	        };
+
+	        _this.show = _this.show.bind(_this);
+	        _this.showConfirmation = _this.showConfirmation.bind(_this);
+	        _this.hide = _this.hide.bind(_this);
 	        return _this;
 	    }
 
@@ -45210,10 +45213,7 @@
 	                    title: 'Confirmation',
 	                    content: content,
 	                    isSmall: true,
-	                    onClose: function onClose() {
-	                        self.hide();
-	                        resolve(false);
-	                    },
+	                    onClose: null,
 	                    buttons: [{
 	                        className: 'btn btn-default',
 	                        children: 'No',
@@ -45256,7 +45256,11 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: (0, _classnames2.default)('panel', { 'small': isSmall }) },
-	                    onClose ? _react2.default.createElement('a', { className: 'fleet-icon-bt_close close-btn', onClick: onClose }) : null,
+	                    onClose ? _react2.default.createElement(
+	                        'a',
+	                        { onClick: onClose, className: 'close-btn' },
+	                        _react2.default.createElement('i', { className: 'glyphicon glyphicon-remove' })
+	                    ) : null,
 	                    title ? _react2.default.createElement(
 	                        'h4',
 	                        { className: 'title' },
@@ -45794,6 +45798,11 @@
 	        key: 'delete',
 	        value: function _delete(resource, id) {
 	            return this.http.del('' + _config.apiHost + resource + '/' + id, this.getDefaultOptions()).catch(this.verifyAuthorization);
+	        }
+	    }, {
+	        key: 'update',
+	        value: function update(resource, id, body) {
+	            return this.http.put('' + _config.apiHost + resource + '/' + id, body, this.getDefaultOptions()).catch(this.verifyAuthorization);
 	        }
 	    }, {
 	        key: 'login',
@@ -61300,6 +61309,10 @@
 
 	var _moment2 = _interopRequireDefault(_moment);
 
+	var _topicForm = __webpack_require__(862);
+
+	var _topicForm2 = _interopRequireDefault(_topicForm);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -61309,6 +61322,9 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AnswerForm = (0, _answerForm2.default)();
+	var AnswerFormPopup = (0, _answerForm2.default)('-popup');
 
 	var TopicPage = function (_Component) {
 	    _inherits(TopicPage, _Component);
@@ -61320,6 +61336,8 @@
 
 	        _this.doAnswer = _this.doAnswer.bind(_this);
 	        _this.deleteAnswer = _this.deleteAnswer.bind(_this);
+	        _this.editAnswer = _this.editAnswer.bind(_this);
+	        _this.editTopic = _this.editTopic.bind(_this);
 	        _this.deleteTopic = _this.deleteTopic.bind(_this);
 	        return _this;
 	    }
@@ -61331,7 +61349,6 @@
 	            var params = _props.params;
 	            var topic = _props.topic;
 	            var getTopic = _props.getTopic;
-	            var router = this.context.router;
 
 
 	            if (!topic || topic.id !== params.id) {
@@ -61359,15 +61376,46 @@
 	            });
 	        }
 	    }, {
+	        key: 'editAnswer',
+	        value: function editAnswer(answer) {
+	            var _props3 = this.props;
+	            var editAnswer = _props3.editAnswer;
+	            var getTopic = _props3.getTopic;
+	            var getPopup = this.context.getPopup;
+
+	            var self = getPopup();
+
+	            var content = _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(AnswerFormPopup, { onSubmit: function onSubmit(answerData) {
+	                        editAnswer(answerData).then(function () {
+	                            getTopic(answer.topicId);
+	                            self.hide();
+	                        });
+	                    }, onCancel: self.hide, initialValues: answer })
+	            );
+
+	            self.show({
+	                title: 'Reply edition',
+	                content: content,
+	                isSmall: false,
+	                onClose: function onClose() {
+	                    self.hide();
+	                },
+	                buttons: []
+	            });
+	        }
+	    }, {
 	        key: 'deleteAnswer',
 	        value: function deleteAnswer(answer) {
 	            var getPopup = this.context.getPopup;
-	            var _props3 = this.props;
-	            var deleteAnswer = _props3.deleteAnswer;
-	            var getTopic = _props3.getTopic;
+	            var _props4 = this.props;
+	            var deleteAnswer = _props4.deleteAnswer;
+	            var getTopic = _props4.getTopic;
 
 
-	            getPopup().showConfirmation('Are you sure to remove this reply?').then(function (mustRemove) {
+	            getPopup().showConfirmation('Are you sure you want to remove this reply?').then(function (mustRemove) {
 	                if (!mustRemove) {
 	                    return;
 	                }
@@ -61377,6 +61425,37 @@
 	                }).catch(function (err) {
 	                    console.log(err);
 	                });
+	            });
+	        }
+	    }, {
+	        key: 'editTopic',
+	        value: function editTopic(e) {
+	            e.preventDefault();
+
+	            var _props5 = this.props;
+	            var topic = _props5.topic;
+	            var editTopic = _props5.editTopic;
+	            var getPopup = this.context.getPopup;
+
+	            var self = getPopup();
+
+	            var content = _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(_topicForm2.default, { onSubmit: function onSubmit(topicData) {
+	                        editTopic(topicData);
+	                        self.hide();
+	                    }, onCancel: self.hide, initialValues: topic })
+	            );
+
+	            self.show({
+	                title: 'Topic edition',
+	                content: content,
+	                isSmall: false,
+	                onClose: function onClose() {
+	                    self.hide();
+	                },
+	                buttons: []
 	            });
 	        }
 	    }, {
@@ -61390,7 +61469,7 @@
 	            var topic = this.props.topic;
 
 
-	            getPopup().showConfirmation('Are you sure to remove this topic?').then(function (mustRemove) {
+	            getPopup().showConfirmation('Are you sure you want to remove this topic?').then(function (mustRemove) {
 	                if (!mustRemove) {
 	                    return;
 	                }
@@ -61407,9 +61486,9 @@
 	        value: function render() {
 	            var _this3 = this;
 
-	            var _props4 = this.props;
-	            var topic = _props4.topic;
-	            var params = _props4.params;
+	            var _props6 = this.props;
+	            var topic = _props6.topic;
+	            var params = _props6.params;
 
 
 	            if (topic && topic.error) {
@@ -61469,7 +61548,7 @@
 	                            { className: 'actions-bar' },
 	                            _react2.default.createElement(
 	                                'a',
-	                                { title: 'Edit' },
+	                                { title: 'Edit', onClick: this.editTopic },
 	                                _react2.default.createElement('i', { className: 'glyphicon glyphicon-pencil' })
 	                            ),
 	                            _react2.default.createElement(
@@ -61485,7 +61564,7 @@
 	                        topic.message
 	                    )
 	                ),
-	                _react2.default.createElement(_answerForm2.default, { ref: 'answerForm', onSubmit: this.doAnswer }),
+	                _react2.default.createElement(AnswerForm, { ref: 'answerForm', onSubmit: this.doAnswer }),
 	                topic.answers && topic.answers.map(function (answer) {
 	                    return _react2.default.createElement(
 	                        'div',
@@ -61508,7 +61587,10 @@
 	                                { className: 'actions-bar' },
 	                                _react2.default.createElement(
 	                                    'a',
-	                                    { title: 'Edit' },
+	                                    { title: 'Edit', onClick: function onClick(e) {
+	                                            e.preventDefault();
+	                                            _this3.editAnswer(answer);
+	                                        } },
 	                                    _react2.default.createElement('i', { className: 'glyphicon glyphicon-pencil' })
 	                                ),
 	                                _react2.default.createElement(
@@ -61541,7 +61623,9 @@
 	    getTopic: _react.PropTypes.func.isRequired,
 	    postAnswer: _react.PropTypes.func.isRequired,
 	    deleteAnswer: _react.PropTypes.func.isRequired,
-	    deleteTopic: _react.PropTypes.func.isRequired
+	    deleteTopic: _react.PropTypes.func.isRequired,
+	    editTopic: _react.PropTypes.func.isRequired,
+	    editAnswer: _react.PropTypes.func.isRequired
 	};
 
 	TopicPage.contextTypes = {
@@ -61575,6 +61659,16 @@
 	            return api.delete('/topics', topicId).then(function () {
 	                dispatch(actions.setTopic(null));
 	            });
+	        },
+	        editTopic: function editTopic(topic) {
+	            var api = new _api2.default(new _http2.default(fetch));
+	            return api.update('/topics', topic.id, topic).then(function (topic) {
+	                dispatch(actions.setTopic(topic));
+	            });
+	        },
+	        editAnswer: function editAnswer(answer) {
+	            var api = new _api2.default(new _http2.default(fetch));
+	            return api.update('/topics/' + answer.topicId + '/answers', answer.id, answer);
 	        }
 	    };
 	})(TopicPage);
@@ -61672,135 +61766,15 @@
 	    error: _react.PropTypes.string
 	};
 
-	exports.default = (0, _reduxForm.reduxForm)({
-	    form: 'topic'
-	})(AnswerForm);
+	exports.default = function (id) {
+	    return (0, _reduxForm.reduxForm)({
+	        form: 'answer' + (id ? id : ''),
+	        enableReinitialize: true
+	    })(AnswerForm);
+	};
 
 /***/ },
 /* 862 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(474);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(543);
-
-	var _api = __webpack_require__(744);
-
-	var _api2 = _interopRequireDefault(_api);
-
-	var _http = __webpack_require__(746);
-
-	var _http2 = _interopRequireDefault(_http);
-
-	var _qmActions = __webpack_require__(565);
-
-	var actions = _interopRequireWildcard(_qmActions);
-
-	var _topicForm = __webpack_require__(863);
-
-	var _topicForm2 = _interopRequireDefault(_topicForm);
-
-	var _reduxForm = __webpack_require__(566);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var TopicCreatePage = function (_Component) {
-	    _inherits(TopicCreatePage, _Component);
-
-	    function TopicCreatePage(props) {
-	        _classCallCheck(this, TopicCreatePage);
-
-	        var _this = _possibleConstructorReturn(this, (TopicCreatePage.__proto__ || Object.getPrototypeOf(TopicCreatePage)).call(this, props));
-
-	        _this.onSubmit = _this.onSubmit.bind(_this);
-	        _this.goBack = _this.goBack.bind(_this);
-	        return _this;
-	    }
-
-	    _createClass(TopicCreatePage, [{
-	        key: 'onSubmit',
-	        value: function onSubmit(topicData) {
-	            var createTopic = this.props.createTopic;
-	            var router = this.context.router;
-
-
-	            return createTopic(topicData).then(function (topic) {
-	                router.push('/topic/' + topic.id);
-	            }).catch(function (err) {
-	                throw new _reduxForm.SubmissionError({ _error: err.message });
-	            });
-	        }
-	    }, {
-	        key: 'goBack',
-	        value: function goBack() {
-	            var router = this.context.router;
-
-	            router.push('/topics');
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'row' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'col-md-12' },
-	                    _react2.default.createElement(
-	                        'h1',
-	                        { className: 'page-header' },
-	                        'New topic'
-	                    ),
-	                    _react2.default.createElement(_topicForm2.default, { onSubmit: this.onSubmit, onCancel: this.goBack })
-	                )
-	            );
-	        }
-	    }]);
-
-	    return TopicCreatePage;
-	}(_react.Component);
-
-	TopicCreatePage.propTypes = {
-	    createTopic: _react.PropTypes.func.isRequired
-	};
-
-	TopicCreatePage.contextTypes = {
-	    router: _react.PropTypes.object.isRequired
-	};
-
-	exports.default = (0, _reactRedux.connect)(function (state) {
-	    return {};
-	}, function (dispatch) {
-	    return {
-	        createTopic: function createTopic(topicData) {
-	            var api = new _api2.default(new _http2.default(fetch));
-	            return api.post('/topics', topicData).then(function (topic) {
-	                return topic;
-	            });
-	        }
-	    };
-	})(TopicCreatePage);
-
-/***/ },
-/* 863 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61925,8 +61899,132 @@
 	};
 
 	exports.default = (0, _reduxForm.reduxForm)({
-	    form: 'topic'
+	    form: 'topic',
+	    enableReinitialize: true
 	})(TopicForm);
+
+/***/ },
+/* 863 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(474);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(543);
+
+	var _api = __webpack_require__(744);
+
+	var _api2 = _interopRequireDefault(_api);
+
+	var _http = __webpack_require__(746);
+
+	var _http2 = _interopRequireDefault(_http);
+
+	var _qmActions = __webpack_require__(565);
+
+	var actions = _interopRequireWildcard(_qmActions);
+
+	var _topicForm = __webpack_require__(862);
+
+	var _topicForm2 = _interopRequireDefault(_topicForm);
+
+	var _reduxForm = __webpack_require__(566);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TopicCreatePage = function (_Component) {
+	    _inherits(TopicCreatePage, _Component);
+
+	    function TopicCreatePage(props) {
+	        _classCallCheck(this, TopicCreatePage);
+
+	        var _this = _possibleConstructorReturn(this, (TopicCreatePage.__proto__ || Object.getPrototypeOf(TopicCreatePage)).call(this, props));
+
+	        _this.onSubmit = _this.onSubmit.bind(_this);
+	        _this.goBack = _this.goBack.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(TopicCreatePage, [{
+	        key: 'onSubmit',
+	        value: function onSubmit(topicData) {
+	            var createTopic = this.props.createTopic;
+	            var router = this.context.router;
+
+
+	            return createTopic(topicData).then(function (topic) {
+	                router.push('/topic/' + topic.id);
+	            }).catch(function (err) {
+	                throw new _reduxForm.SubmissionError({ _error: err.message });
+	            });
+	        }
+	    }, {
+	        key: 'goBack',
+	        value: function goBack() {
+	            var router = this.context.router;
+
+	            router.push('/topics');
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'row' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-12' },
+	                    _react2.default.createElement(
+	                        'h1',
+	                        { className: 'page-header' },
+	                        'New topic'
+	                    ),
+	                    _react2.default.createElement(_topicForm2.default, { onSubmit: this.onSubmit, onCancel: this.goBack })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return TopicCreatePage;
+	}(_react.Component);
+
+	TopicCreatePage.propTypes = {
+	    createTopic: _react.PropTypes.func.isRequired
+	};
+
+	TopicCreatePage.contextTypes = {
+	    router: _react.PropTypes.object.isRequired
+	};
+
+	exports.default = (0, _reactRedux.connect)(function (state) {
+	    return {};
+	}, function (dispatch) {
+	    return {
+	        createTopic: function createTopic(topicData) {
+	            var api = new _api2.default(new _http2.default(fetch));
+	            return api.post('/topics', topicData).then(function (topic) {
+	                return topic;
+	            });
+	        }
+	    };
+	})(TopicCreatePage);
 
 /***/ }
 /******/ ]);

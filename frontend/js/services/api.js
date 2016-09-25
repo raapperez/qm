@@ -70,6 +70,11 @@ var Api = function () {
             return this.http.del('' + _config.apiHost + resource + '/' + id, this.getDefaultOptions()).catch(this.verifyAuthorization);
         }
     }, {
+        key: 'update',
+        value: function update(resource, id, body) {
+            return this.http.put('' + _config.apiHost + resource + '/' + id, body, this.getDefaultOptions()).catch(this.verifyAuthorization);
+        }
+    }, {
         key: 'login',
         value: function login(email, password) {
             return this.http.post(_config.apiHost + '/auth/login', { email: email, password: password }, { headers: { 'content-type': 'application/json;charset=UTF-8', accept: 'application/json' } });

@@ -49,6 +49,10 @@ class Api {
         return this.http.del(`${apiHost}${resource}/${id}`, this.getDefaultOptions()).catch(this.verifyAuthorization);
     }
 
+    update(resource, id, body) {
+        return this.http.put(`${apiHost}${resource}/${id}`, body, this.getDefaultOptions()).catch(this.verifyAuthorization);
+    }
+
     login(email, password) {
         return this.http.post(`${apiHost}/auth/login`, { email, password }, { headers: { 'content-type': 'application/json;charset=UTF-8', accept: 'application/json' } });
     }

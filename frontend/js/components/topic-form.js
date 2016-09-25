@@ -120,5 +120,6 @@ TopicForm.propTypes = {
 };
 
 exports.default = (0, _reduxForm.reduxForm)({
-    form: 'topic'
+    form: 'topic',
+    enableReinitialize: true
 })(TopicForm);

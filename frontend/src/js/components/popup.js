@@ -10,8 +10,11 @@ class Popup extends React.Component {
 
         this.state = {
             isVisible: false
-
         };
+
+        this.show = this.show.bind(this);
+        this.showConfirmation = this.showConfirmation.bind(this);
+        this.hide = this.hide.bind(this);
     }
 
     show(state) {
@@ -27,10 +30,7 @@ class Popup extends React.Component {
                 title: 'Confirmation',
                 content,
                 isSmall: true,
-                onClose: () => {
-                    self.hide();
-                    resolve(false);
-                },
+                onClose: null,
                 buttons: [{
                     className: 'btn btn-default',
                     children: 'No',
@@ -61,7 +61,7 @@ class Popup extends React.Component {
             <div className={classNames('popup-component', { 'hide': !isVisible }) }>
                 <div className={classNames('panel', { 'small': isSmall }) }>
                     {onClose ?
-                        <a className="fleet-icon-bt_close close-btn" onClick={onClose}></a>
+                        <a onClick={onClose} className="close-btn"><i className="glyphicon glyphicon-remove"></i></a>
                         : null
                     }
                     {title ?

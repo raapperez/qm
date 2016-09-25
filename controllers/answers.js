@@ -65,7 +65,7 @@ module.exports.get = (req, res, next) => {
             }
         ]
     }).then(answer => {
-        if (!answer) {
+        if (!answer || answer.isDeleted) {
             const error = new Error('Not found');
             error.status = 404;
             next(error);
@@ -85,7 +85,7 @@ module.exports.update = (req, res, next) => {
 
     Answer.findById(id).then(answer => {
 
-        if (!answer) {
+        if (!answer|| answer.isDeleted) {
             const error = new Error('Not found');
             error.status = 404;
             next(error);

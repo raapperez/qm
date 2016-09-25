@@ -87,6 +87,9 @@ AnswerForm.propTypes = {
     error: _react.PropTypes.string
 };
 
-exports.default = (0, _reduxForm.reduxForm)({
-    form: 'topic'
-})(AnswerForm);
+exports.default = function (id) {
+    return (0, _reduxForm.reduxForm)({
+        form: 'answer' + (id ? id : ''),
+        enableReinitialize: true
+    })(AnswerForm);
+};

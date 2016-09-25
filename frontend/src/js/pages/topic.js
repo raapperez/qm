@@ -5,9 +5,14 @@ import {connect} from 'react-redux';
 import Api from '../services/api';
 import Http from '../services/http';
 import * as actions from '../actions/qm-actions';
-import AnswerForm from '../components/answer-form';
+import answerForm from '../components/answer-form';
 import { SubmissionError } from 'redux-form';
 import moment from 'moment';
+
+import TopicForm from '../components/topic-form';
+
+const AnswerForm = answerForm();
+const AnswerFormPopup = answerForm('-popup');
 
 class TopicPage extends Component {
 
@@ -16,12 +21,13 @@ class TopicPage extends Component {
 
         this.doAnswer = this.doAnswer.bind(this);
         this.deleteAnswer = this.deleteAnswer.bind(this);
+        this.editAnswer = this.editAnswer.bind(this);
+        this.editTopic = this.editTopic.bind(this);
         this.deleteTopic = this.deleteTopic.bind(this);
     }
 
     componentDidMount() {
         const {params, topic, getTopic} = this.props;
-        const {router} = this.context;
 
         if (!topic || topic.id !== params.id) {
             getTopic(params.id);
@@ -42,12 +48,40 @@ class TopicPage extends Component {
 
     }
 
+    editAnswer(answer) {
+
+        const {editAnswer, getTopic} = this.props;
+        const {getPopup} = this.context;
+        const self = getPopup();
+
+        const content = (
+            <div>
+                <AnswerFormPopup onSubmit={answerData => {
+                    editAnswer(answerData).then(() => {
+                        getTopic(answer.topicId);
+                        self.hide();
+                    });
+                }} onCancel={self.hide} initialValues={answer} />
+            </div>
+        );
+
+        self.show({
+            title: 'Reply edition',
+            content,
+            isSmall: false,
+            onClose: () => {
+                self.hide();
+            },
+            buttons: []
+        });
+    }
+
     deleteAnswer(answer) {
 
         const {getPopup} = this.context;
         const {deleteAnswer, getTopic} = this.props;
 
-        getPopup().showConfirmation('Are you sure to remove this reply?').then(mustRemove => {
+        getPopup().showConfirmation('Are you sure you want to remove this reply?').then(mustRemove => {
             if (!mustRemove) {
                 return;
             }
@@ -61,6 +95,34 @@ class TopicPage extends Component {
         });
     }
 
+
+    editTopic(e) {
+        e.preventDefault();
+
+        const {topic, editTopic} = this.props;
+        const {getPopup} = this.context;
+        const self = getPopup();
+
+        const content = (
+            <div>
+                <TopicForm onSubmit={topicData => {
+                    editTopic(topicData);
+                    self.hide();
+                }} onCancel={self.hide} initialValues={topic} />
+            </div>
+        );
+
+        self.show({
+            title: 'Topic edition',
+            content,
+            isSmall: false,
+            onClose: () => {
+                self.hide();
+            },
+            buttons: []
+        });
+    }
+
     deleteTopic(e) {
         e.preventDefault();
         const {getPopup, router} = this.context;
@@ -68,7 +130,7 @@ class TopicPage extends Component {
 
         const {topic} = this.props;
 
-        getPopup().showConfirmation('Are you sure to remove this topic?').then(mustRemove => {
+        getPopup().showConfirmation('Are you sure you want to remove this topic?').then(mustRemove => {
             if (!mustRemove) {
                 return;
             }
@@ -118,7 +180,7 @@ class TopicPage extends Component {
                             }
                         </h3>
                         <div className="actions-bar">
-                            <a title="Edit"><i className="glyphicon glyphicon-pencil"></i></a>
+                            <a title="Edit" onClick={this.editTopic}><i className="glyphicon glyphicon-pencil"></i></a>
                             <a title="Remove" onClick={this.deleteTopic}><i className="glyphicon glyphicon-trash"></i></a>
                         </div>
 
@@ -143,7 +205,10 @@ class TopicPage extends Component {
                                 </h3>
 
                                 <div className="actions-bar">
-                                    <a title="Edit"><i className="glyphicon glyphicon-pencil"></i></a>
+                                    <a title="Edit" onClick={e => {
+                                        e.preventDefault();
+                                        this.editAnswer(answer);
+                                    }}><i className="glyphicon glyphicon-pencil"></i></a>
                                     <a title="Remove" onClick={e => {
                                         e.preventDefault();
                                         this.deleteAnswer(answer);
@@ -168,7 +233,9 @@ TopicPage.propTypes = {
     getTopic: PropTypes.func.isRequired,
     postAnswer: PropTypes.func.isRequired,
     deleteAnswer: PropTypes.func.isRequired,
-    deleteTopic: PropTypes.func.isRequired
+    deleteTopic: PropTypes.func.isRequired,
+    editTopic: PropTypes.func.isRequired,
+    editAnswer: PropTypes.func.isRequired
 };
 
 TopicPage.contextTypes = {
@@ -202,6 +269,16 @@ export default connect(
             return api.delete(`/topics`, topicId).then(() => {
                 dispatch(actions.setTopic(null));
             });
+        },
+        editTopic: topic => {
+            const api = new Api(new Http(fetch));
+            return api.update(`/topics`, topic.id, topic).then(topic => {
+                dispatch(actions.setTopic(topic));
+            });
+        },
+        editAnswer: answer => {
+            const api = new Api(new Http(fetch));
+            return api.update(`/topics/${answer.topicId}/answers`, answer.id, answer);
         }
     })
 )(TopicPage);

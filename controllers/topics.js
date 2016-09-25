@@ -7,6 +7,24 @@ const uuid = require('uuid');
 const _ = require('lodash');
 
 
+const include = [
+    {
+        model: User,
+        as: 'author'
+    },
+    {
+        model: Answer,
+        as: 'answers',
+        where: { isDeleted: false },
+        required: false,
+        include: [
+            {
+                model: User,
+                as: 'author'
+            }
+        ]
+    }];
+
 module.exports.create = (req, res, next) => {
     const topicData = req.body;
 
@@ -35,7 +53,7 @@ module.exports.list = (req, res, next) => {
     const {pagination} = req;
 
     const where = Object.assign({ isDeleted: false }, pagination.where);
-    const order = [['createdAt', 'DESC']];
+    const order = [['createdAt', 'DESC'], [{ model: Answer, as: 'answers' }, 'createdAt', 'DESC']];
 
     Promise.all([
         Topic.count({ where }),
@@ -44,23 +62,7 @@ module.exports.list = (req, res, next) => {
             order,
             offset: pagination.pageSize * (pagination.page - 1),
             limit: pagination.pageSize,
-            include: [
-                {
-                    model: User,
-                    as: 'author'
-                },
-                {
-                    model: Answer,
-                    as: 'answers',
-                    where: { isDeleted: false },
-                    required: false,
-                    include: [
-                        {
-                            model: User,
-                            as: 'author'
-                        }
-                    ]
-                }]
+            include
         })
     ]).then(_.spread((count, topics) => {
         pagination.total = count;
@@ -86,24 +88,7 @@ module.exports.get = (req, res, next) => {
     }
 
     Topic.findById(id, {
-        include: [
-            {
-                model: User,
-                as: 'author'
-            },
-            {
-                model: Answer,
-                as: 'answers',
-                required: false,
-                where: { isDeleted: false },
-                include: [
-                    {
-                        model: User,
-                        as: 'author'
-                    }
-                ]
-            }
-        ],
+        include,
         order: [
             [{ model: Answer, as: 'answers' }, 'createdAt', 'DESC']
         ]
@@ -125,9 +110,11 @@ module.exports.update = (req, res, next) => {
     const topicData = _.omit(req.body, 'id', 'isDeleted', 'createdByUserId', 'createdAt', 'updatedAt'); // These attributes are not allowed to update
 
 
-    topicData.findById(id).then(topic => {
+    Topic.findById(id, {
+        include
+    }).then(topic => {
 
-        if (!topic) {
+        if (!topic || topic.isDeleted) {
             const error = new Error('Not found');
             error.status = 404;
             next(error);

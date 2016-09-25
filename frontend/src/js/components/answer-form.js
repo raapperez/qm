@@ -44,6 +44,7 @@ AnswerForm.propTypes = {
     error: PropTypes.string
 };
 
-export default reduxForm({
-    form: 'topic'
-})(AnswerForm);
+export default id => (reduxForm({
+    form: 'answer' + (id ? id : ''),
+    enableReinitialize: true
+})(AnswerForm));
