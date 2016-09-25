@@ -74,13 +74,13 @@ describe('qm forum api', () => {
         let studentTopicId;
         const studentTopic = {
             subject: 'Student topic subject',
-            message: 'Student topice message'
+            message: 'Student topic message'
         };
 
         let adminTopicId;
         const adminTopic = {
             subject: 'Admin topic subject',
-            message: 'Admin topice message'
+            message: 'Admin topic message'
         };
 
         describe('CREATE /topics', () => {
