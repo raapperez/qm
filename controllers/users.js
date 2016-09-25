@@ -37,7 +37,7 @@ module.exports.get = (req, res, next) => {
             next(error);
             return;
         }
-        res.status(200).json(user);
+        res.status(200).json(user.getPublicInfo());
     }).catch(err => {
         next(err);
     });
@@ -45,7 +45,7 @@ module.exports.get = (req, res, next) => {
 
 module.exports.destroy = (req, res, next) => {
     const {id} = req.params;
-
+console.log('----');
     User.update({
         isActive: false
     }, {
