@@ -9,6 +9,10 @@ const Pagination = ({
     goToPage
 }) => {
 
+    if(!totalPages) {
+        return null;
+    }
+
     const showPages = 5;
     const halfPages = Math.floor(showPages / 2);
 

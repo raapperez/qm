@@ -8,7 +8,8 @@ const createUserAndLogin = (user) => {
         uri: `${host}/auth/login`,
         json: true,
         body: user
-    }).catch(err => {
+    }).then(result => result.token).catch(err => {
+        console.log(err.statusCode);
         if (err.statusCode === 400) {
             return rp.post({
                 uri: `${host}/users`,
@@ -18,7 +19,7 @@ const createUserAndLogin = (user) => {
                 return createUserAndLogin(user);
             });
         }
-    }).then(result => result.token);
+    });
 };
 
 

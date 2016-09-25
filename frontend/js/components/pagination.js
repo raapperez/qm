@@ -20,6 +20,10 @@ var Pagination = function Pagination(_ref) {
     var goToPage = _ref.goToPage;
 
 
+    if (!totalPages) {
+        return null;
+    }
+
     var showPages = 5;
     var halfPages = Math.floor(showPages / 2);
 
