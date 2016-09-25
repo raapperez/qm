@@ -1,6 +1,6 @@
 'use strict';
 
-const permissions = require('../configs/permissions');
+const permissions = require('../frontend/js/constants/permissions').default;
 const logger = require('winston');
 
 const forbiddenError = new Error('No permission granted');
@@ -10,7 +10,7 @@ module.exports = (action, isOwner) => {
 
     return (req, res, next) => {
         if (!permissions[action]) {
-            logger.warn(`Missing permission definition for action {action}`);
+            logger.warn(`Missing permission definition for action ${action}`);
             next();
             return;
         }

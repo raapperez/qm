@@ -28360,7 +28360,7 @@
 
 	var _topic2 = _interopRequireDefault(_topic);
 
-	var _topicCreate = __webpack_require__(863);
+	var _topicCreate = __webpack_require__(865);
 
 	var _topicCreate2 = _interopRequireDefault(_topicCreate);
 
@@ -61337,6 +61337,14 @@
 
 	var _topicForm2 = _interopRequireDefault(_topicForm);
 
+	var _permission = __webpack_require__(863);
+
+	var _permission2 = _interopRequireDefault(_permission);
+
+	var _permissions = __webpack_require__(864);
+
+	var permissions = _interopRequireWildcard(_permissions);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -61513,6 +61521,7 @@
 	            var _props6 = this.props;
 	            var topic = _props6.topic;
 	            var params = _props6.params;
+	            var user = _props6.user;
 
 
 	            if (topic && topic.error) {
@@ -61570,16 +61579,16 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { className: 'actions-bar' },
-	                            _react2.default.createElement(
+	                            _permission2.default.has(user, permissions.UPDATE_TOPIC, topic, 'createdByUserId') ? _react2.default.createElement(
 	                                'a',
 	                                { title: 'Edit', onClick: this.editTopic },
 	                                _react2.default.createElement('i', { className: 'glyphicon glyphicon-pencil' })
-	                            ),
-	                            _react2.default.createElement(
+	                            ) : null,
+	                            _permission2.default.has(user, permissions.DESTROY_TOPIC, topic, 'createdByUserId') ? _react2.default.createElement(
 	                                'a',
 	                                { title: 'Remove', onClick: this.deleteTopic },
 	                                _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' })
-	                            )
+	                            ) : null
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -61609,22 +61618,22 @@
 	                            _react2.default.createElement(
 	                                'div',
 	                                { className: 'actions-bar' },
-	                                _react2.default.createElement(
+	                                _permission2.default.has(user, permissions.UPDATE_ANSWER, answer, 'createdByUserId') ? _react2.default.createElement(
 	                                    'a',
 	                                    { title: 'Edit', onClick: function onClick(e) {
 	                                            e.preventDefault();
 	                                            _this3.editAnswer(answer);
 	                                        } },
 	                                    _react2.default.createElement('i', { className: 'glyphicon glyphicon-pencil' })
-	                                ),
-	                                _react2.default.createElement(
+	                                ) : null,
+	                                _permission2.default.has(user, permissions.DESTROY_ANSWER, answer, 'createdByUserId') ? _react2.default.createElement(
 	                                    'a',
 	                                    { title: 'Remove', onClick: function onClick(e) {
 	                                            e.preventDefault();
 	                                            _this3.deleteAnswer(answer);
 	                                        } },
 	                                    _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' })
-	                                )
+	                                ) : null
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -61642,6 +61651,7 @@
 	}(_react.Component);
 
 	TopicPage.propTypes = {
+	    user: _react.PropTypes.object,
 	    topic: _react.PropTypes.object,
 	    params: _react.PropTypes.object.isRequired,
 	    getTopic: _react.PropTypes.func.isRequired,
@@ -61658,7 +61668,7 @@
 	};
 
 	exports.default = (0, _reactRedux.connect)(function (state) {
-	    return { topic: state.topic };
+	    return { user: state.user, topic: state.topic };
 	}, function (dispatch) {
 	    return {
 	        getTopic: function getTopic(id) {
@@ -61929,6 +61939,87 @@
 
 /***/ },
 /* 863 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _permissions = __webpack_require__(864);
+
+	var _permissions2 = _interopRequireDefault(_permissions);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Permission = function () {
+	    function Permission() {
+	        _classCallCheck(this, Permission);
+	    }
+
+	    _createClass(Permission, [{
+	        key: 'has',
+	        value: function has(user, action, resource, ownerAttribute) {
+	            if (!_permissions2.default[action]) {
+	                console.log('Missing permission definition for action ' + action);
+	                return false;
+	            }
+
+	            var permissionList = _permissions2.default[action];
+
+	            if (permissionList.indexOf(user.role) !== -1) {
+	                return true;
+	            }
+
+	            if (permissionList.indexOf('owner') !== -1 && user.id === resource[ownerAttribute]) {
+	                return true;
+	            }
+
+	            return false;
+	        }
+	    }]);
+
+	    return Permission;
+	}();
+
+	exports.default = new Permission();
+
+/***/ },
+/* 864 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var CREATE_TOPIC = exports.CREATE_TOPIC = 'CREATE_TOPIC';
+	var GET_TOPIC = exports.GET_TOPIC = 'GET_TOPIC';
+	var UPDATE_TOPIC = exports.UPDATE_TOPIC = 'UPDATE_TOPIC';
+	var DESTROY_TOPIC = exports.DESTROY_TOPIC = 'DESTROY_TOPIC';
+	var CREATE_ANSWER = exports.CREATE_ANSWER = 'CREATE_ANSWER';
+	var GET_ANSWER = exports.GET_ANSWER = 'GET_ANSWER';
+	var UPDATE_ANSWER = exports.UPDATE_ANSWER = 'UPDATE_ANSWER';
+	var DESTROY_ANSWER = exports.DESTROY_ANSWER = 'DESTROY_ANSWER';
+
+	exports.default = {
+	    'CREATE_TOPIC': ['admin', 'student'],
+	    'GET_TOPIC': ['admin', 'student'],
+	    'UPDATE_TOPIC': ['owner', 'admin'],
+	    'DESTROY_TOPIC': ['owner', 'admin'],
+	    'CREATE_ANSWER': ['admin', 'student'],
+	    'GET_ANSWER': ['admin', 'student'],
+	    'UPDATE_ANSWER': ['owner', 'admin'],
+	    'DESTROY_ANSWER': ['owner', 'admin']
+	};
+
+/***/ },
+/* 865 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

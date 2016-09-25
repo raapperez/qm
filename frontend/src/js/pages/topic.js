@@ -11,6 +11,9 @@ import moment from 'moment';
 
 import TopicForm from '../components/topic-form';
 
+import permission from '../services/permission';
+import * as permissions from '../constants/permissions';
+
 const AnswerForm = answerForm();
 const AnswerFormPopup = answerForm('-popup');
 
@@ -61,7 +64,7 @@ class TopicPage extends Component {
                         getTopic(answer.topicId);
                         self.hide();
                     });
-                }} onCancel={self.hide} initialValues={answer} />
+                } } onCancel={self.hide} initialValues={answer} />
             </div>
         );
 
@@ -108,7 +111,7 @@ class TopicPage extends Component {
                 <TopicForm onSubmit={topicData => {
                     editTopic(topicData);
                     self.hide();
-                }} onCancel={self.hide} initialValues={topic} />
+                } } onCancel={self.hide} initialValues={topic} />
             </div>
         );
 
@@ -144,7 +147,7 @@ class TopicPage extends Component {
     }
 
     render() {
-        const {topic, params} = this.props;
+        const {topic, params, user} = this.props;
 
         if (topic && topic.error) {
             return (
@@ -180,8 +183,17 @@ class TopicPage extends Component {
                             }
                         </h3>
                         <div className="actions-bar">
-                            <a title="Edit" onClick={this.editTopic}><i className="glyphicon glyphicon-pencil"></i></a>
-                            <a title="Remove" onClick={this.deleteTopic}><i className="glyphicon glyphicon-trash"></i></a>
+                            {
+                                permission.has(user, permissions.UPDATE_TOPIC, topic, 'createdByUserId') ?
+                                    <a title="Edit" onClick={this.editTopic}><i className="glyphicon glyphicon-pencil"></i></a>
+                                    : null
+                            }
+
+                            {
+                                permission.has(user, permissions.DESTROY_TOPIC, topic, 'createdByUserId') ?
+                                    <a title="Remove" onClick={this.deleteTopic}><i className="glyphicon glyphicon-trash"></i></a>
+                                    : null
+                            }
                         </div>
 
                     </div>
@@ -205,14 +217,24 @@ class TopicPage extends Component {
                                 </h3>
 
                                 <div className="actions-bar">
-                                    <a title="Edit" onClick={e => {
-                                        e.preventDefault();
-                                        this.editAnswer(answer);
-                                    }}><i className="glyphicon glyphicon-pencil"></i></a>
-                                    <a title="Remove" onClick={e => {
-                                        e.preventDefault();
-                                        this.deleteAnswer(answer);
-                                    } }><i className="glyphicon glyphicon-trash"></i></a>
+                                    {
+                                        permission.has(user, permissions.UPDATE_ANSWER, answer, 'createdByUserId') ?
+                                            <a title="Edit" onClick={e => {
+                                                e.preventDefault();
+                                                this.editAnswer(answer);
+                                            } }><i className="glyphicon glyphicon-pencil"></i></a>
+                                            : null
+                                    }
+
+                                    {
+                                        permission.has(user, permissions.DESTROY_ANSWER, answer, 'createdByUserId') ?
+                                            <a title="Remove" onClick={e => {
+                                                e.preventDefault();
+                                                this.deleteAnswer(answer);
+                                            } }><i className="glyphicon glyphicon-trash"></i></a>
+                                            : null
+                                    }
+
                                 </div>
 
                             </div>
@@ -228,6 +250,7 @@ class TopicPage extends Component {
 }
 
 TopicPage.propTypes = {
+    user: PropTypes.object,
     topic: PropTypes.object,
     params: PropTypes.object.isRequired,
     getTopic: PropTypes.func.isRequired,
@@ -244,7 +267,7 @@ TopicPage.contextTypes = {
 };
 
 export default connect(
-    state => ({ topic: state.topic }),
+    state => ({ user: state.user, topic: state.topic }),
     dispatch => ({
         getTopic: id => {
             const api = new Api(new Http(fetch));

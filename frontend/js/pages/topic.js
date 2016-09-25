@@ -38,6 +38,14 @@ var _topicForm = require('../components/topic-form');
 
 var _topicForm2 = _interopRequireDefault(_topicForm);
 
+var _permission = require('../services/permission');
+
+var _permission2 = _interopRequireDefault(_permission);
+
+var _permissions = require('../constants/permissions');
+
+var permissions = _interopRequireWildcard(_permissions);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -214,6 +222,7 @@ var TopicPage = function (_Component) {
             var _props6 = this.props;
             var topic = _props6.topic;
             var params = _props6.params;
+            var user = _props6.user;
 
 
             if (topic && topic.error) {
@@ -271,16 +280,16 @@ var TopicPage = function (_Component) {
                         _react2.default.createElement(
                             'div',
                             { className: 'actions-bar' },
-                            _react2.default.createElement(
+                            _permission2.default.has(user, permissions.UPDATE_TOPIC, topic, 'createdByUserId') ? _react2.default.createElement(
                                 'a',
                                 { title: 'Edit', onClick: this.editTopic },
                                 _react2.default.createElement('i', { className: 'glyphicon glyphicon-pencil' })
-                            ),
-                            _react2.default.createElement(
+                            ) : null,
+                            _permission2.default.has(user, permissions.DESTROY_TOPIC, topic, 'createdByUserId') ? _react2.default.createElement(
                                 'a',
                                 { title: 'Remove', onClick: this.deleteTopic },
                                 _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' })
-                            )
+                            ) : null
                         )
                     ),
                     _react2.default.createElement(
@@ -310,22 +319,22 @@ var TopicPage = function (_Component) {
                             _react2.default.createElement(
                                 'div',
                                 { className: 'actions-bar' },
-                                _react2.default.createElement(
+                                _permission2.default.has(user, permissions.UPDATE_ANSWER, answer, 'createdByUserId') ? _react2.default.createElement(
                                     'a',
                                     { title: 'Edit', onClick: function onClick(e) {
                                             e.preventDefault();
                                             _this3.editAnswer(answer);
                                         } },
                                     _react2.default.createElement('i', { className: 'glyphicon glyphicon-pencil' })
-                                ),
-                                _react2.default.createElement(
+                                ) : null,
+                                _permission2.default.has(user, permissions.DESTROY_ANSWER, answer, 'createdByUserId') ? _react2.default.createElement(
                                     'a',
                                     { title: 'Remove', onClick: function onClick(e) {
                                             e.preventDefault();
                                             _this3.deleteAnswer(answer);
                                         } },
                                     _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' })
-                                )
+                                ) : null
                             )
                         ),
                         _react2.default.createElement(
@@ -343,6 +352,7 @@ var TopicPage = function (_Component) {
 }(_react.Component);
 
 TopicPage.propTypes = {
+    user: _react.PropTypes.object,
     topic: _react.PropTypes.object,
     params: _react.PropTypes.object.isRequired,
     getTopic: _react.PropTypes.func.isRequired,
@@ -359,7 +369,7 @@ TopicPage.contextTypes = {
 };
 
 exports.default = (0, _reactRedux.connect)(function (state) {
-    return { topic: state.topic };
+    return { user: state.user, topic: state.topic };
 }, function (dispatch) {
     return {
         getTopic: function getTopic(id) {
