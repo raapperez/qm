@@ -16,10 +16,12 @@ class TopicPage extends Component {
 
         this.doAnswer = this.doAnswer.bind(this);
         this.deleteAnswer = this.deleteAnswer.bind(this);
+        this.deleteTopic = this.deleteTopic.bind(this);
     }
 
     componentDidMount() {
         const {params, topic, getTopic} = this.props;
+        const {router} = this.context;
 
         if (!topic || topic.id !== params.id) {
             getTopic(params.id);
@@ -42,11 +44,11 @@ class TopicPage extends Component {
 
     deleteAnswer(answer) {
 
-        const {getPopup, } = this.context;
+        const {getPopup} = this.context;
         const {deleteAnswer, getTopic} = this.props;
 
         getPopup().showConfirmation('Are you sure to remove this reply?').then(mustRemove => {
-            if(!mustRemove) {
+            if (!mustRemove) {
                 return;
             }
 
@@ -59,8 +61,40 @@ class TopicPage extends Component {
         });
     }
 
+    deleteTopic(e) {
+        e.preventDefault();
+        const {getPopup, router} = this.context;
+        const {deleteTopic} = this.props;
+
+        const {topic} = this.props;
+
+        getPopup().showConfirmation('Are you sure to remove this topic?').then(mustRemove => {
+            if (!mustRemove) {
+                return;
+            }
+
+            deleteTopic(topic.id).then(() => {
+                router.push('/topics');
+            }).catch(err => {
+                console.log(err);
+            });
+        });
+    }
+
     render() {
         const {topic, params} = this.props;
+
+        if (topic && topic.error) {
+            return (
+                <div className="topic-page">
+                    <br />
+                    <div className="alert alert-danger" role="alert">
+                        <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span className="sr-only">Error: </span> {topic.error.message}
+                    </div>
+                </div>
+            );
+        }
 
         if (!topic || topic.id !== params.id) {
             return (
@@ -77,15 +111,15 @@ class TopicPage extends Component {
                 <div className="panel panel-default">
                     <div className="panel-heading box">
                         <h3 className="panel-title fill">{`${topic.author.firstName} ${topic.author.lastName} - ${moment(topic.updatedAt).fromNow()}`}
-                        {
-                            topic.createdAt !== topic.updatedAt ?
-                                <span className="label label-info no-select edited">edited</span>
-                                : null
-                        }
+                            {
+                                topic.createdAt !== topic.updatedAt ?
+                                    <span className="label label-info no-select edited">edited</span>
+                                    : null
+                            }
                         </h3>
                         <div className="actions-bar">
                             <a title="Edit"><i className="glyphicon glyphicon-pencil"></i></a>
-                            <a title="Remove"><i className="glyphicon glyphicon-trash"></i></a>
+                            <a title="Remove" onClick={this.deleteTopic}><i className="glyphicon glyphicon-trash"></i></a>
                         </div>
 
                     </div>
@@ -101,11 +135,11 @@ class TopicPage extends Component {
                         <div key={answer.id} className="panel panel-default">
                             <div className="panel-heading box">
                                 <h3 className="panel-title fill">{`${answer.author.firstName} ${answer.author.lastName} - ${moment(answer.updatedAt).fromNow()}`}
-                                {
-                                    answer.createdAt !== answer.updatedAt ?
-                                        <span className="label label-info no-select edited">edited</span>
-                                        : null
-                                }
+                                    {
+                                        answer.createdAt !== answer.updatedAt ?
+                                            <span className="label label-info no-select edited">edited</span>
+                                            : null
+                                    }
                                 </h3>
 
                                 <div className="actions-bar">
@@ -113,7 +147,7 @@ class TopicPage extends Component {
                                     <a title="Remove" onClick={e => {
                                         e.preventDefault();
                                         this.deleteAnswer(answer);
-                                    }}><i className="glyphicon glyphicon-trash"></i></a>
+                                    } }><i className="glyphicon glyphicon-trash"></i></a>
                                 </div>
 
                             </div>
@@ -133,11 +167,13 @@ TopicPage.propTypes = {
     params: PropTypes.object.isRequired,
     getTopic: PropTypes.func.isRequired,
     postAnswer: PropTypes.func.isRequired,
-    deleteAnswer: PropTypes.func.isRequired
+    deleteAnswer: PropTypes.func.isRequired,
+    deleteTopic: PropTypes.func.isRequired
 };
 
 TopicPage.contextTypes = {
-    getPopup: PropTypes.func.isRequired
+    getPopup: PropTypes.func.isRequired,
+    router: PropTypes.object.isRequired
 };
 
 export default connect(
@@ -160,6 +196,12 @@ export default connect(
         deleteAnswer: (topicId, answerId) => {
             const api = new Api(new Http(fetch));
             return api.delete(`/topics/${topicId}/answers`, answerId);
+        },
+        deleteTopic: topicId => {
+            const api = new Api(new Http(fetch));
+            return api.delete(`/topics`, topicId).then(() => {
+                dispatch(actions.setTopic(null));
+            });
         }
     })
 )(TopicPage);

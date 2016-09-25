@@ -38,7 +38,7 @@ class Api {
         where = where ? `&where=${encodeURIComponent(JSON.stringify(where))}` : '';
         order = order ? `&order=${encodeURIComponent(JSON.stringify(order))}` : '';
 
-        return this.http.get(`${apiHost}/${resource}?page=${page}&pageSize=${pageSize}${where}${order}`, {}, this.getDefaultOptions()).catch(this.verifyAuthorization);
+        return this.http.get(`${apiHost}${resource}?page=${page}&pageSize=${pageSize}${where}${order}`, {}, this.getDefaultOptions()).catch(this.verifyAuthorization);
     }
 
     post(resource, body) {
@@ -46,7 +46,7 @@ class Api {
     }
 
     delete(resource, id) {
-        return this.http.del(`${apiHost}/${resource}/${id}`, this.getDefaultOptions()).catch(this.verifyAuthorization);
+        return this.http.del(`${apiHost}${resource}/${id}`, this.getDefaultOptions()).catch(this.verifyAuthorization);
     }
 
     login(email, password) {

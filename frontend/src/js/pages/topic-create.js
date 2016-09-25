@@ -22,7 +22,7 @@ class TopicCreatePage extends Component {
         const {router} = this.context;
 
         return createTopic(topicData).then(topic => {
-            router.push(`/topic/${topic.id}`);
+            router.push(`/topic/${topic.id}`);            
         }).catch(err => {
             throw new SubmissionError({_error: err.message});
         });
@@ -59,7 +59,6 @@ export default connect(
         createTopic: topicData => {
             const api = new Api(new Http(fetch));
             return api.post('/topics', topicData).then(topic => {
-                dispatch(actions.setTopic(topic));
                 return topic;
             });
         }

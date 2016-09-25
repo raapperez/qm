@@ -108,7 +108,7 @@ module.exports.get = (req, res, next) => {
             [{ model: Answer, as: 'answers' }, 'createdAt', 'DESC']
         ]
     }).then(topic => {
-        if (!topic) {
+        if (!topic || topic.isDeleted) {
             const error = new Error('Not found');
             error.status = 404;
             next(error);

@@ -45783,7 +45783,7 @@
 	            where = where ? '&where=' + encodeURIComponent(JSON.stringify(where)) : '';
 	            order = order ? '&order=' + encodeURIComponent(JSON.stringify(order)) : '';
 
-	            return this.http.get(_config.apiHost + '/' + resource + '?page=' + page + '&pageSize=' + pageSize + where + order, {}, this.getDefaultOptions()).catch(this.verifyAuthorization);
+	            return this.http.get('' + _config.apiHost + resource + '?page=' + page + '&pageSize=' + pageSize + where + order, {}, this.getDefaultOptions()).catch(this.verifyAuthorization);
 	        }
 	    }, {
 	        key: 'post',
@@ -45793,7 +45793,7 @@
 	    }, {
 	        key: 'delete',
 	        value: function _delete(resource, id) {
-	            return this.http.del(_config.apiHost + '/' + resource + '/' + id, this.getDefaultOptions()).catch(this.verifyAuthorization);
+	            return this.http.del('' + _config.apiHost + resource + '/' + id, this.getDefaultOptions()).catch(this.verifyAuthorization);
 	        }
 	    }, {
 	        key: 'login',
@@ -61320,6 +61320,7 @@
 
 	        _this.doAnswer = _this.doAnswer.bind(_this);
 	        _this.deleteAnswer = _this.deleteAnswer.bind(_this);
+	        _this.deleteTopic = _this.deleteTopic.bind(_this);
 	        return _this;
 	    }
 
@@ -61330,6 +61331,7 @@
 	            var params = _props.params;
 	            var topic = _props.topic;
 	            var getTopic = _props.getTopic;
+	            var router = this.context.router;
 
 
 	            if (!topic || topic.id !== params.id) {
@@ -61378,6 +61380,29 @@
 	            });
 	        }
 	    }, {
+	        key: 'deleteTopic',
+	        value: function deleteTopic(e) {
+	            e.preventDefault();
+	            var _context = this.context;
+	            var getPopup = _context.getPopup;
+	            var router = _context.router;
+	            var deleteTopic = this.props.deleteTopic;
+	            var topic = this.props.topic;
+
+
+	            getPopup().showConfirmation('Are you sure to remove this topic?').then(function (mustRemove) {
+	                if (!mustRemove) {
+	                    return;
+	                }
+
+	                deleteTopic(topic.id).then(function () {
+	                    router.push('/topics');
+	                }).catch(function (err) {
+	                    console.log(err);
+	                });
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _this3 = this;
@@ -61386,6 +61411,26 @@
 	            var topic = _props4.topic;
 	            var params = _props4.params;
 
+
+	            if (topic && topic.error) {
+	                return _react2.default.createElement(
+	                    'div',
+	                    { className: 'topic-page' },
+	                    _react2.default.createElement('br', null),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'alert alert-danger', role: 'alert' },
+	                        _react2.default.createElement('span', { className: 'glyphicon glyphicon-exclamation-sign', 'aria-hidden': 'true' }),
+	                        _react2.default.createElement(
+	                            'span',
+	                            { className: 'sr-only' },
+	                            'Error: '
+	                        ),
+	                        ' ',
+	                        topic.error.message
+	                    )
+	                );
+	            }
 
 	            if (!topic || topic.id !== params.id) {
 	                return _react2.default.createElement(
@@ -61429,7 +61474,7 @@
 	                            ),
 	                            _react2.default.createElement(
 	                                'a',
-	                                { title: 'Remove' },
+	                                { title: 'Remove', onClick: this.deleteTopic },
 	                                _react2.default.createElement('i', { className: 'glyphicon glyphicon-trash' })
 	                            )
 	                        )
@@ -61495,11 +61540,13 @@
 	    params: _react.PropTypes.object.isRequired,
 	    getTopic: _react.PropTypes.func.isRequired,
 	    postAnswer: _react.PropTypes.func.isRequired,
-	    deleteAnswer: _react.PropTypes.func.isRequired
+	    deleteAnswer: _react.PropTypes.func.isRequired,
+	    deleteTopic: _react.PropTypes.func.isRequired
 	};
 
 	TopicPage.contextTypes = {
-	    getPopup: _react.PropTypes.func.isRequired
+	    getPopup: _react.PropTypes.func.isRequired,
+	    router: _react.PropTypes.object.isRequired
 	};
 
 	exports.default = (0, _reactRedux.connect)(function (state) {
@@ -61522,6 +61569,12 @@
 	        deleteAnswer: function deleteAnswer(topicId, answerId) {
 	            var api = new _api2.default(new _http2.default(fetch));
 	            return api.delete('/topics/' + topicId + '/answers', answerId);
+	        },
+	        deleteTopic: function deleteTopic(topicId) {
+	            var api = new _api2.default(new _http2.default(fetch));
+	            return api.delete('/topics', topicId).then(function () {
+	                dispatch(actions.setTopic(null));
+	            });
 	        }
 	    };
 	})(TopicPage);
@@ -61740,7 +61793,6 @@
 	        createTopic: function createTopic(topicData) {
 	            var api = new _api2.default(new _http2.default(fetch));
 	            return api.post('/topics', topicData).then(function (topic) {
-	                dispatch(actions.setTopic(topic));
 	                return topic;
 	            });
 	        }

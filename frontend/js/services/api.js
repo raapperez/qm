@@ -57,7 +57,7 @@ var Api = function () {
             where = where ? '&where=' + encodeURIComponent(JSON.stringify(where)) : '';
             order = order ? '&order=' + encodeURIComponent(JSON.stringify(order)) : '';
 
-            return this.http.get(_config.apiHost + '/' + resource + '?page=' + page + '&pageSize=' + pageSize + where + order, {}, this.getDefaultOptions()).catch(this.verifyAuthorization);
+            return this.http.get('' + _config.apiHost + resource + '?page=' + page + '&pageSize=' + pageSize + where + order, {}, this.getDefaultOptions()).catch(this.verifyAuthorization);
         }
     }, {
         key: 'post',
@@ -67,7 +67,7 @@ var Api = function () {
     }, {
         key: 'delete',
         value: function _delete(resource, id) {
-            return this.http.del(_config.apiHost + '/' + resource + '/' + id, this.getDefaultOptions()).catch(this.verifyAuthorization);
+            return this.http.del('' + _config.apiHost + resource + '/' + id, this.getDefaultOptions()).catch(this.verifyAuthorization);
         }
     }, {
         key: 'login',

@@ -111,7 +111,6 @@ exports.default = (0, _reactRedux.connect)(function (state) {
         createTopic: function createTopic(topicData) {
             var api = new _api2.default(new _http2.default(fetch));
             return api.post('/topics', topicData).then(function (topic) {
-                dispatch(actions.setTopic(topic));
                 return topic;
             });
         }
