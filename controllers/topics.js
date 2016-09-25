@@ -109,19 +109,21 @@ module.exports.update = (req, res, next) => {
     const {id} = req.params;
     const topicData = _.omit(req.body, 'id', 'isDeleted', 'createdByUserId', 'createdAt', 'updatedAt'); // These attributes are not allowed to update
 
-
-    Topic.findById(id, {
-        include
-    }).then(topic => {
-
-        if (!topic || topic.isDeleted) {
-            const error = new Error('Not found');
-            error.status = 404;
-            next(error);
-            return;
-        }
-
-        return topic.update(topicData).then(topic => {
+    Topic.update(topicData, {
+        where: { id }
+    }).then(() => {
+        Topic.findById(id, {
+            include,
+            order: [
+                [{ model: Answer, as: 'answers' }, 'createdAt', 'DESC']
+            ]
+        }).then(topic => {
+            if (!topic || topic.isDeleted) {
+                const error = new Error('Not found');
+                error.status = 404;
+                next(error);
+                return;
+            }
             res.status(200).json(topic);
         });
     }).catch(err => {
