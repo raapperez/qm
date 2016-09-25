@@ -31,7 +31,7 @@ module.exports.create = (req, res, next) => {
 
     if (!Topic.isValidToCreate(topicData)) {
         const error = new Error('Invalid topic\'s subject or message');
-        error.status = 404;
+        error.status = 400;
         next(error);
         return;
     }

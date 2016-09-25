@@ -18,7 +18,7 @@ module.exports.create = (req, res, next) => {
 
     if (!Answer.isValidToCreate(answerData)) {
         const error = new Error('Invalid answer\'s message or wrong value for pair (answerId, topicId)');
-        error.status = 404;
+        error.status = 400;
         next(error);
         return;
     }

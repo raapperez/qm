@@ -42,7 +42,7 @@ describe('qm forum api', () => {
             lastName: 'Studenty'
         };
 
-        describe('POST /users', () => {
+        describe('CREATE /users', () => {
 
             it('Should create a new user', () => {
 
