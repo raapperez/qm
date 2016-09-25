@@ -10,25 +10,8 @@ const uuid = require('uuid');
 
 chai.use(chaiAsPromised);
 
-const host = 'http://localhost:3000/api/v1';
-
-const createUserAndLogin = (user) => {
-    return rp.post({
-        uri: `${host}/auth/login`,
-        json: true,
-        body: user
-    }).catch(err => {
-        if (err.statusCode === 400) {
-            return rp.post({
-                uri: `${host}/users`,
-                json: true,
-                body: user
-            }).then(() => {
-                return createUserAndLogin(user);
-            });
-        }
-    }).then(result => result.token);
-};
+const {host} = require('./helpers/constants');
+const {createUserAndLogin} = require('./helpers/utils');
 
 describe('qm forum api', () => {
 

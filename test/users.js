@@ -10,9 +10,7 @@ const uuid = require('uuid');
 
 chai.use(chaiAsPromised);
 
-const host = 'http://localhost:3000/api/v1';
-
-let createdProperty;
+const {host} = require('./helpers/constants');
 
 describe('qm forum api', () => {
     before(() => {
@@ -94,7 +92,7 @@ describe('qm forum api', () => {
                 });
 
                 return promise.then(() => {
-                    throw 'Not expectinh success';
+                    throw 'Not expecting success';
                 }).catch(err => {
                     err.statusCode.should.be.equal(401);
                 });
@@ -168,7 +166,7 @@ describe('qm forum api', () => {
                 });
 
                 return promise.then(() => {
-                    throw 'Not expectinh success';
+                    throw 'Not expecting success';
                 }).catch(err => {
                     err.statusCode.should.be.equal(401);
                 });
